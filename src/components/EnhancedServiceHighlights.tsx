@@ -1,60 +1,66 @@
-import { Shield, Car, Clock, Award } from "lucide-react";
+import { Crown, ShieldCheck, Timer, Medal } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 const services = [
   {
-    icon: Car,
+    icon: Crown,
     title: "Luxury Chauffeur",
-    description: "Arrive in style with our premium fleet and professional drivers",
+    description: "Professional drivers and premium vehicles for every occasion. Experience the pinnacle of executive travel with our meticulously maintained fleet and expertly trained chauffeurs."
   },
   {
-    icon: Shield,
+    icon: ShieldCheck,
     title: "Close Protection",
-    description: "Discreet security services from experienced professionals",
+    description: "Discreet security services from experienced professionals. Military-grade protection protocols combined with seamless luxury service for high-profile clients."
   },
   {
-    icon: Clock,
+    icon: Timer,
     title: "24/7 Availability",
-    description: "Round-the-clock service for your convenience and peace of mind",
+    description: "Round-the-clock service whenever you need us. Immediate response times with dedicated support ensuring you're never left waiting."
   },
   {
-    icon: Award,
+    icon: Medal,
     title: "Premium Experience",
-    description: "Unmatched attention to detail and customer satisfaction",
-  },
+    description: "Unmatched quality and attention to detail. Every journey is crafted to perfection with bespoke services tailored to your exact requirements."
+  }
 ];
 
 const EnhancedServiceHighlights = () => {
   return (
-    <section className="py-20 bg-gradient-dark">
+    <section className="py-24 bg-gradient-dark">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in-up">
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 text-gradient-metal">
-            Our Services
+        <div className="text-center mb-20 space-y-6">
+          <h2 className="text-5xl md:text-6xl font-display font-bold text-gradient-metal">
+            Elite Services
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Exceptional service tailored to your needs
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Delivering excellence through premium transportation and security solutions
           </p>
         </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service, index) => (
-            <Card 
-              key={service.title}
-              className={`p-6 shadow-metal bg-card/50 backdrop-blur hover-lift transition-smooth animate-fade-in-up animation-delay-${index * 200}`}
-            >
-              <div className="mb-6 flex items-center justify-center w-16 h-16 rounded-full bg-accent/20">
-                <service.icon className="w-8 h-8 text-accent" />
-              </div>
-              
-              <h3 className="text-2xl font-display font-semibold mb-3 text-primary">
-                {service.title}
-              </h3>
-              <p className="text-muted-foreground">
-                {service.description}
-              </p>
-            </Card>
-          ))}
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          {services.map((service, index) => {
+            const Icon = service.icon;
+            return (
+              <Card 
+                key={service.title}
+                className="p-10 bg-card/50 backdrop-blur-sm border-primary/20 hover:border-accent/40 transition-all duration-500 hover:-translate-y-3 shadow-metal animate-fade-in-up group"
+                style={{ animationDelay: `${index * 0.15}s` }}
+              >
+                <div className="space-y-6">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-accent/20 blur-2xl rounded-full group-hover:bg-accent/30 transition-all" />
+                    <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-accent/30 to-accent/10 flex items-center justify-center border border-accent/30 group-hover:border-accent/50 transition-all">
+                      <Icon className="w-10 h-10 text-accent" strokeWidth={1.5} />
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <h3 className="text-2xl font-semibold text-foreground font-display">{service.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed text-base">{service.description}</p>
+                  </div>
+                </div>
+              </Card>
+            );
+          })}
         </div>
       </div>
     </section>

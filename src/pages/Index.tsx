@@ -1,7 +1,8 @@
 import Navigation from "@/components/Navigation";
 import EnhancedHero from "@/components/EnhancedHero";
+import TrustBadges from "@/components/TrustBadges";
 import EnhancedServiceHighlights from "@/components/EnhancedServiceHighlights";
-import BookingWidget from "@/components/EnhancedBookingWidget";
+import MultiStepBookingWidget from "@/components/MultiStepBookingWidget";
 import EnhancedTestimonials from "@/components/EnhancedTestimonials";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
@@ -40,38 +41,50 @@ const Index = () => {
       />
       <Navigation />
       <EnhancedHero />
+      <TrustBadges />
       
       <EnhancedServiceHighlights />
       
-      <section id="booking" className="py-20 bg-gradient-dark">
+      <section id="booking" className="py-24 bg-gradient-dark">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <BookingWidget />
+          <div className="text-center mb-12 space-y-4">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-gradient-metal">
+              Book Your Journey
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Complete your booking in three simple steps
+            </p>
+          </div>
+          <div className="max-w-6xl mx-auto">
+            <MultiStepBookingWidget />
           </div>
         </div>
       </section>
 
       <EnhancedTestimonials />
 
-      <section className="py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 text-gradient-metal">
+      <section className="py-24 bg-gradient-to-b from-background via-secondary/30 to-background relative overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,hsl(0_0%_15%)_0%,hsl(0_0%_7%)_50%,hsl(0_0%_15%)_100%)]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-accent/5 via-transparent to-accent/5" />
+        
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h2 className="text-5xl md:text-6xl font-display font-bold mb-8 text-gradient-metal">
             Ready to Experience Supreme Service?
           </h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Contact us today to discuss your requirements or make a booking
+          <p className="text-xl text-foreground/80 mb-12 max-w-3xl mx-auto leading-relaxed">
+            Join our distinguished clients and discover what true luxury transportation means
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Link to="/contact">
-              <Button size="lg" className="gradient-accent shadow-glow hover-lift">
+              <Button size="lg" className="gradient-accent shadow-glow hover-lift text-lg px-10 py-7 font-semibold">
                 Get in Touch
               </Button>
             </Link>
-            <Link to="/auth">
-              <Button size="lg" variant="outline" className="border-primary/50 hover-scale">
-                Admin Login
+            <a href="#booking">
+              <Button size="lg" variant="outline" className="border-primary/50 hover:bg-primary/10 hover-scale text-lg px-10 py-7 font-semibold">
+                Book Now
               </Button>
-            </Link>
+            </a>
           </div>
         </div>
       </section>

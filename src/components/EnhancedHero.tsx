@@ -16,37 +16,37 @@ const EnhancedHero = () => {
           fetchPriority="high"
           decoding="async"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-background/40" />
       </div>
       
       <div className="container mx-auto px-4 relative z-10 pt-20">
-        <div className="max-w-4xl mx-auto text-center space-y-8">
-          <div className="space-y-4 animate-fade-in-up">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-gradient-metal leading-tight">
+        <div className="max-w-5xl mx-auto text-center space-y-8">
+          <div className="space-y-6 animate-fade-in-up">
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-display font-bold text-gradient-metal leading-tight">
               TRAVEL IN<br />SUPREME STYLE
             </h1>
-            <p className="text-lg md:text-2xl text-foreground/90 max-w-3xl mx-auto font-light">
+            <p className="text-xl md:text-3xl text-foreground/90 max-w-3xl mx-auto font-light leading-relaxed">
               Experience unparalleled luxury with our elite chauffeur services and professional close protection
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up animation-delay-200">
+          <p className="text-sm md:text-base text-accent/90 font-medium tracking-wider animate-fade-in-up animation-delay-200">
+            Available 24/7 • Immediate Response • Discreet Service
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up animation-delay-400">
             <a href="tel:08001234567">
-              <Button size="lg" className="gradient-accent shadow-glow text-lg px-8 py-6 hover-lift">
+              <Button size="lg" className="gradient-accent shadow-glow text-lg px-10 py-7 hover-lift font-semibold">
                 <Phone className="w-5 h-5 mr-2" />
                 Call 0800 123 4567
               </Button>
             </a>
             <a href="#booking">
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-primary/50 hover:bg-primary/10 hover-scale">
+              <Button size="lg" variant="outline" className="text-lg px-10 py-7 border-primary/50 hover:bg-primary/10 hover-scale font-semibold">
                 Book Online
               </Button>
             </a>
           </div>
-
-          <p className="text-sm text-foreground/70 animate-fade-in-up animation-delay-400">
-            Available 24/7 • Immediate Response • Discreet Service
-          </p>
         </div>
       </div>
       
