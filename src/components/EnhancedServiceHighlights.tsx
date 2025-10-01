@@ -29,7 +29,7 @@ const EnhancedServiceHighlights = () => {
     <section className="py-24 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-20 space-y-6">
-          <h2 className="text-5xl md:text-6xl font-display font-bold text-gradient-metal">
+          <h2 className="text-4xl md:text-5xl font-display font-bold text-gradient-metal">
             Elite Services
           </h2>
           <p className="text-lg text-muted-foreground uppercase tracking-wider">
