@@ -1,17 +1,27 @@
 import { Link, useLocation } from "react-router-dom";
-import { Menu, Phone, X, Lock, MessageCircle } from "lucide-react";
-import { useState } from "react";
+import { Menu, Phone, X, Lock } from "lucide-react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { FaWhatsapp } from "react-icons/fa";
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const navLinks = [{
     path: "/",
     label: "Home"
   }, {
     path: "/chauffeur-services",
-    label: "Chauffeur Services"
+    label: "Chauffeur"
   }, {
     path: "/close-protection",
     label: "Close Protection"
@@ -25,38 +35,44 @@ const Navigation = () => {
     path: "/testimonials",
     label: "Testimonials"
   }, {
-    path: "/faq",
-    label: "FAQ"
-  }, {
     path: "/contact",
     label: "Contact"
   }];
-  return <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-metal">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
-          <Link to="/" className="flex items-center">
-            <span className="text-2xl font-display font-bold text-gradient-metal">Travel in Supreme Style</span>
+  return <nav className={`fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-metal transition-all duration-300 ${isScrolled ? 'py-2' : 'py-4'}`}>
+      <div className="container mx-auto px-6">
+        <div className="flex items-center justify-between gap-8">
+          {/* Logo/Branding - Left */}
+          <Link to="/" className="flex items-center flex-shrink-0">
+            <span className="text-xl lg:text-2xl font-display font-bold text-gradient-metal leading-tight">
+              Travel in<br className="hidden lg:block" /> Supreme Style
+            </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
-            {navLinks.map(link => <Link key={link.path} to={link.path} className={`text-sm font-medium transition-colors hover:text-primary ${isActive(link.path) ? "text-primary" : "text-muted-foreground"}`}>
+          {/* Desktop Navigation - Center */}
+          <div className="hidden xl:flex items-center justify-center flex-1 space-x-8">
+            {navLinks.map(link => <Link key={link.path} to={link.path} className={`text-sm font-medium transition-colors hover:text-primary px-2 ${isActive(link.path) ? "text-primary" : "text-muted-foreground"}`}>
                 {link.label}
               </Link>)}
+          </div>
+
+          {/* Right-side Action Area */}
+          <div className="hidden lg:flex items-center gap-3">
             <Link to="/auth">
-              <Button variant="outline" size="sm">
-                <Lock className="w-4 h-4 mr-2" />
-                Admin
+              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                <Lock className="w-4 h-4 mr-1.5" />
+                <span className="text-xs">Admin</span>
               </Button>
             </Link>
             <a href="tel:08001234567">
-              <Button className="gradient-accent shadow-glow">
+              <Button className="gradient-accent shadow-glow text-sm font-semibold">
                 <Phone className="w-4 h-4 mr-2" />
                 0800 123 4567
               </Button>
             </a>
-            <a href="https://wa.me/447700900000" target="_blank" rel="noopener noreferrer" className="lg:flex hidden">
-              
+            <a href="https://wa.me/447700900000" target="_blank" rel="noopener noreferrer">
+              <Button size="icon" className="rounded-full bg-green-600 hover:bg-green-700 text-white shadow-lg">
+                <FaWhatsapp className="w-5 h-5" />
+              </Button>
             </a>
           </div>
 
@@ -67,22 +83,30 @@ const Navigation = () => {
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && <div className="lg:hidden pb-4 space-y-3">
-            {navLinks.map(link => <Link key={link.path} to={link.path} onClick={() => setIsOpen(false)} className={`block py-2 text-sm font-medium transition-colors ${isActive(link.path) ? "text-primary" : "text-muted-foreground"}`}>
+        {isOpen && <div className="lg:hidden pb-4 pt-4 space-y-3 border-t border-border/50 mt-4">
+            {navLinks.map(link => <Link key={link.path} to={link.path} onClick={() => setIsOpen(false)} className={`block py-2.5 text-sm font-medium transition-colors ${isActive(link.path) ? "text-primary" : "text-muted-foreground"}`}>
                 {link.label}
               </Link>)}
-            <Link to="/auth" onClick={() => setIsOpen(false)}>
-              <Button variant="outline" className="w-full">
-                <Lock className="w-4 h-4 mr-2" />
-                Admin Login
-              </Button>
-            </Link>
-            <a href="tel:08001234567">
-              <Button className="w-full gradient-accent shadow-glow">
-                <Phone className="w-4 h-4 mr-2" />
-                0800 123 4567
-              </Button>
-            </a>
+            <div className="pt-4 space-y-3">
+              <Link to="/auth" onClick={() => setIsOpen(false)}>
+                <Button variant="outline" className="w-full">
+                  <Lock className="w-4 h-4 mr-2" />
+                  Admin Login
+                </Button>
+              </Link>
+              <a href="tel:08001234567">
+                <Button className="w-full gradient-accent shadow-glow">
+                  <Phone className="w-4 h-4 mr-2" />
+                  0800 123 4567
+                </Button>
+              </a>
+              <a href="https://wa.me/447700900000" target="_blank" rel="noopener noreferrer">
+                <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                  <FaWhatsapp className="w-4 h-4 mr-2" />
+                  WhatsApp
+                </Button>
+              </a>
+            </div>
           </div>}
       </div>
     </nav>;
