@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import BookingConfirmation from "./BookingConfirmation";
 
+// Enhanced booking widget with detailed pricing breakdown
 interface Vehicle {
   id: string;
   name: string;
