@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import BookingConfirmation from "./BookingConfirmation";
 
 interface Vehicle {
   id: string;
@@ -27,6 +28,8 @@ const BookingWidget = () => {
   const [isLongDrive, setIsLongDrive] = useState(false);
   const [hasOvernightStop, setHasOvernightStop] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmedBooking, setConfirmedBooking] = useState<any>(null);
 
   const [formData, setFormData] = useState({
     pickupLocation: "",
@@ -110,7 +113,7 @@ const BookingWidget = () => {
       customer_name: formData.customerName,
       customer_email: formData.customerEmail,
       customer_phone: formData.customerPhone,
-      status: "pending",
+      status: "new",
     });
 
     setLoading(false);
@@ -120,8 +123,23 @@ const BookingWidget = () => {
       return;
     }
 
-    toast.success("Booking submitted successfully! We'll contact you shortly.");
-    
+    // Show confirmation
+    setConfirmedBooking({
+      pickupLocation: formData.pickupLocation,
+      dropoffLocation: formData.dropoffLocation,
+      pickupDate: formData.pickupDate,
+      pickupTime: formData.pickupTime,
+      vehicleName: selectedVehicle.name,
+      totalPrice: calculatePrice(),
+      customerName: formData.customerName,
+      customerEmail: formData.customerEmail,
+    });
+    setShowConfirmation(true);
+  };
+
+  const handleCloseConfirmation = () => {
+    setShowConfirmation(false);
+    setConfirmedBooking(null);
     // Reset form
     setFormData({
       pickupLocation: "",
@@ -139,6 +157,10 @@ const BookingWidget = () => {
     setIsLongDrive(false);
     setHasOvernightStop(false);
   };
+
+  if (showConfirmation && confirmedBooking) {
+    return <BookingConfirmation bookingDetails={confirmedBooking} onClose={handleCloseConfirmation} />;
+  }
 
   return (
     <Card className="p-6 md:p-8 shadow-metal bg-card/50 backdrop-blur">

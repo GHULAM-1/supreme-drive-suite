@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Menu, Phone, X } from "lucide-react";
+import { Menu, Phone, X, Lock } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 const Navigation = () => {
@@ -40,7 +40,13 @@ const Navigation = () => {
             {navLinks.map(link => <Link key={link.path} to={link.path} className={`text-sm font-medium transition-colors hover:text-primary ${isActive(link.path) ? "text-primary" : "text-muted-foreground"}`}>
                 {link.label}
               </Link>)}
-            <a href="tel:08001234567" className="flex items-center gap-2">
+            <Link to="/auth">
+              <Button variant="outline" size="sm">
+                <Lock className="w-4 h-4 mr-2" />
+                Admin
+              </Button>
+            </Link>
+            <a href="tel:08001234567">
               <Button className="gradient-accent shadow-glow">
                 <Phone className="w-4 h-4 mr-2" />
                 0800 123 4567
@@ -59,7 +65,13 @@ const Navigation = () => {
             {navLinks.map(link => <Link key={link.path} to={link.path} onClick={() => setIsOpen(false)} className={`block py-2 text-sm font-medium transition-colors ${isActive(link.path) ? "text-primary" : "text-muted-foreground"}`}>
                 {link.label}
               </Link>)}
-            <a href="tel:08001234567" className="block">
+            <Link to="/auth" onClick={() => setIsOpen(false)}>
+              <Button variant="outline" className="w-full">
+                <Lock className="w-4 h-4 mr-2" />
+                Admin Login
+              </Button>
+            </Link>
+            <a href="tel:08001234567">
               <Button className="w-full gradient-accent shadow-glow">
                 <Phone className="w-4 h-4 mr-2" />
                 0800 123 4567
