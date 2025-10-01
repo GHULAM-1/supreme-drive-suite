@@ -6,13 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
-import JobsDashboard from "./admin/JobsDashboard";
+import EnhancedJobsDashboard from "./admin/EnhancedJobsDashboard";
 import VehiclesManagement from "./admin/VehiclesManagement";
 import DriversManagement from "./admin/DriversManagement";
 import TestimonialsManagement from "./admin/TestimonialsManagement";
 import PricingManagement from "./admin/PricingManagement";
 import FAQManagement from "./admin/FAQManagement";
 import AuditLogs from "./admin/AuditLogs";
+import ReportsDashboard from "./admin/ReportsDashboard";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -80,10 +81,11 @@ const Admin = () => {
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="jobs" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-7 lg:w-auto lg:inline-grid">
+          <TabsList className="grid w-full grid-cols-8 lg:w-auto lg:inline-grid">
             <TabsTrigger value="jobs">Jobs</TabsTrigger>
             <TabsTrigger value="vehicles">Vehicles</TabsTrigger>
             <TabsTrigger value="drivers">Drivers</TabsTrigger>
+            <TabsTrigger value="reports">Reports</TabsTrigger>
             <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
             <TabsTrigger value="pricing">Pricing</TabsTrigger>
             <TabsTrigger value="faq">FAQ</TabsTrigger>
@@ -91,7 +93,7 @@ const Admin = () => {
           </TabsList>
 
           <TabsContent value="jobs">
-            <JobsDashboard />
+            <EnhancedJobsDashboard />
           </TabsContent>
 
           <TabsContent value="vehicles">
@@ -100,6 +102,10 @@ const Admin = () => {
 
           <TabsContent value="drivers">
             <DriversManagement />
+          </TabsContent>
+
+          <TabsContent value="reports">
+            <ReportsDashboard />
           </TabsContent>
 
           <TabsContent value="testimonials">
