@@ -66,10 +66,10 @@ function AdminSidebar() {
 
   return (
     <Sidebar className={open ? "w-64" : "w-16"} collapsible="icon">
-      <SidebarContent className="bg-gradient-dark border-r border-border/50">
+      <SidebarContent className="bg-sidebar border-r border-sidebar-border">
         <SidebarGroup>
           <SidebarGroupLabel className="px-4 py-6">
-            <h2 className="text-xl font-display font-bold text-gradient-metal">
+            <h2 className="text-xl font-display font-bold text-sidebar-foreground">
               {open ? "Admin Portal" : "AP"}
             </h2>
           </SidebarGroupLabel>
@@ -81,8 +81,8 @@ function AdminSidebar() {
                     onClick={() => navigate(item.url)}
                     className={`
                       ${isActive(item.url) 
-                        ? "bg-primary/10 text-primary border-l-4 border-primary" 
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                        ? "bg-sidebar-accent text-sidebar-accent-foreground border-l-4 border-accent font-medium" 
+                        : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
                       }
                       transition-all duration-200
                     `}
