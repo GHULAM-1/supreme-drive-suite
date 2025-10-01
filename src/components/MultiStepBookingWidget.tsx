@@ -243,23 +243,25 @@ const MultiStepBookingWidget = () => {
     <Card className="p-8 bg-card/90 backdrop-blur-sm border-primary/30 shadow-metal">
       <div className="space-y-8">
         {/* Progress Indicator */}
-        <div className="flex items-center justify-between mb-8">
-          {[1, 2, 3].map((step) => (
-            <div key={step} className="flex items-center flex-1">
-              <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all ${
-                currentStep >= step 
-                  ? 'bg-accent border-accent text-accent-foreground' 
-                  : 'border-muted text-muted-foreground'
-              }`}>
-                {currentStep > step ? <Check className="w-5 h-5" /> : step}
+        <div className="flex justify-center mb-8">
+          <div className="flex items-center max-w-md w-full">
+            {[1, 2, 3].map((step) => (
+              <div key={step} className="flex items-center flex-1">
+                <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all ${
+                  currentStep >= step 
+                    ? 'bg-accent border-accent text-accent-foreground' 
+                    : 'border-muted text-muted-foreground'
+                }`}>
+                  {currentStep > step ? <Check className="w-5 h-5" /> : step}
+                </div>
+                {step < 3 && (
+                  <div className={`flex-1 h-0.5 mx-2 ${
+                    currentStep > step ? 'bg-accent' : 'bg-muted'
+                  }`} />
+                )}
               </div>
-              {step < 3 && (
-                <div className={`flex-1 h-0.5 mx-2 ${
-                  currentStep > step ? 'bg-accent' : 'bg-muted'
-                }`} />
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Step 1: Journey Details */}
