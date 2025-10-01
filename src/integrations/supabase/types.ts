@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_logs: {
+        Row: {
+          action: string
+          created_at: string | null
+          id: string
+          new_values: Json | null
+          old_values: Json | null
+          record_id: string | null
+          table_name: string
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          id?: string
+          new_values?: Json | null
+          old_values?: Json | null
+          record_id?: string | null
+          table_name: string
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          id?: string
+          new_values?: Json | null
+          old_values?: Json | null
+          record_id?: string | null
+          table_name?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           additional_requirements: string | null
@@ -143,33 +176,143 @@ export type Database = {
         }
         Relationships: []
       }
+      faqs: {
+        Row: {
+          answer: string
+          category: string
+          created_at: string | null
+          display_order: number | null
+          id: string
+          is_active: boolean | null
+          question: string
+        }
+        Insert: {
+          answer: string
+          category: string
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          question: string
+        }
+        Update: {
+          answer?: string
+          category?: string
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          question?: string
+        }
+        Relationships: []
+      }
+      fixed_routes: {
+        Row: {
+          created_at: string | null
+          dropoff_location: string
+          fixed_price: number
+          id: string
+          is_active: boolean | null
+          pickup_location: string
+          route_name: string
+          vehicle_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          dropoff_location: string
+          fixed_price: number
+          id?: string
+          is_active?: boolean | null
+          pickup_location: string
+          route_name: string
+          vehicle_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          dropoff_location?: string
+          fixed_price?: number
+          id?: string
+          is_active?: boolean | null
+          pickup_location?: string
+          route_name?: string
+          vehicle_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fixed_routes_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pricing_extras: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          extra_name: string
+          id: string
+          is_active: boolean | null
+          price: number
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          extra_name: string
+          id?: string
+          is_active?: boolean | null
+          price: number
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          extra_name?: string
+          id?: string
+          is_active?: boolean | null
+          price?: number
+        }
+        Relationships: []
+      }
       pricing_rules: {
         Row: {
+          base_fee: number | null
           created_at: string | null
           fixed_amount: number | null
           id: string
           is_active: boolean | null
+          minimum_fare: number | null
           multiplier: number | null
           rule_name: string
           rule_type: string
+          vehicle_category: string | null
+          wait_time_per_hour: number | null
         }
         Insert: {
+          base_fee?: number | null
           created_at?: string | null
           fixed_amount?: number | null
           id?: string
           is_active?: boolean | null
+          minimum_fare?: number | null
           multiplier?: number | null
           rule_name: string
           rule_type: string
+          vehicle_category?: string | null
+          wait_time_per_hour?: number | null
         }
         Update: {
+          base_fee?: number | null
           created_at?: string | null
           fixed_amount?: number | null
           id?: string
           is_active?: boolean | null
+          minimum_fare?: number | null
           multiplier?: number | null
           rule_name?: string
           rule_type?: string
+          vehicle_category?: string | null
+          wait_time_per_hour?: number | null
         }
         Relationships: []
       }

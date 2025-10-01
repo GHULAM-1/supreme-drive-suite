@@ -10,6 +10,9 @@ import JobsDashboard from "./admin/JobsDashboard";
 import VehiclesManagement from "./admin/VehiclesManagement";
 import DriversManagement from "./admin/DriversManagement";
 import TestimonialsManagement from "./admin/TestimonialsManagement";
+import PricingManagement from "./admin/PricingManagement";
+import FAQManagement from "./admin/FAQManagement";
+import AuditLogs from "./admin/AuditLogs";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -77,11 +80,14 @@ const Admin = () => {
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="jobs" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+          <TabsList className="grid w-full grid-cols-7 lg:w-auto lg:inline-grid">
             <TabsTrigger value="jobs">Jobs</TabsTrigger>
             <TabsTrigger value="vehicles">Vehicles</TabsTrigger>
             <TabsTrigger value="drivers">Drivers</TabsTrigger>
             <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
+            <TabsTrigger value="pricing">Pricing</TabsTrigger>
+            <TabsTrigger value="faq">FAQ</TabsTrigger>
+            <TabsTrigger value="audit">Audit</TabsTrigger>
           </TabsList>
 
           <TabsContent value="jobs">
@@ -98,6 +104,18 @@ const Admin = () => {
 
           <TabsContent value="testimonials">
             <TestimonialsManagement />
+          </TabsContent>
+
+          <TabsContent value="pricing">
+            <PricingManagement />
+          </TabsContent>
+
+          <TabsContent value="faq">
+            <FAQManagement />
+          </TabsContent>
+
+          <TabsContent value="audit">
+            <AuditLogs />
           </TabsContent>
         </Tabs>
       </div>
