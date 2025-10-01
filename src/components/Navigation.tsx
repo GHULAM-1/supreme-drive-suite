@@ -42,8 +42,8 @@ const Navigation = () => {
         <div className="flex items-center justify-between gap-8">
           {/* Logo/Branding - Left */}
           <Link to="/" className="flex items-center flex-shrink-0">
-            <span className="text-xl lg:text-2xl font-display font-bold text-gradient-metal leading-tight">
-              Travel in<br className="hidden lg:block" /> Supreme Style
+            <span className="text-xl lg:text-2xl font-display font-bold text-gradient-metal leading-tight whitespace-nowrap">
+              Travel in Supreme Style
             </span>
           </Link>
 
