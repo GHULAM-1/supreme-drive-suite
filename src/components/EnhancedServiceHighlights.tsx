@@ -51,9 +51,10 @@ const EnhancedServiceHighlights = () => {
                 <div className="relative mb-6 rounded-lg overflow-hidden">
                   <img
                     src={service.image}
-                    alt={service.title}
+                    alt={`Professional ${service.title.toLowerCase()} service with luxury vehicle and trained chauffeur`}
                     className="w-full h-48 object-cover"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
                 </div>

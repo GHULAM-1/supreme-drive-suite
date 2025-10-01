@@ -10,9 +10,11 @@ const EnhancedHero = () => {
       <div className="absolute inset-0">
         <img 
           src={luxuryHero}
-          alt="Luxury chauffeur vehicle"
+          alt="Premium luxury chauffeur service featuring elegant black vehicle with professional driver in executive setting"
           className="w-full h-full object-cover"
           loading="eager"
+          fetchPriority="high"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
       </div>
