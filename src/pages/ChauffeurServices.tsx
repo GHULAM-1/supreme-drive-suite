@@ -1,9 +1,10 @@
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import UniversalHero from "@/components/UniversalHero";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plane, Briefcase, Sparkles, Map, UserCheck, Car, Shield, Clock, Star } from "lucide-react";
+import { Plane, Briefcase, Sparkles, Map, UserCheck, Car, Shield, Clock, Star, Phone } from "lucide-react";
 import chauffeurHero from "@/assets/chauffeur-hero.jpg";
 import EnhancedTestimonials from "@/components/EnhancedTestimonials";
 import MultiStepBookingWidget from "@/components/MultiStepBookingWidget";
@@ -91,42 +92,24 @@ const ChauffeurServices = () => {
       
       <Navigation />
       
-      {/* Hero Section */}
-      <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${chauffeurHero})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/80" />
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10 pt-20">
-          <div className="max-w-4xl mx-auto text-center space-y-8">
-            <div className="space-y-4 animate-fade-in">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-gradient-metal leading-tight">
-                LUXURY CHAUFFEUR<br />SERVICES
-              </h1>
-              <p className="text-xl md:text-2xl text-[#C5A572]/90 max-w-3xl mx-auto leading-relaxed">
-                Executive travel tailored to your schedule, with unmatched comfort and discretion.
-              </p>
-            </div>
-
-            <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              <Button 
-                size="lg" 
-                onClick={handleHeroCTA}
-                className="gradient-accent shadow-glow text-lg px-10 py-7 hover:scale-105 transition-transform"
-              >
-                Book Your Journey →
-              </Button>
-            </div>
-
-            <p className="text-sm text-muted-foreground animate-fade-in" style={{ animationDelay: '0.3s' }}>
-              Available 24/7 • Discreet Service • Immediate Response
-            </p>
-          </div>
-        </div>
-      </section>
+      <UniversalHero
+        headline="Luxury Chauffeur Services"
+        subheading="Executive travel tailored to your schedule, with unmatched comfort and discretion"
+        backgroundImage={chauffeurHero}
+        backgroundAlt="Professional luxury chauffeur service at airport terminal"
+        overlayStrength="medium"
+        primaryCTA={{
+          text: "Book Your Journey",
+          onClick: handleHeroCTA
+        }}
+        secondaryCTA={{
+          text: "Call 0800 123 4567",
+          href: "tel:08001234567",
+          icon: <Phone className="w-5 h-5" />
+        }}
+        trustLine={["Available 24/7", "Discreet Service", "Immediate Response"]}
+        minHeight="min-h-[75vh]"
+      />
 
       {/* Service Cards */}
       <section className="py-20 bg-background">

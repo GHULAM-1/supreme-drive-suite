@@ -1,6 +1,8 @@
 import Navigation from "@/components/Navigation";
-import EnhancedHero from "@/components/EnhancedHero";
+import UniversalHero from "@/components/UniversalHero";
 import TrustBadges from "@/components/TrustBadges";
+import rollsRoyceHero from "@/assets/rolls-royce-city-hero.jpg";
+import { Phone } from "lucide-react";
 import EnhancedServiceHighlights from "@/components/EnhancedServiceHighlights";
 import MultiStepBookingWidget from "@/components/MultiStepBookingWidget";
 import EnhancedTestimonials from "@/components/EnhancedTestimonials";
@@ -40,7 +42,24 @@ const Index = () => {
         schema={businessSchema}
       />
       <Navigation />
-      <EnhancedHero />
+      <UniversalHero
+        headline="Travel in Supreme Style"
+        subheading="Experience unparalleled luxury with our elite chauffeur services and professional close protection"
+        backgroundImage={rollsRoyceHero}
+        backgroundAlt="Ultra-luxury Rolls-Royce chauffeur service in prestigious city skyline"
+        overlayStrength="medium"
+        primaryCTA={{
+          text: "Call 0800 123 4567",
+          href: "tel:08001234567",
+          icon: <Phone className="w-5 h-5" />
+        }}
+        secondaryCTA={{
+          text: "Book Online",
+          href: "#booking"
+        }}
+        trustLine={["Available 24/7", "Immediate Response", "Discreet Service"]}
+        showScrollIndicator={true}
+      />
       <TrustBadges />
       
       <EnhancedServiceHighlights />

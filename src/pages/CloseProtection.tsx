@@ -1,8 +1,9 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import UniversalHero from "@/components/UniversalHero";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Shield, Award, Users, Globe, CheckCircle, Quote, BadgeCheck } from "lucide-react";
+import { Shield, Award, Users, Globe, CheckCircle, Quote, BadgeCheck, Phone } from "lucide-react";
 import protectionHero from "@/assets/service-protection.jpg";
 import CloseProtectionEnquiryForm from "@/components/CloseProtectionEnquiryForm";
 
@@ -66,39 +67,24 @@ const CloseProtection = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${protectionHero})` }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-background" />
-        
-        <div className="container mx-auto px-4 relative z-10 text-center">
-          <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-display font-bold text-gradient-metal leading-tight">
-              Discreet. Professional.<br />Trusted.
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-              Elite close protection services tailored for high-profile clients.
-            </p>
-            <Button 
-              onClick={scrollToForm}
-              size="lg" 
-              className="gradient-accent shadow-glow text-lg px-12 py-8 hover-lift"
-            >
-              Request a Confidential Consultation
-            </Button>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-primary/50 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-primary rounded-full mt-2" />
-          </div>
-        </div>
-      </section>
+      <UniversalHero
+        headline={<>Discreet. Professional.<br />Trusted.</>}
+        subheading="Elite close protection services tailored for high-profile clients"
+        backgroundImage={protectionHero}
+        backgroundAlt="Professional close protection security service"
+        overlayStrength="strong"
+        primaryCTA={{
+          text: "Request Confidential Consultation",
+          onClick: scrollToForm
+        }}
+        secondaryCTA={{
+          text: "Call 0800 123 4567",
+          href: "tel:08001234567",
+          icon: <Phone className="w-5 h-5" />
+        }}
+        trustLine={["Fully Licensed", "Global Coverage", "24/7 Availability"]}
+        showScrollIndicator={true}
+      />
 
       {/* Features Grid */}
       <section className="py-24 bg-gradient-to-b from-background to-background/50">
