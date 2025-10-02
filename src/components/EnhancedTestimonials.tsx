@@ -55,7 +55,7 @@ const EnhancedTestimonials = () => {
           {testimonials.map((testimonial, index) => (
             <Card
               key={testimonial.id}
-              className={`p-8 shadow-metal bg-card/50 backdrop-blur hover-lift transition-smooth ${
+              className={`p-8 shadow-metal bg-card/50 backdrop-blur hover-lift transition-smooth flex flex-col ${
                 index === activeIndex ? 'ring-2 ring-accent/50' : ''
               }`}
               style={{
@@ -70,7 +70,7 @@ const EnhancedTestimonials = () => {
                 ))}
               </div>
 
-              <p className="text-foreground/90 mb-6 italic leading-relaxed">
+              <p className="text-foreground/90 mb-6 italic leading-relaxed min-h-[7rem] flex items-start">
                 "{testimonial.content}"
               </p>
 
