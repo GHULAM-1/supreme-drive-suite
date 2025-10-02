@@ -93,7 +93,7 @@ const ChauffeurServices = () => {
       <Navigation />
       
       <UniversalHero
-        headline="Luxury Chauffeur Services"
+        headline={<>Luxury<br />Chauffeur Services</>}
         subheading="Executive travel tailored to your schedule, with unmatched comfort and discretion"
         backgroundImage={chauffeurHero}
         backgroundAlt="Professional luxury chauffeur service at airport terminal"
