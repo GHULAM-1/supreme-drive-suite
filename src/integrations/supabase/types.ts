@@ -87,7 +87,11 @@ export type Database = {
           pickup_date: string
           pickup_location: string
           pickup_time: string
+          priority: string | null
+          protection_details: Json | null
           route_notes: string | null
+          service_type: string | null
+          source: string | null
           status: string | null
           total_price: number | null
           vehicle_id: string | null
@@ -119,7 +123,11 @@ export type Database = {
           pickup_date: string
           pickup_location: string
           pickup_time: string
+          priority?: string | null
+          protection_details?: Json | null
           route_notes?: string | null
+          service_type?: string | null
+          source?: string | null
           status?: string | null
           total_price?: number | null
           vehicle_id?: string | null
@@ -151,7 +159,11 @@ export type Database = {
           pickup_date?: string
           pickup_location?: string
           pickup_time?: string
+          priority?: string | null
+          protection_details?: Json | null
           route_notes?: string | null
+          service_type?: string | null
+          source?: string | null
           status?: string | null
           total_price?: number | null
           vehicle_id?: string | null

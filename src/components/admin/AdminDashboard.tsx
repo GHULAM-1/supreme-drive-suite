@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Briefcase, Users, Car, DollarSign, TrendingUp, Clock } from "lucide-react";
+import { Briefcase, Users, Car, DollarSign, TrendingUp, Clock, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Progress } from "@/components/ui/progress";
 
@@ -11,6 +11,7 @@ interface DashboardMetrics {
   revenueThisWeek: number;
   totalJobs: number;
   completedJobs: number;
+  closeProtectionEnquiries: number;
 }
 
 export default function AdminDashboard() {
@@ -21,6 +22,7 @@ export default function AdminDashboard() {
     revenueThisWeek: 0,
     totalJobs: 0,
     completedJobs: 0,
+    closeProtectionEnquiries: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -34,7 +36,7 @@ export default function AdminDashboard() {
       weekAgo.setDate(weekAgo.getDate() - 7);
 
       const [bookingsRes, driversRes, vehiclesRes] = await Promise.all([
-        supabase.from("bookings").select("status, total_price, created_at"),
+        supabase.from("bookings").select("status, total_price, created_at, service_type"),
         supabase.from("drivers").select("is_active, is_available"),
         supabase.from("vehicles").select("is_active, service_status"),
       ]);
@@ -65,6 +67,7 @@ export default function AdminDashboard() {
       );
 
       const completedJobs = bookings.filter((b) => b.status === "completed").length;
+      const closeProtectionEnquiries = bookings.filter((b) => b.service_type === "close_protection" && b.status === "in_review").length;
 
       setMetrics({
         upcomingJobs,
@@ -73,6 +76,7 @@ export default function AdminDashboard() {
         revenueThisWeek,
         totalJobs: bookings.length,
         completedJobs,
+        closeProtectionEnquiries,
       });
     } catch (error) {
       console.error("Error loading metrics:", error);
@@ -113,6 +117,14 @@ export default function AdminDashboard() {
       icon: DollarSign,
       gradient: "from-amber-500/20 to-amber-500/5",
       iconColor: "text-amber-500",
+    },
+    {
+      title: "Close Protection Enquiries",
+      value: metrics.closeProtectionEnquiries,
+      icon: Shield,
+      gradient: "from-amber-500/20 to-amber-500/5",
+      iconColor: "text-amber-500",
+      link: "/admin/jobs?serviceType=close_protection&status=in_review",
     },
   ];
 

@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { ArrowLeft, MapPin, Clock, User, Car, Phone, Mail, FileText } from "lucide-react";
+import { ArrowLeft, MapPin, Clock, User, Car, Phone, Mail, FileText, Shield, AlertTriangle } from "lucide-react";
 import { format } from "date-fns";
 
 interface JobDetail {
@@ -31,6 +31,9 @@ interface JobDetail {
   has_overnight_stop: boolean | null;
   distance_miles: number | null;
   duration_minutes: number | null;
+  service_type: string | null;
+  priority: string | null;
+  protection_details: any;
   driver_name?: string;
   driver_phone?: string;
   driver_email?: string;
@@ -61,7 +64,15 @@ export default function JobDetail() {
 
       if (error) throw error;
       
-      setJob(data);
+      // Ensure new fields are present even if view doesn't include them yet
+      const jobData = {
+        ...data,
+        service_type: (data as any).service_type || "chauffeur",
+        priority: (data as any).priority || "normal",
+        protection_details: (data as any).protection_details || null,
+      } as JobDetail;
+      
+      setJob(jobData);
       setRouteNotes(data.route_notes || "");
       setInternalNotes(data.internal_notes || "");
     } catch (error: any) {
@@ -156,8 +167,70 @@ export default function JobDetail() {
           </div>
         </Card>
 
-        {/* Trip Details */}
-        <Card className="p-6">
+        {/* Security Brief - for Close Protection jobs */}
+        {job.service_type === "close_protection" && job.protection_details && (
+          <Card className="p-6 border-amber-500/30 bg-amber-500/5">
+            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <Shield className="w-5 h-5 text-amber-500" />
+              Security Brief
+            </h3>
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Service Type</p>
+                  <p className="font-medium">{job.protection_details.service_type}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Risk Level</p>
+                  <Badge className={
+                    job.protection_details.risk_level === "High" ? "bg-red-500/20 text-red-400 border-red-500/30" :
+                    job.protection_details.risk_level === "Medium" ? "bg-amber-500/20 text-amber-400 border-amber-500/30" :
+                    "bg-green-500/20 text-green-400 border-green-500/30"
+                  }>
+                    <AlertTriangle className="w-3 h-3 mr-1" />
+                    {job.protection_details.risk_level}
+                  </Badge>
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Date & Time</p>
+                <p className="font-medium">
+                  {format(new Date(job.protection_details.date), "MMMM dd, yyyy")} at {job.protection_details.start_time}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Duration</p>
+                <p className="font-medium">{job.protection_details.duration_hours} hours</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Primary Location</p>
+                <p className="font-medium">{job.protection_details.primary_location}</p>
+              </div>
+              {job.protection_details.secondary_location && (
+                <div>
+                  <p className="text-sm text-muted-foreground">Secondary Location</p>
+                  <p className="font-medium">{job.protection_details.secondary_location}</p>
+                </div>
+              )}
+              {job.protection_details.agents_required && (
+                <div>
+                  <p className="text-sm text-muted-foreground">Agents Required</p>
+                  <p className="font-medium">{job.protection_details.agents_required}</p>
+                </div>
+              )}
+              {job.protection_details.additional_notes && (
+                <div>
+                  <p className="text-sm text-muted-foreground">Additional Notes</p>
+                  <p className="font-medium whitespace-pre-wrap">{job.protection_details.additional_notes}</p>
+                </div>
+              )}
+            </div>
+          </Card>
+        )}
+
+        {/* Trip Details - for Chauffeur jobs */}
+        {job.service_type !== "close_protection" && (
+          <Card className="p-6">
           <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
             <MapPin className="w-5 h-5" />
             Trip Details
@@ -195,6 +268,7 @@ export default function JobDetail() {
             )}
           </div>
         </Card>
+        )}
 
         {/* Driver Assignment */}
         <Card className="p-6">
@@ -270,6 +344,7 @@ export default function JobDetail() {
             )}
           </div>
         </Card>
+        )}
 
         {/* Additional Requirements */}
         {job.additional_requirements && (

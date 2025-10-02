@@ -18,6 +18,15 @@ const enquirySchema = z.object({
   serviceType: z.enum(["Event", "Travel", "Residential", "Ongoing"], {
     required_error: "Please select a service type",
   }),
+  date: z.string().min(1, "Date is required"),
+  startTime: z.string().min(1, "Start time is required"),
+  durationHours: z.number().min(1, "Duration must be at least 1 hour").max(24),
+  primaryLocation: z.string().trim().min(5, "Primary location is required").max(500),
+  secondaryLocation: z.string().trim().max(500).optional(),
+  agentsRequired: z.number().min(1).max(10).optional(),
+  riskLevel: z.enum(["Low", "Medium", "High"], {
+    required_error: "Please select a risk level",
+  }),
   notes: z.string().trim().max(1000).optional(),
 });
 
@@ -42,21 +51,36 @@ const CloseProtectionEnquiryForm = () => {
   const onSubmit = async (data: EnquiryFormData) => {
     setIsSubmitting(true);
     try {
+      const priority = data.riskLevel === "High" ? "high" : "normal";
+      
       const { data: booking, error } = await supabase
         .from("bookings")
         .insert({
           customer_name: data.fullName,
           customer_email: data.email,
           customer_phone: data.phone,
-          pickup_location: "Close Protection Service Request",
-          dropoff_location: `${data.serviceType} Protection`,
-          pickup_date: new Date().toISOString().split("T")[0],
-          pickup_time: "00:00:00",
-          passengers: 1,
+          pickup_location: data.primaryLocation,
+          dropoff_location: data.secondaryLocation || "N/A",
+          pickup_date: data.date,
+          pickup_time: data.startTime,
+          passengers: data.agentsRequired || 1,
           luggage: 0,
-          additional_requirements: `SERVICE TYPE: ${data.serviceType}\n${data.notes || ""}`,
-          internal_notes: "HIGH_PRIORITY_PROTECTION_ENQUIRY",
-          status: "new",
+          service_type: "close_protection",
+          protection_details: {
+            service_type: data.serviceType,
+            date: data.date,
+            start_time: data.startTime,
+            duration_hours: data.durationHours,
+            primary_location: data.primaryLocation,
+            secondary_location: data.secondaryLocation,
+            agents_required: data.agentsRequired,
+            risk_level: data.riskLevel,
+            additional_notes: data.notes,
+          },
+          source: "CloseProtectionForm",
+          priority,
+          status: "in_review",
+          internal_notes: `CLOSE PROTECTION ENQUIRY - Risk Level: ${data.riskLevel}`,
         })
         .select()
         .single();
@@ -182,12 +206,123 @@ const CloseProtectionEnquiryForm = () => {
           </div>
         </div>
 
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="date">Date *</Label>
+            <Input
+              id="date"
+              type="date"
+              {...register("date")}
+              className="bg-background/50"
+            />
+            {errors.date && (
+              <p className="text-sm text-destructive">{errors.date.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="startTime">Start Time *</Label>
+            <Input
+              id="startTime"
+              type="time"
+              {...register("startTime")}
+              className="bg-background/50"
+            />
+            {errors.startTime && (
+              <p className="text-sm text-destructive">{errors.startTime.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="durationHours">Duration (Hours) *</Label>
+            <Input
+              id="durationHours"
+              type="number"
+              min="1"
+              max="24"
+              {...register("durationHours", { valueAsNumber: true })}
+              placeholder="8"
+              className="bg-background/50"
+            />
+            {errors.durationHours && (
+              <p className="text-sm text-destructive">{errors.durationHours.message}</p>
+            )}
+          </div>
+        </div>
+
         <div className="space-y-2">
-          <Label htmlFor="notes">Notes / Special Requirements</Label>
+          <Label htmlFor="primaryLocation">Pickup / Primary Location *</Label>
+          <Textarea
+            id="primaryLocation"
+            {...register("primaryLocation")}
+            placeholder="Enter primary location or pickup address..."
+            className="bg-background/50 min-h-[80px]"
+          />
+          {errors.primaryLocation && (
+            <p className="text-sm text-destructive">{errors.primaryLocation.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="secondaryLocation">Destination / Area (Optional)</Label>
+          <Textarea
+            id="secondaryLocation"
+            {...register("secondaryLocation")}
+            placeholder="Enter destination or coverage area if applicable..."
+            className="bg-background/50 min-h-[80px]"
+          />
+          {errors.secondaryLocation && (
+            <p className="text-sm text-destructive">{errors.secondaryLocation.message}</p>
+          )}
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="agentsRequired">Number of Agents Required (Optional)</Label>
+            <Input
+              id="agentsRequired"
+              type="number"
+              min="1"
+              max="10"
+              {...register("agentsRequired", { valueAsNumber: true })}
+              placeholder="1"
+              className="bg-background/50"
+            />
+            {errors.agentsRequired && (
+              <p className="text-sm text-destructive">{errors.agentsRequired.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="riskLevel">Risk / Priority Level *</Label>
+            <Controller
+              name="riskLevel"
+              control={control}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger className="bg-background/50">
+                    <SelectValue placeholder="Select risk level" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-card border-primary/20">
+                    <SelectItem value="Low">Low</SelectItem>
+                    <SelectItem value="Medium">Medium</SelectItem>
+                    <SelectItem value="High">High</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {errors.riskLevel && (
+              <p className="text-sm text-destructive">{errors.riskLevel.message}</p>
+            )}
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="notes">Additional Notes</Label>
           <Textarea
             id="notes"
             {...register("notes")}
-            placeholder="Please provide any specific requirements or concerns..."
+            placeholder="Please provide any specific requirements, concerns, or additional details..."
             className="bg-background/50 min-h-[120px]"
           />
           {errors.notes && (
@@ -214,7 +349,7 @@ const CloseProtectionEnquiryForm = () => {
               Submitting Securely...
             </>
           ) : (
-            "Submit Confidential Enquiry"
+            "Request Confidential Consultation"
           )}
         </Button>
       </form>

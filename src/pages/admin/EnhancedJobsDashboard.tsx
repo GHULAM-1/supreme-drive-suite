@@ -9,7 +9,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon, Download, Search, Filter } from "lucide-react";
+import { Calendar as CalendarIcon, Download, Search, Filter, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +27,9 @@ interface Booking {
   vehicle_id: string | null;
   total_price: number | null;
   created_at: string | null;
+  service_type: string | null;
+  priority: string | null;
+  protection_details: any;
 }
 
 interface Driver {
@@ -52,6 +55,7 @@ export default function EnhancedJobsDashboard() {
   // Filters
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [serviceTypeFilter, setServiceTypeFilter] = useState("all");
   const [driverFilter, setDriverFilter] = useState("all");
   const [vehicleFilter, setVehicleFilter] = useState("all");
   const [dateRange, setDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>({
@@ -69,7 +73,7 @@ export default function EnhancedJobsDashboard() {
 
   useEffect(() => {
     applyFilters();
-  }, [bookings, searchTerm, statusFilter, driverFilter, vehicleFilter, dateRange, sortField, sortDirection]);
+  }, [bookings, searchTerm, statusFilter, serviceTypeFilter, driverFilter, vehicleFilter, dateRange, sortField, sortDirection]);
 
   const loadData = async () => {
     try {
@@ -111,6 +115,11 @@ export default function EnhancedJobsDashboard() {
     // Status filter
     if (statusFilter !== "all") {
       filtered = filtered.filter((b) => b.status === statusFilter);
+    }
+
+    // Service type filter
+    if (serviceTypeFilter !== "all") {
+      filtered = filtered.filter((b) => b.service_type === serviceTypeFilter);
     }
 
     // Driver filter
@@ -213,6 +222,7 @@ export default function EnhancedJobsDashboard() {
   const getStatusColor = (status: string | null) => {
     switch (status) {
       case "new": return "bg-primary/20 text-primary border-primary/30";
+      case "in_review": return "bg-amber-500/20 text-amber-400 border-amber-500/30";
       case "confirmed": return "bg-green-500/20 text-green-400 border-green-500/30";
       case "in_progress": return "bg-amber-500/20 text-amber-400 border-amber-500/30";
       case "completed": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
@@ -239,7 +249,7 @@ export default function EnhancedJobsDashboard() {
       </div>
 
       {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 bg-card/50 rounded-lg border border-border/50 shadow-metal">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-4 p-4 bg-card/50 rounded-lg border border-border/50 shadow-metal">
         <div className="relative">
           <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
           <Input
@@ -257,10 +267,22 @@ export default function EnhancedJobsDashboard() {
           <SelectContent>
             <SelectItem value="all">All Statuses</SelectItem>
             <SelectItem value="new">New</SelectItem>
+            <SelectItem value="in_review">In Review</SelectItem>
             <SelectItem value="confirmed">Confirmed</SelectItem>
             <SelectItem value="in_progress">In Progress</SelectItem>
             <SelectItem value="completed">Completed</SelectItem>
             <SelectItem value="cancelled">Cancelled</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select value={serviceTypeFilter} onValueChange={setServiceTypeFilter}>
+          <SelectTrigger>
+            <SelectValue placeholder="Service Type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Services</SelectItem>
+            <SelectItem value="chauffeur">Chauffeur</SelectItem>
+            <SelectItem value="close_protection">Close Protection</SelectItem>
           </SelectContent>
         </Select>
 
@@ -334,6 +356,7 @@ export default function EnhancedJobsDashboard() {
               </TableHead>
               <TableHead>Customer</TableHead>
               <TableHead>Route</TableHead>
+              <TableHead>Service Type</TableHead>
               <TableHead className="cursor-pointer" onClick={() => handleSort("status")}>
                 Status {sortField === "status" && (sortDirection === "asc" ? "↑" : "↓")}
               </TableHead>
@@ -361,6 +384,23 @@ export default function EnhancedJobsDashboard() {
                 <TableCell>
                   <div className="text-sm">{booking.pickup_location}</div>
                   <div className="text-xs text-muted-foreground">→ {booking.dropoff_location}</div>
+                </TableCell>
+                <TableCell>
+                  {booking.service_type === "close_protection" ? (
+                    <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 gap-1">
+                      <Shield className="w-3 h-3" />
+                      Close Protection
+                    </Badge>
+                  ) : (
+                    <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
+                      Chauffeur
+                    </Badge>
+                  )}
+                  {booking.priority === "high" && (
+                    <Badge className="ml-1 bg-red-500/20 text-red-400 border-red-500/30 text-xs">
+                      High Priority
+                    </Badge>
+                  )}
                 </TableCell>
                 <TableCell>
                   <Badge className={getStatusColor(booking.status)}>
