@@ -83,6 +83,22 @@ const MultiStepBookingWidget = () => {
     loadData();
   }, []);
 
+  // Handle pre-filled service from Chauffeur Services page
+  useEffect(() => {
+    const prefilledRequirements = sessionStorage.getItem('prefilledRequirements');
+    
+    if (prefilledRequirements) {
+      setFormData(prev => ({
+        ...prev,
+        additionalRequirements: prefilledRequirements
+      }));
+      
+      // Clear sessionStorage after using
+      sessionStorage.removeItem('prefilledService');
+      sessionStorage.removeItem('prefilledRequirements');
+    }
+  }, []);
+
   useEffect(() => {
     if (formData.pickupLocation && formData.dropoffLocation) {
       checkForFixedRoute();
