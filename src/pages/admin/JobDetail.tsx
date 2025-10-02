@@ -344,7 +344,6 @@ export default function JobDetail() {
             )}
           </div>
         </Card>
-        )}
 
         {/* Additional Requirements */}
         {job.additional_requirements && (

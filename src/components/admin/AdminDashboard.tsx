@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Briefcase, Users, Car, DollarSign, TrendingUp, Clock, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -148,26 +149,39 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {statsCards.map((stat) => (
-          <Card
-            key={stat.title}
-            className="relative overflow-hidden border-border/50 bg-card shadow-metal hover-lift transition-smooth"
-          >
-            <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient}`} />
-            <CardHeader className="relative flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {stat.title}
-              </CardTitle>
-              <stat.icon className={`h-5 w-5 ${stat.iconColor}`} />
-            </CardHeader>
-            <CardContent className="relative">
-              <div className="text-3xl font-bold font-display text-gradient-metal">
-                {stat.value}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        {statsCards.map((stat) => {
+          const content = (
+            <Card
+              className={`relative overflow-hidden border-border/50 bg-card shadow-metal hover-lift transition-smooth ${
+                stat.link ? 'cursor-pointer hover:border-primary/50' : ''
+              }`}
+            >
+              <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient}`} />
+              <CardHeader className="relative flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  {stat.title}
+                </CardTitle>
+                <stat.icon className={`h-5 w-5 ${stat.iconColor}`} />
+              </CardHeader>
+              <CardContent className="relative">
+                <div className="text-3xl font-bold font-display text-gradient-metal">
+                  {stat.value}
+                </div>
+              </CardContent>
+            </Card>
+          );
+          
+          return stat.link ? (
+            <Link key={stat.title} to={stat.link} className="block">
+              {content}
+            </Link>
+          ) : (
+            <div key={stat.title}>
+              {content}
+            </div>
+          );
+        })}
       </div>
 
       {/* Performance Overview */}

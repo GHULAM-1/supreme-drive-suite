@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +11,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon, Download, Search, Filter, Shield } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 interface Booking {
@@ -46,6 +46,7 @@ interface Vehicle {
 
 export default function EnhancedJobsDashboard() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
   const [drivers, setDrivers] = useState<Driver[]>([]);
@@ -70,6 +71,15 @@ export default function EnhancedJobsDashboard() {
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    // Apply URL filters on mount
+    const urlServiceType = searchParams.get("serviceType");
+    const urlStatus = searchParams.get("status");
+    
+    if (urlServiceType) setServiceTypeFilter(urlServiceType);
+    if (urlStatus) setStatusFilter(urlStatus);
+  }, [searchParams]);
 
   useEffect(() => {
     applyFilters();
