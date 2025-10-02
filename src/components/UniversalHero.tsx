@@ -93,7 +93,7 @@ const UniversalHero: React.FC<UniversalHeroProps> = ({
           
           {/* Headline */}
           <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-extrabold text-white leading-tight">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-extrabold text-white leading-tight">
               {headline}
             </h1>
             
