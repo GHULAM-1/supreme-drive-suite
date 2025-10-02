@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Menu, Phone, X, Lock } from "lucide-react";
+import { Menu, Phone, X, Lock, Shield } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -42,10 +42,14 @@ const Navigation = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between gap-8">
           {/* Logo/Branding - Left */}
-          <Link to="/" className="flex items-center flex-shrink-0">
-            <span className="text-xl lg:text-2xl font-display font-bold text-gradient-metal leading-tight whitespace-nowrap">
-              Travel in Supreme Style
-            </span>
+          <Link to="/" className="flex items-center gap-3 flex-shrink-0 group">
+            <Shield className="w-6 h-6 text-foreground transition-colors" strokeWidth={1.5} />
+            <div className="flex flex-col">
+              <span className="text-xl lg:text-2xl font-luxury font-semibold text-gradient-silver leading-tight whitespace-nowrap tracking-wide">
+                Travel in Supreme Style
+              </span>
+              <div className="h-px w-full bg-gradient-to-r from-accent/0 via-accent to-accent/0 mt-1" />
+            </div>
           </Link>
 
           {/* Desktop Navigation - Center */}
