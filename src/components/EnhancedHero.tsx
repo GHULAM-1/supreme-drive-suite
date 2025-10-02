@@ -1,7 +1,7 @@
 import { Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import rollsRoyceHero from "@/assets/rolls-royce-hero.jpg";
+import rollsRoyceHero from "@/assets/rolls-royce-city-hero.jpg";
 
 const EnhancedHero = () => {
   return (
@@ -10,7 +10,7 @@ const EnhancedHero = () => {
       <div className="absolute inset-0">
         <img 
           src={rollsRoyceHero}
-          alt="Ultra-luxury Rolls-Royce chauffeur service at prestigious hotel entrance with professional executive transport"
+          alt="Ultra-luxury Rolls-Royce chauffeur service in prestigious city skyline with professional executive transport"
           className="w-full h-full object-cover object-center"
           loading="eager"
           fetchPriority="high"
