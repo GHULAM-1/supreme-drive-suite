@@ -145,24 +145,24 @@ const ChauffeurServices = () => {
               {services.map((service, index) => (
                 <Card 
                   key={index} 
-                  className="p-8 bg-card/60 backdrop-blur-lg border border-primary/20 hover:scale-[1.03] hover:shadow-2xl transition-all duration-300"
+                  className="p-8 bg-card/60 backdrop-blur-lg border border-primary/20 hover:scale-[1.03] hover:shadow-2xl transition-all duration-300 flex flex-col"
                 >
-                  <div className="flex flex-col items-center text-center space-y-4">
-                    <div className="w-16 h-16 rounded-full gradient-metal flex items-center justify-center">
+                  <div className="flex flex-col items-center text-center flex-1">
+                    <div className="w-16 h-16 rounded-full gradient-metal flex items-center justify-center mb-4">
                       <service.icon className="w-8 h-8 text-background" />
                     </div>
                     
-                    <h3 className="text-2xl font-display font-bold text-primary">
+                    <h3 className="text-2xl font-display font-bold text-primary mb-4">
                       {service.title}
                     </h3>
                     
-                    <p className="text-muted-foreground leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed flex-1 mb-6">
                       {service.description}
                     </p>
 
                     <Button
                       onClick={() => handleServiceClick(service.serviceType, service.prefilledText)}
-                      className="w-full mt-4 gradient-accent shadow-glow hover:scale-105 transition-transform"
+                      className="w-full gradient-accent shadow-glow hover:scale-105 transition-transform"
                     >
                       {service.cta} →
                     </Button>
