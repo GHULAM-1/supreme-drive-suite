@@ -11,12 +11,12 @@ const EnhancedHero = () => {
         <img 
           src={rollsRoyceHero}
           alt="Ultra-luxury Rolls-Royce chauffeur service at prestigious hotel entrance with professional executive transport"
-          className="w-full h-full object-cover object-center-left"
+          className="w-full h-full object-cover object-center"
           loading="eager"
           fetchPriority="high"
           decoding="async"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-black/70" />
       </div>
       
       <div className="container mx-auto px-4 relative z-10 pt-20">
