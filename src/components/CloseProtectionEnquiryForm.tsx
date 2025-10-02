@@ -81,13 +81,12 @@ const CloseProtectionEnquiryForm = () => {
           priority,
           status: "in_review",
           internal_notes: `CLOSE PROTECTION ENQUIRY - Risk Level: ${data.riskLevel}`,
-        })
-        .select()
-        .single();
+        });
 
       if (error) throw error;
 
-      const refNumber = booking.id.substring(0, 8).toUpperCase();
+      // Generate a random reference number for tracking
+      const refNumber = `CP${Date.now().toString().slice(-8)}`;
       setReferenceNumber(refNumber);
       setSubmitted(true);
       reset();
