@@ -183,11 +183,12 @@ const MultiStepBookingWidget = () => {
         customer_name: formData.customerName,
         customer_email: formData.customerEmail,
         customer_phone: formData.customerPhone,
-      }).select();
+      });
 
       if (error) throw error;
 
-      const reference = `SDS-${data[0].id.substring(0, 8).toUpperCase()}`;
+      // Generate reference using timestamp (no database read needed)
+      const reference = `SDS-${Date.now().toString(36).toUpperCase()}`;
       setBookingReference(reference);
       
       // Store booking details for confirmation
