@@ -212,13 +212,13 @@ const CloseProtection = () => {
                 {testimonials.map((testimonial, index) => (
                   <Card 
                     key={index}
-                    className="p-8 bg-card/50 backdrop-blur border-primary/20 hover:border-primary/40 transition-all"
+                    className="p-8 bg-card/50 backdrop-blur border-primary/20 hover:border-primary/40 transition-all flex flex-col"
                   >
                     <Quote className="w-10 h-10 text-primary/30 mb-4" />
-                    <p className="text-muted-foreground italic mb-6 leading-relaxed">
+                    <p className="text-muted-foreground italic mb-6 leading-relaxed flex-1">
                       "{testimonial.quote}"
                     </p>
-                    <p className="text-sm font-semibold text-primary">
+                    <p className="text-sm font-semibold text-primary mt-auto">
                       {testimonial.clientType}
                     </p>
                   </Card>
