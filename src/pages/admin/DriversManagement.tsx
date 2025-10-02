@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { Plus, Edit, Trash2, Phone, Mail } from "lucide-react";
 
@@ -254,129 +254,127 @@ const DriversManagement = () => {
         </Dialog>
       </div>
 
-      <TooltipProvider>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {drivers.map((driver) => (
-            <Card 
-              key={driver.id} 
-              className="relative p-8 shadow-metal hover:shadow-lg transition-all duration-300 hover:scale-[1.01] border-border/50 hover:border-primary/20"
-            >
-              {/* Status Badge - Top Right */}
-              <div className="absolute top-4 right-4">
-                {driver.is_available ? (
-                  <Badge className="rounded-full px-3 py-1 bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30 text-xs">
-                    Available
-                  </Badge>
-                ) : (
-                  <Badge className="rounded-full px-3 py-1 bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30 text-xs">
-                    Unavailable
-                  </Badge>
-                )}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {drivers.map((driver) => (
+          <Card 
+            key={driver.id} 
+            className="relative p-8 shadow-metal hover:shadow-lg transition-all duration-300 hover:scale-[1.01] border-border/50 hover:border-primary/20"
+          >
+            {/* Status Badge - Top Right */}
+            <div className="absolute top-4 right-4">
+              {driver.is_available ? (
+                <Badge className="rounded-full px-3 py-1 bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30 text-xs">
+                  Available
+                </Badge>
+              ) : (
+                <Badge className="rounded-full px-3 py-1 bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30 text-xs">
+                  Unavailable
+                </Badge>
+              )}
+            </div>
+
+            <div className="space-y-4">
+              {/* Avatar with Initials */}
+              <div className="flex flex-col items-center space-y-3">
+                <Avatar className="h-16 w-16 bg-gradient-to-br from-primary to-primary/60 shadow-glow">
+                  <AvatarFallback className="bg-transparent text-primary-foreground font-bold text-lg">
+                    {getInitials(driver.name)}
+                  </AvatarFallback>
+                </Avatar>
+                
+                {/* Driver Name */}
+                <h3 className="text-2xl font-display font-bold text-center">{driver.name}</h3>
               </div>
 
-              <div className="space-y-4">
-                {/* Avatar with Initials */}
-                <div className="flex flex-col items-center space-y-3">
-                  <Avatar className="h-16 w-16 bg-gradient-to-br from-primary to-primary/60 shadow-glow">
-                    <AvatarFallback className="bg-transparent text-primary-foreground font-bold text-lg">
-                      {getInitials(driver.name)}
-                    </AvatarFallback>
-                  </Avatar>
-                  
-                  {/* Driver Name */}
-                  <h3 className="text-2xl font-display font-bold text-center">{driver.name}</h3>
-                </div>
-
-                {/* Contact Information */}
-                <div className="space-y-2">
-                  {driver.email && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Mail className="w-4 h-4 flex-shrink-0" />
-                      <span className="truncate">{driver.email}</span>
-                    </div>
-                  )}
-
-                  {driver.phone && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Phone className="w-4 h-4 flex-shrink-0" />
-                      <span>{driver.phone}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* License Number */}
-                {driver.license_number && (
-                  <p className="text-sm font-light text-muted-foreground text-center">
-                    License: {driver.license_number}
-                  </p>
-                )}
-
-                {/* Specializations - Premium Pills */}
-                {driver.specializations && driver.specializations.length > 0 && (
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {driver.specializations.map((spec, idx) => (
-                      <Badge 
-                        key={idx} 
-                        className={`rounded-full px-3 py-1 text-xs font-medium ${
-                          idx % 2 === 0 
-                            ? 'bg-primary text-primary-foreground border-primary/50' 
-                            : 'bg-secondary text-secondary-foreground border-border'
-                        }`}
-                      >
-                        {spec}
-                      </Badge>
-                    ))}
+              {/* Contact Information */}
+              <div className="space-y-2">
+                {driver.email && (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Mail className="w-4 h-4 flex-shrink-0" />
+                    <span className="truncate">{driver.email}</span>
                   </div>
                 )}
 
-                {/* Inactive Badge if applicable */}
-                {!driver.is_active && (
-                  <div className="flex justify-center">
-                    <Badge variant="secondary" className="rounded-full px-3 py-1 text-xs">
-                      Inactive
+                {driver.phone && (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Phone className="w-4 h-4 flex-shrink-0" />
+                    <span>{driver.phone}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* License Number */}
+              {driver.license_number && (
+                <p className="text-sm font-light text-muted-foreground text-center">
+                  License: {driver.license_number}
+                </p>
+              )}
+
+              {/* Specializations - Premium Pills */}
+              {driver.specializations && driver.specializations.length > 0 && (
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {driver.specializations.map((spec, idx) => (
+                    <Badge 
+                      key={idx} 
+                      className={`rounded-full px-3 py-1 text-xs font-medium ${
+                        idx % 2 === 0 
+                          ? 'bg-primary text-primary-foreground border-primary/50' 
+                          : 'bg-secondary text-secondary-foreground border-border'
+                      }`}
+                    >
+                      {spec}
                     </Badge>
-                  </div>
-                )}
-
-                {/* Action Buttons - Bottom Right */}
-                <div className="flex justify-end gap-2 pt-4">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button 
-                        size="icon" 
-                        variant="outline" 
-                        onClick={() => handleEdit(driver)}
-                        className="hover:bg-primary/10 hover:border-primary/50"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Edit Driver</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button 
-                        size="icon" 
-                        variant="destructive" 
-                        onClick={() => handleDelete(driver.id)}
-                        className="hover:bg-destructive/90"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Remove Driver</p>
-                    </TooltipContent>
-                  </Tooltip>
+                  ))}
                 </div>
+              )}
+
+              {/* Inactive Badge if applicable */}
+              {!driver.is_active && (
+                <div className="flex justify-center">
+                  <Badge variant="secondary" className="rounded-full px-3 py-1 text-xs">
+                    Inactive
+                  </Badge>
+                </div>
+              )}
+
+              {/* Action Buttons - Bottom Right */}
+              <div className="flex justify-end gap-2 pt-4">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      size="icon" 
+                      variant="outline" 
+                      onClick={() => handleEdit(driver)}
+                      className="hover:bg-primary/10 hover:border-primary/50"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Edit Driver</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      size="icon" 
+                      variant="destructive" 
+                      onClick={() => handleDelete(driver.id)}
+                      className="hover:bg-destructive/90"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Remove Driver</p>
+                  </TooltipContent>
+                </Tooltip>
               </div>
-            </Card>
-          ))}
-        </div>
-      </TooltipProvider>
+            </div>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };
