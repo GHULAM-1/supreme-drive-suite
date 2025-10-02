@@ -2,7 +2,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Shield, Award, Users, Globe, CheckCircle } from "lucide-react";
+import { Shield, Award, Users, Globe, CheckCircle, Quote, BadgeCheck } from "lucide-react";
 import protectionHero from "@/assets/service-protection.jpg";
 import CloseProtectionEnquiryForm from "@/components/CloseProtectionEnquiryForm";
 
@@ -34,6 +34,28 @@ const CloseProtection = () => {
     "Comprehensive Threat Assessment",
     "Continuous Training & Accreditation",
     "Seamless Global Coordination",
+  ];
+
+  const accreditations = [
+    { name: "SIA Licensed", description: "Security Industry Authority" },
+    { name: "ISO Certified", description: "Quality Management Standards" },
+    { name: "BSIA Member", description: "British Security Industry Association" },
+    { name: "CPO Certified", description: "Close Protection Officer" },
+  ];
+
+  const testimonials = [
+    {
+      quote: "The team provided seamless security for our high-profile corporate event. Their discretion and professionalism were exemplary.",
+      clientType: "CEO, Fortune 500 Company",
+    },
+    {
+      quote: "During international travel, I felt completely secure yet unrestricted. True professionals who understand the balance between protection and privacy.",
+      clientType: "Private Client",
+    },
+    {
+      quote: "Their residential protection service is second to none. We have complete peace of mind knowing our family is in capable hands.",
+      clientType: "Private Family",
+    },
   ];
 
   const scrollToForm = () => {
@@ -143,8 +165,87 @@ const CloseProtection = () => {
         </div>
       </section>
 
+      {/* Trust & Credentials Section */}
+      <section className="py-24 bg-gradient-to-b from-background to-background/50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto space-y-16">
+            
+            {/* Accreditations & Certifications */}
+            <div className="text-center">
+              <h2 className="text-4xl md:text-5xl font-display font-bold text-gradient-metal mb-4">
+                Accredited & Certified
+              </h2>
+              <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
+                Our credentials reflect our commitment to the highest security standards
+              </p>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {accreditations.map((cert, index) => (
+                  <Card 
+                    key={index}
+                    className="p-6 bg-gradient-to-br from-card/80 to-card/50 backdrop-blur border-primary/30 hover:border-primary/50 transition-all hover-lift"
+                  >
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                      <BadgeCheck className="w-8 h-8 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-bold text-foreground mb-1">
+                      {cert.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      {cert.description}
+                    </p>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Trusted by Clients */}
+            <div>
+              <h2 className="text-4xl md:text-5xl font-display font-bold text-gradient-metal mb-4 text-center">
+                Trusted by High-Profile Clients
+              </h2>
+              <p className="text-lg text-muted-foreground mb-12 text-center max-w-2xl mx-auto">
+                Discover why discerning clients choose our close protection services
+              </p>
+              
+              <div className="grid md:grid-cols-3 gap-6">
+                {testimonials.map((testimonial, index) => (
+                  <Card 
+                    key={index}
+                    className="p-8 bg-card/50 backdrop-blur border-primary/20 hover:border-primary/40 transition-all"
+                  >
+                    <Quote className="w-10 h-10 text-primary/30 mb-4" />
+                    <p className="text-muted-foreground italic mb-6 leading-relaxed">
+                      "{testimonial.quote}"
+                    </p>
+                    <p className="text-sm font-semibold text-primary">
+                      {testimonial.clientType}
+                    </p>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Confidentiality Assurance */}
+            <div className="text-center">
+              <Card className="p-8 bg-gradient-to-br from-card/80 to-card/50 backdrop-blur border-primary/30 max-w-4xl mx-auto">
+                <div className="flex items-start gap-4 text-left">
+                  <Shield className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
+                  <p className="text-muted-foreground leading-relaxed">
+                    Our close protection services operate under strict confidentiality protocols. 
+                    All client information and operational details remain private at all times. 
+                    We maintain the highest standards of discretion and data security throughout every engagement.
+                  </p>
+                </div>
+              </Card>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* Enquiry Form Section */}
-      <section id="enquiry-form" className="py-24 bg-gradient-to-b from-background to-background/50">
+      <section id="enquiry-form" className="py-24 bg-gradient-to-b from-background/50 to-background">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
