@@ -22,16 +22,16 @@ const EnhancedHero = () => {
       <div className="container mx-auto px-4 relative z-10 pt-20">
         <div className="max-w-5xl mx-auto text-center space-y-8">
           <div className="space-y-4 animate-fade-in-up">
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-display font-bold text-gradient-metal leading-[0.85] tracking-tight">
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-display font-bold leading-[0.85] tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white via-white/95 to-white/80">
               TRAVEL IN<br />SUPREME STYLE
             </h1>
-            <p className="text-xl md:text-3xl text-foreground/90 max-w-3xl mx-auto font-light leading-relaxed">
+            <p className="text-xl md:text-3xl text-white/90 max-w-3xl mx-auto font-light leading-relaxed">
               Experience unparalleled luxury with our elite chauffeur services and professional close protection
             </p>
           </div>
 
           <div className="space-y-4 animate-fade-in-up animation-delay-200">
-            <p className="text-xs md:text-sm text-muted-foreground/80 font-medium tracking-wider">
+            <p className="text-xs md:text-sm text-white/70 font-medium tracking-wider">
               Available 24/7 · Immediate Response · Discreet Service
             </p>
             
@@ -43,7 +43,7 @@ const EnhancedHero = () => {
                 </Button>
               </a>
               <a href="#booking">
-                <Button size="lg" className="text-lg px-8 py-4 border-2 border-muted-foreground/40 bg-transparent hover:bg-accent/10 hover:border-accent text-foreground hover:text-accent hover:shadow-glow transition-all font-semibold">
+                <Button size="lg" className="text-lg px-8 py-4 border-2 border-white/40 bg-transparent hover:bg-accent/10 hover:border-accent text-white hover:text-accent hover:shadow-glow transition-all font-semibold">
                   Book Online
                 </Button>
               </a>
@@ -54,8 +54,8 @@ const EnhancedHero = () => {
       
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-fade-in animation-delay-600">
-        <div className="w-6 h-10 border-2 border-primary/30 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-primary/50 rounded-full mt-2 animate-pulse" />
+        <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+          <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-pulse" />
         </div>
       </div>
     </section>
