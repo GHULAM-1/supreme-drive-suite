@@ -6,10 +6,17 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ChevronRight, ChevronLeft, Check } from "lucide-react";
+import { 
+  ChevronRight, ChevronLeft, Check, 
+  Baby, Coffee, MapPin, UserCheck, 
+  Car, Crown, TrendingUp, Users as GroupIcon,
+  Calculator, Shield, CheckCircle
+} from "lucide-react";
 import BookingConfirmation from "./BookingConfirmation";
+import CloseProtectionModal from "./CloseProtectionModal";
 
 interface Vehicle {
   id: string;
@@ -49,6 +56,10 @@ const MultiStepBookingWidget = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [bookingReference, setBookingReference] = useState("");
   const [bookingDetails, setBookingDetails] = useState<any>(null);
+  const [calculatedDistance, setCalculatedDistance] = useState<number | null>(null);
+  const [distanceOverride, setDistanceOverride] = useState(false);
+  const [cpInterested, setCpInterested] = useState(false);
+  const [showCPModal, setShowCPModal] = useState(false);
 
   const [formData, setFormData] = useState({
     pickupLocation: "",
@@ -223,6 +234,41 @@ const MultiStepBookingWidget = () => {
       customerPhone: ""
     });
     setSelectedExtras([]);
+    setCalculatedDistance(null);
+    setDistanceOverride(false);
+    setCpInterested(false);
+  };
+
+  const estimateDistance = () => {
+    // Placeholder distance calculator
+    // In production, integrate with Google Distance Matrix API or similar
+    const baseDistance = Math.floor(Math.random() * 50) + 10;
+    setCalculatedDistance(baseDistance);
+    setFormData({ ...formData, estimatedMiles: baseDistance.toString() });
+    toast.success(`Estimated distance: ${baseDistance} miles`);
+  };
+
+  const getExtraIcon = (extraName: string) => {
+    const name = extraName.toLowerCase();
+    if (name.includes("child") || name.includes("seat")) return Baby;
+    if (name.includes("meet") || name.includes("greet")) return UserCheck;
+    if (name.includes("stop") || name.includes("pickup")) return MapPin;
+    if (name.includes("refresh") || name.includes("beverage")) return Coffee;
+    return Coffee;
+  };
+
+  const getVehicleBadge = (vehicleName: string, category: string) => {
+    const name = vehicleName.toLowerCase();
+    if (name.includes("rolls") || name.includes("phantom")) {
+      return { text: "Ultra Luxury", icon: Crown, color: "text-[#C5A572] border-[#C5A572]" };
+    }
+    if (name.includes("s-class") || name.includes("s class")) {
+      return { text: "Most Popular", icon: TrendingUp, color: "text-blue-400 border-blue-400" };
+    }
+    if (name.includes("v-class") || name.includes("v class") || category.toLowerCase().includes("mpv")) {
+      return { text: "Best for Groups", icon: GroupIcon, color: "text-green-400 border-green-400" };
+    }
+    return null;
   };
 
   const priceBreakdown = calculatePriceBreakdown();
@@ -240,151 +286,223 @@ const MultiStepBookingWidget = () => {
   }
 
   return (
-    <Card className="p-8 bg-card/90 backdrop-blur-sm border-primary/30 shadow-metal">
+    <Card className="p-4 md:p-8 bg-card/90 backdrop-blur-sm border-primary/30 shadow-metal">
       <div className="space-y-8">
-        {/* Progress Indicator */}
-        <div className="flex items-center justify-between w-full mb-8">
-          {[1, 2, 3].map((step, index) => (
-            <>
-              <div key={step} className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all ${
-                currentStep >= step 
-                  ? 'bg-accent border-accent text-accent-foreground' 
-                  : 'border-muted text-muted-foreground'
-              }`}>
-                {currentStep > step ? <Check className="w-5 h-5" /> : step}
+        {/* Enhanced Progress Indicator */}
+        <div className="w-full">
+          <div className="flex items-center justify-between relative">
+            {[
+              { step: 1, label: "Journey" },
+              { step: 2, label: "Vehicle" },
+              { step: 3, label: "Details" }
+            ].map(({ step, label }, index) => (
+              <div key={step} className="flex flex-col items-center flex-1 relative z-10">
+                <div className={`flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border-2 transition-all ${
+                  currentStep >= step 
+                    ? 'bg-accent border-accent text-accent-foreground shadow-lg' 
+                    : 'border-muted text-muted-foreground bg-background'
+                } ${currentStep === step ? 'animate-pulse' : ''}`}>
+                  {currentStep > step ? <Check className="w-5 h-5 md:w-6 md:h-6" /> : <span className="text-lg md:text-xl font-semibold">{step}</span>}
+                </div>
+                <span className={`mt-2 text-xs md:text-sm font-medium ${
+                  currentStep >= step ? 'text-accent' : 'text-muted-foreground'
+                }`}>
+                  {label}
+                </span>
+                {index < 2 && (
+                  <div className={`absolute top-6 left-[calc(50%+24px)] md:left-[calc(50%+28px)] w-[calc(100%-48px)] md:w-[calc(100%-56px)] h-0.5 ${
+                    currentStep > step ? 'bg-accent' : 'bg-muted'
+                  }`} />
+                )}
               </div>
-              {index < 2 && (
-                <div className={`flex-1 h-0.5 mx-4 ${
-                  currentStep > index + 1 ? 'bg-accent' : 'bg-muted'
-                }`} />
-              )}
-            </>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Step 1: Journey Details */}
         {currentStep === 1 && (
-          <div className="space-y-6 animate-fade-in">
-            <h3 className="text-2xl font-display font-semibold text-gradient-metal">Journey Details</h3>
+          <div className="space-y-8 animate-fade-in">
+            <h3 className="text-2xl md:text-3xl font-display font-semibold text-gradient-metal">Journey Details</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="pickupLocation">Pickup Location</Label>
-                <Input
-                  id="pickupLocation"
-                  value={formData.pickupLocation}
-                  onChange={(e) => setFormData({ ...formData, pickupLocation: e.target.value })}
-                  placeholder="Enter pickup address"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="dropoffLocation">Drop-off Location</Label>
-                <Input
-                  id="dropoffLocation"
-                  value={formData.dropoffLocation}
-                  onChange={(e) => setFormData({ ...formData, dropoffLocation: e.target.value })}
-                  placeholder="Enter destination"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="pickupDate">Pickup Date</Label>
-                <Input
-                  id="pickupDate"
-                  type="date"
-                  value={formData.pickupDate}
-                  onChange={(e) => setFormData({ ...formData, pickupDate: e.target.value })}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="pickupTime">Pickup Time</Label>
-                <Input
-                  id="pickupTime"
-                  type="time"
-                  value={formData.pickupTime}
-                  onChange={(e) => setFormData({ ...formData, pickupTime: e.target.value })}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="passengers">Passengers</Label>
-                <Input
-                  id="passengers"
-                  type="number"
-                  min="1"
-                  value={formData.passengers}
-                  onChange={(e) => setFormData({ ...formData, passengers: e.target.value })}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="luggage">Luggage Items</Label>
-                <Input
-                  id="luggage"
-                  type="number"
-                  min="0"
-                  value={formData.luggage}
-                  onChange={(e) => setFormData({ ...formData, luggage: e.target.value })}
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="additionalRequirements">Additional Requirements</Label>
-              <Textarea
-                id="additionalRequirements"
-                value={formData.additionalRequirements}
-                onChange={(e) => setFormData({ ...formData, additionalRequirements: e.target.value })}
-                placeholder="Any special requests or requirements..."
-                rows={3}
-              />
-            </div>
-
-            {!matchedRoute && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Journey Section */}
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold text-foreground/90 flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-accent" />
+                Journey
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="estimatedMiles">Estimated Miles (Optional)</Label>
+                  <Label htmlFor="pickupLocation">Pickup Location</Label>
                   <Input
-                    id="estimatedMiles"
-                    type="number"
-                    step="0.1"
-                    value={formData.estimatedMiles}
-                    onChange={(e) => setFormData({ ...formData, estimatedMiles: e.target.value })}
+                    id="pickupLocation"
+                    value={formData.pickupLocation}
+                    onChange={(e) => setFormData({ ...formData, pickupLocation: e.target.value })}
+                    placeholder="Enter pickup address"
+                    className="p-4 focus-visible:ring-[#C5A572]"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="waitTime">Wait Time (Hours)</Label>
+                  <Label htmlFor="dropoffLocation">Drop-off Location</Label>
                   <Input
-                    id="waitTime"
-                    type="number"
-                    step="0.5"
-                    value={formData.waitTime}
-                    onChange={(e) => setFormData({ ...formData, waitTime: e.target.value })}
+                    id="dropoffLocation"
+                    value={formData.dropoffLocation}
+                    onChange={(e) => setFormData({ ...formData, dropoffLocation: e.target.value })}
+                    placeholder="Enter destination"
+                    className="p-4 focus-visible:ring-[#C5A572]"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="pickupDate">Pickup Date</Label>
+                  <Input
+                    id="pickupDate"
+                    type="date"
+                    value={formData.pickupDate}
+                    onChange={(e) => setFormData({ ...formData, pickupDate: e.target.value })}
+                    className="p-4 focus-visible:ring-[#C5A572]"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="pickupTime">Pickup Time</Label>
+                  <Input
+                    id="pickupTime"
+                    type="time"
+                    value={formData.pickupTime}
+                    onChange={(e) => setFormData({ ...formData, pickupTime: e.target.value })}
+                    className="p-4 focus-visible:ring-[#C5A572]"
                   />
                 </div>
               </div>
-            )}
 
-            <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="isLongDrive"
-                  checked={formData.isLongDrive}
-                  onCheckedChange={(checked) => setFormData({ ...formData, isLongDrive: checked as boolean })}
+              {/* Distance Calculator */}
+              {!matchedRoute && formData.pickupLocation && formData.dropoffLocation && (
+                <div className="flex items-center gap-3 p-4 bg-accent/5 border border-accent/20 rounded-lg">
+                  <Calculator className="w-5 h-5 text-accent" />
+                  {calculatedDistance && !distanceOverride ? (
+                    <>
+                      <span className="text-sm">Estimated: <span className="font-semibold text-accent">~{calculatedDistance} miles</span></span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setDistanceOverride(true)}
+                        className="ml-auto"
+                      >
+                        Edit
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={estimateDistance}
+                      className="ml-auto"
+                    >
+                      Calculate Distance
+                    </Button>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Passengers & Luggage Section */}
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold text-foreground/90 flex items-center gap-2">
+                <GroupIcon className="w-5 h-5 text-accent" />
+                Passengers & Luggage
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="passengers">Passengers</Label>
+                  <Input
+                    id="passengers"
+                    type="number"
+                    min="1"
+                    value={formData.passengers}
+                    onChange={(e) => setFormData({ ...formData, passengers: e.target.value })}
+                    className="p-4 focus-visible:ring-[#C5A572]"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="luggage">Luggage Items</Label>
+                  <Input
+                    id="luggage"
+                    type="number"
+                    min="0"
+                    value={formData.luggage}
+                    onChange={(e) => setFormData({ ...formData, luggage: e.target.value })}
+                    className="p-4 focus-visible:ring-[#C5A572]"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Additional Options Section */}
+            <div className="space-y-4">
+              <h4 className="text-lg font-semibold text-foreground/90">Additional Options</h4>
+              
+              <div className="space-y-2">
+                <Label htmlFor="additionalRequirements">Special Requests</Label>
+                <Textarea
+                  id="additionalRequirements"
+                  value={formData.additionalRequirements}
+                  onChange={(e) => setFormData({ ...formData, additionalRequirements: e.target.value })}
+                  placeholder="Any special requests or requirements..."
+                  rows={3}
+                  className="p-4 focus-visible:ring-[#C5A572]"
                 />
-                <Label htmlFor="isLongDrive" className="cursor-pointer">Long drive (4+ hours)</Label>
               </div>
 
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="hasOvernightStop"
-                  checked={formData.hasOvernightStop}
-                  onCheckedChange={(checked) => setFormData({ ...formData, hasOvernightStop: checked as boolean })}
-                />
-                <Label htmlFor="hasOvernightStop" className="cursor-pointer">Overnight stop required</Label>
+              {!matchedRoute && (distanceOverride || !calculatedDistance) && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="estimatedMiles">Estimated Miles</Label>
+                    <Input
+                      id="estimatedMiles"
+                      type="number"
+                      step="0.1"
+                      value={formData.estimatedMiles}
+                      onChange={(e) => setFormData({ ...formData, estimatedMiles: e.target.value })}
+                      className="p-4 focus-visible:ring-[#C5A572]"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="waitTime">Wait Time (Hours)</Label>
+                    <Input
+                      id="waitTime"
+                      type="number"
+                      step="0.5"
+                      value={formData.waitTime}
+                      onChange={(e) => setFormData({ ...formData, waitTime: e.target.value })}
+                      className="p-4 focus-visible:ring-[#C5A572]"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="isLongDrive"
+                    checked={formData.isLongDrive}
+                    onCheckedChange={(checked) => setFormData({ ...formData, isLongDrive: checked as boolean })}
+                  />
+                  <Label htmlFor="isLongDrive" className="cursor-pointer">Long drive (4+ hours)</Label>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="hasOvernightStop"
+                    checked={formData.hasOvernightStop}
+                    onCheckedChange={(checked) => setFormData({ ...formData, hasOvernightStop: checked as boolean })}
+                  />
+                  <Label htmlFor="hasOvernightStop" className="cursor-pointer">Overnight stop required</Label>
+                </div>
               </div>
             </div>
 
@@ -402,52 +520,103 @@ const MultiStepBookingWidget = () => {
         {/* Step 2: Vehicle Selection */}
         {currentStep === 2 && (
           <div className="space-y-6 animate-fade-in">
-            <h3 className="text-2xl font-display font-semibold text-gradient-metal">Select Your Vehicle</h3>
+            <h3 className="text-2xl md:text-3xl font-display font-semibold text-gradient-metal">Select Your Vehicle</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {vehicles.map((vehicle) => (
-                <Card
-                  key={vehicle.id}
-                  className={`p-6 cursor-pointer transition-all hover:border-accent/50 ${
-                    formData.vehicleId === vehicle.id 
-                      ? 'border-accent bg-accent/10' 
-                      : 'border-border'
-                  }`}
-                  onClick={() => setFormData({ ...formData, vehicleId: vehicle.id })}
-                >
-                  <div className="space-y-4">
-                    {vehicle.image_url && (
-                      <img 
-                        src={vehicle.image_url} 
-                        alt={vehicle.name}
-                        className="w-full h-32 object-cover rounded-lg"
-                      />
-                    )}
-                    <div>
-                      <h4 className="text-lg font-semibold">{vehicle.name}</h4>
-                      <p className="text-sm text-muted-foreground">{vehicle.category}</p>
-                    </div>
-                    <div className="text-sm">
-                      <p>Capacity: {vehicle.capacity} passengers</p>
-                      <p className="text-accent font-semibold mt-2">
-                        £{vehicle.base_price_per_mile.toFixed(2)} per mile
-                      </p>
-                    </div>
-                    {vehicle.features && vehicle.features.length > 0 && (
-                      <div className="text-xs text-muted-foreground">
-                        {vehicle.features.slice(0, 3).join(' • ')}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {vehicles
+                .sort((a, b) => {
+                  // Rolls-Royce Phantom first
+                  if (a.name.toLowerCase().includes("rolls") || a.name.toLowerCase().includes("phantom")) return -1;
+                  if (b.name.toLowerCase().includes("rolls") || b.name.toLowerCase().includes("phantom")) return 1;
+                  return 0;
+                })
+                .map((vehicle) => {
+                  const badge = getVehicleBadge(vehicle.name, vehicle.category);
+                  const isRollsRoyce = vehicle.name.toLowerCase().includes("rolls") || vehicle.name.toLowerCase().includes("phantom");
+                  
+                  return (
+                    <Card
+                      key={vehicle.id}
+                      className={`p-6 cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.02] relative ${
+                        formData.vehicleId === vehicle.id 
+                          ? 'border-accent bg-accent/10 shadow-lg' 
+                          : 'border-border hover:border-accent/50'
+                      } ${isRollsRoyce ? 'border-[#C5A572] shadow-[0_0_20px_rgba(197,165,114,0.2)]' : ''}`}
+                      onClick={() => setFormData({ ...formData, vehicleId: vehicle.id })}
+                    >
+                      {/* Badge */}
+                      {badge && (
+                        <div className={`absolute top-4 right-4 flex items-center gap-1 px-3 py-1 rounded-full border text-xs font-semibold ${badge.color} bg-background/80 backdrop-blur-sm`}>
+                          <badge.icon className="w-3 h-3" />
+                          {badge.text}
+                        </div>
+                      )}
+
+                      <div className="space-y-4">
+                        {/* Vehicle Icon/Image */}
+                        <div className={`flex items-center justify-center h-32 rounded-lg ${
+                          isRollsRoyce 
+                            ? 'bg-gradient-to-br from-[#C5A572]/20 to-[#8B7355]/20' 
+                            : 'bg-accent/5'
+                        }`}>
+                          {vehicle.image_url ? (
+                            <img 
+                              src={vehicle.image_url} 
+                              alt={vehicle.name}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          ) : (
+                            <Car className={`w-20 h-20 ${isRollsRoyce ? 'text-[#C5A572]' : 'text-accent'}`} />
+                          )}
+                        </div>
+
+                        {/* Vehicle Details */}
+                        <div>
+                          <h4 className="text-lg font-semibold flex items-center gap-2">
+                            {vehicle.name}
+                            {isRollsRoyce && <Crown className="w-5 h-5 text-[#C5A572]" />}
+                          </h4>
+                          <p className="text-sm text-muted-foreground">{vehicle.category}</p>
+                        </div>
+
+                        {/* Capacity & Pricing */}
+                        <div className="flex items-center justify-between text-sm border-t border-border/50 pt-3">
+                          <div className="flex items-center gap-4">
+                            <span className="flex items-center gap-1">
+                              <GroupIcon className="w-4 h-4 text-muted-foreground" />
+                              {vehicle.capacity}
+                            </span>
+                          </div>
+                          <p className={`font-semibold ${isRollsRoyce ? 'text-[#C5A572]' : 'text-accent'}`}>
+                            £{vehicle.base_price_per_mile.toFixed(2)}/mile
+                          </p>
+                        </div>
+
+                        {/* Key Features */}
+                        {vehicle.features && vehicle.features.length > 0 && (
+                          <div className="text-xs text-muted-foreground pt-2 border-t border-border/50">
+                            {vehicle.features.slice(0, 3).join(' • ')}
+                          </div>
+                        )}
+
+                        {/* Selected Indicator */}
+                        {formData.vehicleId === vehicle.id && (
+                          <div className="flex items-center gap-2 text-accent font-medium text-sm pt-2">
+                            <CheckCircle className="w-4 h-4" />
+                            Selected
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </Card>
-              ))}
+                    </Card>
+                  );
+                })}
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Button
                 onClick={() => setCurrentStep(1)}
                 variant="outline"
-                className="flex-1"
+                className="w-full sm:flex-1 order-2 sm:order-1"
                 size="lg"
               >
                 <ChevronLeft className="mr-2 w-5 h-5" /> Back
@@ -455,7 +624,7 @@ const MultiStepBookingWidget = () => {
               <Button
                 onClick={() => setCurrentStep(3)}
                 disabled={!canProceedStep2}
-                className="flex-1 gradient-accent hover-lift"
+                className="w-full sm:flex-1 gradient-accent hover-lift order-1 sm:order-2"
                 size="lg"
               >
                 Continue to Extras <ChevronRight className="ml-2 w-5 h-5" />
@@ -467,85 +636,151 @@ const MultiStepBookingWidget = () => {
         {/* Step 3: Extras & Client Details */}
         {currentStep === 3 && (
           <div className="space-y-6 animate-fade-in">
-            <div className="grid lg:grid-cols-3 gap-8">
+            <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
               <div className="lg:col-span-2 space-y-6">
-                <h3 className="text-2xl font-display font-semibold text-gradient-metal">Extras & Details</h3>
+                <h3 className="text-2xl md:text-3xl font-display font-semibold text-gradient-metal">Extras & Details</h3>
                 
+                {/* Optional Extras with Icons */}
                 {extras.length > 0 && (
-                  <div className="space-y-3">
-                    <Label>Optional Extras</Label>
-                    {extras.map((extra) => (
-                      <div key={extra.id} className="flex items-center space-x-3 p-4 border border-border rounded-lg">
-                        <Checkbox
-                          id={extra.id}
-                          checked={selectedExtras.includes(extra.id)}
-                          onCheckedChange={(checked) => {
-                            if (checked) {
-                              setSelectedExtras([...selectedExtras, extra.id]);
-                            } else {
+                  <div className="space-y-4">
+                    <Label className="text-lg font-semibold">Optional Extras</Label>
+                    {extras.map((extra) => {
+                      const IconComponent = getExtraIcon(extra.extra_name);
+                      return (
+                        <div 
+                          key={extra.id} 
+                          className={`flex items-start gap-4 p-4 border rounded-lg transition-all cursor-pointer hover:border-accent/50 ${
+                            selectedExtras.includes(extra.id) ? 'border-accent bg-accent/5' : 'border-border'
+                          }`}
+                          onClick={() => {
+                            if (selectedExtras.includes(extra.id)) {
                               setSelectedExtras(selectedExtras.filter(id => id !== extra.id));
+                            } else {
+                              setSelectedExtras([...selectedExtras, extra.id]);
                             }
                           }}
-                        />
-                        <Label htmlFor={extra.id} className="flex-1 cursor-pointer">
-                          <span className="font-medium">{extra.extra_name}</span>
-                          {extra.description && (
-                            <span className="block text-sm text-muted-foreground">{extra.description}</span>
-                          )}
-                        </Label>
-                        <span className="text-accent font-semibold">£{extra.price.toFixed(2)}</span>
-                      </div>
-                    ))}
+                        >
+                          <div className={`p-2 rounded-lg ${selectedExtras.includes(extra.id) ? 'bg-accent/20' : 'bg-muted/50'}`}>
+                            <IconComponent className={`w-5 h-5 ${selectedExtras.includes(extra.id) ? 'text-accent' : 'text-muted-foreground'}`} />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-start justify-between gap-2">
+                              <div>
+                                <p className="font-medium">{extra.extra_name}</p>
+                                {extra.description && (
+                                  <p className="text-sm text-muted-foreground mt-1">{extra.description}</p>
+                                )}
+                              </div>
+                              <span className="text-accent font-semibold whitespace-nowrap">£{extra.price.toFixed(2)}</span>
+                            </div>
+                          </div>
+                          <Checkbox
+                            id={extra.id}
+                            checked={selectedExtras.includes(extra.id)}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                setSelectedExtras([...selectedExtras, extra.id]);
+                              } else {
+                                setSelectedExtras(selectedExtras.filter(id => id !== extra.id));
+                              }
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
 
+                {/* Close Protection Toggle */}
+                <div className="p-6 border border-[#C5A572]/30 rounded-lg bg-gradient-to-br from-[#C5A572]/5 to-transparent">
+                  <div className="flex items-start gap-4">
+                    <div className="p-2 rounded-lg bg-[#C5A572]/20">
+                      <Shield className="w-6 h-6 text-[#C5A572]" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-lg mb-1">Interested in Close Protection?</h4>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Add discreet security for this journey with our trained professionals
+                      </p>
+                      <div className="flex items-center gap-3">
+                        <Switch
+                          id="cp-toggle"
+                          checked={cpInterested}
+                          onCheckedChange={(checked) => {
+                            setCpInterested(checked);
+                            if (checked) {
+                              setShowCPModal(true);
+                            }
+                          }}
+                        />
+                        <Label htmlFor="cp-toggle" className="cursor-pointer text-sm">
+                          I'm interested
+                        </Label>
+                        <Button
+                          variant="link"
+                          size="sm"
+                          onClick={() => setShowCPModal(true)}
+                          className="ml-auto text-[#C5A572] hover:text-[#C5A572]/80"
+                        >
+                          Learn More →
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Customer Details */}
                 <div className="space-y-4 pt-6 border-t border-border">
                   <h4 className="text-lg font-semibold">Your Details</h4>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="customerName">Full Name</Label>
+                    <Label htmlFor="customerName">Full Name *</Label>
                     <Input
                       id="customerName"
                       value={formData.customerName}
                       onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
                       placeholder="Enter your name"
+                      className="p-4 focus-visible:ring-[#C5A572]"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="customerEmail">Email Address</Label>
+                    <Label htmlFor="customerEmail">Email Address *</Label>
                     <Input
                       id="customerEmail"
                       type="email"
                       value={formData.customerEmail}
                       onChange={(e) => setFormData({ ...formData, customerEmail: e.target.value })}
                       placeholder="your@email.com"
+                      className="p-4 focus-visible:ring-[#C5A572]"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="customerPhone">Phone Number</Label>
+                    <Label htmlFor="customerPhone">Phone Number *</Label>
                     <Input
                       id="customerPhone"
                       type="tel"
                       value={formData.customerPhone}
                       onChange={(e) => setFormData({ ...formData, customerPhone: e.target.value })}
-                      placeholder="Your contact number"
+                      placeholder="+44 7XXX XXXXXX"
+                      className="p-4 focus-visible:ring-[#C5A572]"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Fixed Price Summary */}
+              {/* Sticky Price Summary (Desktop) */}
               <div className="lg:col-span-1">
-                <Card className="p-6 bg-gradient-dark border-accent/30 sticky top-4">
+                <Card className="p-6 bg-gradient-dark border-accent/30 lg:sticky lg:top-24 lg:self-start">
                   <h4 className="text-lg font-semibold text-gradient-metal mb-4">Price Summary</h4>
                   
                   {priceBreakdown ? (
                     <div className="space-y-3">
                       {priceBreakdown.isFixedRoute ? (
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Fixed Route Price</span>
+                          <span className="text-muted-foreground">Fixed Route</span>
                           <span className="font-medium">£{priceBreakdown.basePrice.toFixed(2)}</span>
                         </div>
                       ) : (
@@ -586,36 +821,55 @@ const MultiStepBookingWidget = () => {
                       </div>
                       
                       <p className="text-xs text-muted-foreground mt-4">
-                        * This is an estimated price. Final price may vary based on actual distance and time.
+                        * Estimated price. Final price may vary based on actual distance and time.
                       </p>
                     </div>
                   ) : (
-                    <p className="text-muted-foreground">Select a vehicle to see pricing</p>
+                    <p className="text-muted-foreground text-sm">Select a vehicle to see pricing</p>
                   )}
                 </Card>
               </div>
             </div>
 
-            <div className="flex gap-4">
-              <Button
-                onClick={() => setCurrentStep(2)}
-                variant="outline"
-                className="flex-1"
-                size="lg"
-              >
-                <ChevronLeft className="mr-2 w-5 h-5" /> Back
-              </Button>
-              <Button
-                onClick={handleSubmit}
-                disabled={!canSubmit || loading}
-                className="flex-1 gradient-accent hover-lift"
-                size="lg"
-              >
-                {loading ? "Submitting..." : "Confirm Booking"}
-              </Button>
+            {/* Action Buttons */}
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <Button
+                  onClick={() => setCurrentStep(2)}
+                  variant="outline"
+                  className="w-full sm:flex-1 order-2 sm:order-1"
+                  size="lg"
+                >
+                  <ChevronLeft className="mr-2 w-5 h-5" /> Back
+                </Button>
+                <Button
+                  onClick={handleSubmit}
+                  disabled={!canSubmit || loading}
+                  className="w-full sm:flex-1 gradient-accent hover-lift order-1 sm:order-2"
+                  size="lg"
+                >
+                  {loading ? "Submitting..." : "Confirm Booking"}
+                </Button>
+              </div>
+              
+              {/* Reassurance Text */}
+              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                <CheckCircle className="w-4 h-4 text-green-500" />
+                <p>Your request will be reviewed by our team. You'll receive confirmation shortly.</p>
+              </div>
             </div>
           </div>
         )}
+
+        {/* Close Protection Modal */}
+        <CloseProtectionModal
+          open={showCPModal}
+          onOpenChange={setShowCPModal}
+          customerName={formData.customerName}
+          customerEmail={formData.customerEmail}
+          customerPhone={formData.customerPhone}
+          bookingDetails={`${formData.pickupLocation} → ${formData.dropoffLocation} on ${formData.pickupDate} at ${formData.pickupTime}`}
+        />
       </div>
     </Card>
   );
