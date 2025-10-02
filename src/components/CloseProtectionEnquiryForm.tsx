@@ -53,35 +53,30 @@ const CloseProtectionEnquiryForm = () => {
     try {
       const priority = data.riskLevel === "High" ? "high" : "normal";
       
-      const { data: booking, error } = await supabase
-        .from("bookings")
-        .insert({
-          customer_name: data.fullName,
-          customer_email: data.email,
-          customer_phone: data.phone,
-          pickup_location: data.primaryLocation,
-          dropoff_location: data.secondaryLocation || "N/A",
-          pickup_date: data.date,
-          pickup_time: data.startTime,
-          passengers: data.agentsRequired || 1,
-          luggage: 0,
-          service_type: "close_protection",
-          protection_details: {
-            service_type: data.serviceType,
-            date: data.date,
-            start_time: data.startTime,
-            duration_hours: data.durationHours,
-            primary_location: data.primaryLocation,
-            secondary_location: data.secondaryLocation,
-            agents_required: data.agentsRequired,
-            risk_level: data.riskLevel,
-            additional_notes: data.notes,
-          },
-          source: "CloseProtectionForm",
-          priority,
-          status: "in_review",
-          internal_notes: `CLOSE PROTECTION ENQUIRY - Risk Level: ${data.riskLevel}`,
-        });
+      const { data: bookingId, error } = await supabase.rpc('insert_close_protection_booking', {
+        p_service_type: 'close_protection',
+        p_pickup_location: data.primaryLocation,
+        p_dropoff_location: data.secondaryLocation || "N/A",
+        p_pickup_date: data.date,
+        p_pickup_time: data.startTime,
+        p_passengers: data.agentsRequired || 1,
+        p_luggage: 0,
+        p_customer_name: data.fullName,
+        p_customer_email: data.email,
+        p_customer_phone: data.phone,
+        p_additional_requirements: `CLOSE PROTECTION ENQUIRY - Risk Level: ${data.riskLevel}${data.notes ? '\n' + data.notes : ''}`,
+        p_protection_details: {
+          service_type: data.serviceType,
+          date: data.date,
+          start_time: data.startTime,
+          duration_hours: data.durationHours,
+          primary_location: data.primaryLocation,
+          secondary_location: data.secondaryLocation,
+          agents_required: data.agentsRequired,
+          risk_level: data.riskLevel,
+          additional_notes: data.notes,
+        }
+      });
 
       if (error) throw error;
 

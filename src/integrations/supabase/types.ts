@@ -803,6 +803,23 @@ export type Database = {
       }
     }
     Functions: {
+      insert_close_protection_booking: {
+        Args: {
+          p_additional_requirements: string
+          p_customer_email: string
+          p_customer_name: string
+          p_customer_phone: string
+          p_dropoff_location: string
+          p_luggage: number
+          p_passengers: number
+          p_pickup_date: string
+          p_pickup_location: string
+          p_pickup_time: string
+          p_protection_details: Json
+          p_service_type: string
+        }
+        Returns: string
+      }
       is_admin: {
         Args: { user_id: string }
         Returns: boolean
