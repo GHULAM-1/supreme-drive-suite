@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import UniversalHero from "@/components/UniversalHero";
 import SEO from "@/components/SEO";
+import luxuryHero from "@/assets/luxury-hero.jpg";
 import { PortfolioCard } from "@/components/portfolio/PortfolioCard";
 import { PortfolioFilters } from "@/components/portfolio/PortfolioFilters";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -117,21 +119,25 @@ const Portfolio = () => {
       <div className="min-h-screen flex flex-col bg-background">
         <Navigation />
         
+        <UniversalHero
+          headline={<>Our Portfolio</>}
+          subheading="Exceptional journeys and secure operations that define excellence"
+          backgroundImage={luxuryHero}
+          backgroundAlt="Luxury chauffeur and close protection portfolio"
+          overlayStrength="medium"
+          primaryCTA={{
+            text: "View All Projects",
+            onClick: () => {
+              document.getElementById("portfolio-grid")?.scrollIntoView({ behavior: "smooth" });
+            }
+          }}
+          secondaryCTA={{
+            text: "Book a Service",
+            href: "/contact"
+          }}
+        />
+        
         <main className="flex-1">
-          {/* Hero Section */}
-          <section className="relative py-20 border-b border-border/50">
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent" />
-            <div className="container mx-auto px-4 relative">
-              <div className="max-w-3xl mx-auto text-center">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                  Our Portfolio
-                </h1>
-                <p className="text-lg text-muted-foreground">
-                  Exceptional journeys and secure operations that define excellence
-                </p>
-              </div>
-            </div>
-          </section>
 
           {/* Filters */}
           <section className="py-8 border-b border-border/50">
@@ -141,7 +147,7 @@ const Portfolio = () => {
           </section>
 
           {/* Portfolio Grid */}
-          <section className="py-16">
+          <section id="portfolio-grid" className="py-16">
             <div className="container mx-auto px-4">
               {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
