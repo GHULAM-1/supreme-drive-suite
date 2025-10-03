@@ -23,7 +23,7 @@ export const PortfolioFilters = ({ onFilter, items }: PortfolioFiltersProps) => 
   const [serviceType, setServiceType] = useState("all");
   const [vehicle, setVehicle] = useState("");
   const [location, setLocation] = useState("");
-  const [year, setYear] = useState("");
+  const [year, setYear] = useState("all");
   const [search, setSearch] = useState("");
 
   const uniqueYears = useMemo(() => {
@@ -92,7 +92,7 @@ export const PortfolioFilters = ({ onFilter, items }: PortfolioFiltersProps) => 
             <SelectValue placeholder="Year" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Years</SelectItem>
+            <SelectItem value="all">All Years</SelectItem>
             {uniqueYears.map((y) => (
               <SelectItem key={y} value={y.toString()}>
                 {y}

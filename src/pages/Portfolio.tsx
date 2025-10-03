@@ -84,7 +84,7 @@ const Portfolio = () => {
       );
     }
 
-    if (filters.year) {
+    if (filters.year && filters.year !== "all") {
       filtered = filtered.filter((item) =>
         item.event_date.startsWith(filters.year)
       );
