@@ -10,7 +10,7 @@ interface CTAButton {
 }
 
 interface UniversalHeroProps {
-  headline?: string | React.ReactNode;
+  headline: string | React.ReactNode;
   subheading: string;
   backgroundImage: string;
   backgroundAlt: string;
@@ -93,11 +93,9 @@ const UniversalHero: React.FC<UniversalHeroProps> = ({
           
           {/* Headline */}
           <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            {headline && (
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-extrabold text-white leading-tight">
-                {headline}
-              </h1>
-            )}
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-extrabold text-white leading-tight">
+              {headline}
+            </h1>
             
             {/* Subheading */}
             <p className="text-base md:text-lg lg:text-xl text-white/85 max-w-3xl mx-auto font-sans font-light leading-relaxed">

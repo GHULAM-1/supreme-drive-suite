@@ -1,7 +1,7 @@
 import Navigation from "@/components/Navigation";
 import UniversalHero from "@/components/UniversalHero";
 import TrustBadges from "@/components/TrustBadges";
-import heroBackground from "@/assets/travel-supreme-style-hero.png";
+import rollsRoyceHero from "@/assets/rolls-royce-city-hero.jpg";
 import { Phone } from "lucide-react";
 import EnhancedServiceHighlights from "@/components/EnhancedServiceHighlights";
 import MultiStepBookingWidget from "@/components/MultiStepBookingWidget";
@@ -43,10 +43,11 @@ const Index = () => {
       />
       <Navigation />
       <UniversalHero
+        headline={<>Travel in<br />Supreme Style</>}
         subheading="Experience unparalleled luxury with our elite chauffeur services and professional close protection"
-        backgroundImage={heroBackground}
-        backgroundAlt="Travel in Supreme Style - luxury chauffeur service with premium vehicle"
-        overlayStrength="light"
+        backgroundImage={rollsRoyceHero}
+        backgroundAlt="Ultra-luxury Rolls-Royce chauffeur service in prestigious city skyline"
+        overlayStrength="medium"
         primaryCTA={{
           text: "Call 0800 123 4567",
           href: "tel:08001234567",
