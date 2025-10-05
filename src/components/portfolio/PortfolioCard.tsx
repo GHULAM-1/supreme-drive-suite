@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Calendar, MapPin, Star } from "lucide-react";
+import { Calendar, MapPin, Star, Shield } from "lucide-react";
 import { format } from "date-fns";
 
 interface PortfolioCardProps {
@@ -14,26 +14,37 @@ interface PortfolioCardProps {
     location: string;
     event_date: string;
     is_featured: boolean;
+    is_confidential?: boolean;
   };
 }
 
 export const PortfolioCard = ({ item }: PortfolioCardProps) => {
   return (
     <Link to={`/portfolio/${item.slug}`}>
-      <Card className="group overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-primary/20 hover:-translate-y-1 bg-card border-border/50">
+      <Card className="group overflow-hidden transition-all duration-500 hover:shadow-[0_10px_40px_rgba(255,215,0,0.25)] hover:shadow-glow hover:-translate-y-2 hover:border-accent/50 bg-card border-border/50">
         <div className="relative aspect-[4/3] overflow-hidden">
           <img
             src={item.cover_image_url}
             alt={item.title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-500" />
           
-          {/* Featured Badge */}
-          {item.is_featured && (
+          {/* Confidential Badge */}
+          {item.is_confidential && (
             <div className="absolute top-4 right-4">
-              <Badge className="bg-accent text-accent-foreground border-accent-foreground/20 gap-1">
+              <Badge className="bg-secondary/80 backdrop-blur-sm text-secondary-foreground border-border gap-1">
+                <Shield className="w-3 h-3" />
+                Confidential
+              </Badge>
+            </div>
+          )}
+
+          {/* Featured Badge */}
+          {item.is_featured && !item.is_confidential && (
+            <div className="absolute top-4 right-4">
+              <Badge className="bg-accent/90 backdrop-blur-sm text-accent-foreground border-accent-foreground/20 gap-1 shadow-[0_0_20px_rgba(255,215,0,0.3)]">
                 <Star className="w-3 h-3 fill-current" />
                 Featured
               </Badge>
@@ -42,25 +53,28 @@ export const PortfolioCard = ({ item }: PortfolioCardProps) => {
 
           {/* Service Type Badge */}
           <div className="absolute top-4 left-4">
-            <Badge variant={item.service_type === "chauffeur" ? "default" : "secondary"}>
+            <Badge 
+              variant={item.service_type === "chauffeur" ? "default" : "secondary"}
+              className="backdrop-blur-sm"
+            >
               {item.service_type === "chauffeur" ? "Chauffeur" : "Close Protection"}
             </Badge>
           </div>
         </div>
 
         <div className="p-6 space-y-3">
-          <h3 className="text-xl font-semibold group-hover:text-primary transition-colors line-clamp-2">
+          <h3 className="text-xl font-display font-semibold group-hover:text-accent transition-colors duration-300 line-clamp-2">
             {item.title}
           </h3>
           
-          <p className="text-sm text-muted-foreground line-clamp-2">
-            {item.summary}
+          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
+            {item.is_confidential ? "Details available upon request" : item.summary}
           </p>
 
-          <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2">
+          <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t border-border/50 pt-3">
             <div className="flex items-center gap-1">
               <MapPin className="w-3 h-3" />
-              <span>{item.location}</span>
+              <span>{item.is_confidential ? "Private Location" : item.location}</span>
             </div>
             <div className="flex items-center gap-1">
               <Calendar className="w-3 h-3" />

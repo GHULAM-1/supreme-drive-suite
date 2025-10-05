@@ -9,6 +9,7 @@ import chauffeurHero from "@/assets/chauffeur-hero.jpg";
 import EnhancedTestimonials from "@/components/EnhancedTestimonials";
 import MultiStepBookingWidget from "@/components/MultiStepBookingWidget";
 import SEO from "@/components/SEO";
+import { PortfolioCarousel } from "@/components/portfolio/PortfolioCarousel";
 
 const ChauffeurServices = () => {
   const services = [
@@ -202,6 +203,13 @@ const ChauffeurServices = () => {
           </div>
         </div>
       </section>
+
+      {/* Featured Projects Carousel */}
+      <PortfolioCarousel 
+        serviceType="chauffeur"
+        title="Featured Projects"
+        subtitle="Discover our portfolio of exceptional chauffeur services"
+      />
 
       {/* Testimonials */}
       <EnhancedTestimonials />

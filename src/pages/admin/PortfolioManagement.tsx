@@ -30,6 +30,8 @@ import {
   Eye,
   EyeOff,
   Copy,
+  ChevronRight,
+  Sparkles,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -41,6 +43,21 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 interface PortfolioItem {
   id: string;
@@ -66,6 +83,7 @@ export default function PortfolioManagement() {
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<string>("");
 
   useEffect(() => {
     loadPortfolioItems();
@@ -98,6 +116,7 @@ export default function PortfolioManagement() {
 
       if (error) throw error;
       setItems(data || []);
+      setLastUpdated(new Date().toLocaleString());
     } catch (error: any) {
       toast({
         title: "Error",
@@ -249,18 +268,52 @@ export default function PortfolioManagement() {
 
   return (
     <div className="p-8 space-y-6">
+      {/* Breadcrumb */}
+      <Breadcrumb className="mb-2">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/admin">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator>
+            <ChevronRight className="w-4 h-4" />
+          </BreadcrumbSeparator>
+          <BreadcrumbItem>
+            <BreadcrumbPage>Portfolio Management</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Portfolio Management</h1>
-          <p className="text-muted-foreground">
+      <div className="flex justify-between items-start">
+        <div className="space-y-2">
+          <h1 className="text-4xl font-display font-bold text-gradient-metal">
+            Portfolio Management
+          </h1>
+          <p className="text-base text-muted-foreground">
             Manage case studies and project showcases
           </p>
+          {lastUpdated && (
+            <p className="text-xs text-muted-foreground">
+              Last updated: {lastUpdated}
+            </p>
+          )}
         </div>
-        <Button onClick={() => navigate("/admin/portfolio/new")}>
-          <Plus className="mr-2 h-4 w-4" />
-          New Case Study
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                onClick={() => navigate("/admin/portfolio/new")}
+                className="shadow-glow hover:shadow-[0_0_40px_rgba(255,215,0,0.4)] transition-all"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                New Case Study
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Create a new portfolio showcase</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       {/* Filters */}
@@ -367,20 +420,55 @@ export default function PortfolioManagement() {
           </TableHeader>
           <TableBody>
             {loading ? (
-              <TableRow>
-                <TableCell colSpan={8} className="text-center py-8">
-                  Loading...
-                </TableCell>
-              </TableRow>
+              <>
+                {[...Array(5)].map((_, i) => (
+                  <TableRow key={i} className="animate-fade-in" style={{ animationDelay: `${i * 50}ms` }}>
+                    <TableCell><Skeleton className="h-5 w-5" /></TableCell>
+                    <TableCell><Skeleton className="h-16 w-16 rounded" /></TableCell>
+                    <TableCell><Skeleton className="h-5 w-48" /></TableCell>
+                    <TableCell><Skeleton className="h-5 w-32" /></TableCell>
+                    <TableCell><Skeleton className="h-5 w-24" /></TableCell>
+                    <TableCell><Skeleton className="h-5 w-24" /></TableCell>
+                    <TableCell><Skeleton className="h-6 w-20" /></TableCell>
+                    <TableCell><Skeleton className="h-8 w-24 ml-auto" /></TableCell>
+                  </TableRow>
+                ))}
+              </>
             ) : filteredItems.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-8">
-                  No portfolio items found
+                <TableCell colSpan={8} className="py-16">
+                  <div className="flex flex-col items-center justify-center space-y-4 text-center">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-accent to-accent/60 opacity-20 blur-3xl rounded-full" />
+                      <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center">
+                        <Sparkles className="w-10 h-10 text-accent" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-xl font-display font-semibold text-foreground">
+                        No portfolio items yet
+                      </p>
+                      <p className="text-sm text-muted-foreground max-w-sm">
+                        Showcase your best work by adding your first project
+                      </p>
+                    </div>
+                    <Button 
+                      onClick={() => navigate("/admin/portfolio/new")}
+                      className="mt-4 shadow-glow"
+                    >
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add Case Study
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ) : (
-              filteredItems.map((item) => (
-                <TableRow key={item.id}>
+              filteredItems.map((item, index) => (
+                <TableRow 
+                  key={item.id}
+                  className="hover:bg-accent/5 transition-all duration-300 animate-fade-in group"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
                   <TableCell>
                     <Checkbox
                       checked={selectedItems.has(item.id)}
@@ -417,41 +505,66 @@ export default function PortfolioManagement() {
                   </TableCell>
                   <TableCell>
                     <Badge
-                      variant={
-                        item.status === "published" ? "default" : "secondary"
+                      variant={item.status === "published" ? "default" : "secondary"}
+                      className={item.status === "published" 
+                        ? "shadow-[0_0_20px_rgba(255,215,0,0.2)] group-hover:shadow-[0_0_25px_rgba(255,215,0,0.3)] transition-all"
+                        : ""
                       }
                     >
+                      {item.status === "published" && <span className="mr-1">✓</span>}
                       {item.status}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() =>
-                          navigate(`/admin/portfolio/edit/${item.id}`)
-                        }
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleDuplicate(item)}
-                      >
-                        <Copy className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => {
-                          setItemToDelete(item.id);
-                          setDeleteDialogOpen(true);
-                        }}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => navigate(`/admin/portfolio/edit/${item.id}`)}
+                              className="hover:bg-accent/10 hover:text-accent transition-all"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent><p>Edit</p></TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleDuplicate(item)}
+                              className="hover:bg-accent/10 hover:text-accent transition-all"
+                            >
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent><p>Duplicate</p></TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => {
+                                setItemToDelete(item.id);
+                                setDeleteDialogOpen(true);
+                              }}
+                              className="hover:bg-destructive/10 hover:text-destructive transition-all"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent><p>Delete</p></TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
                   </TableCell>
                 </TableRow>

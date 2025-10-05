@@ -24,8 +24,20 @@ import {
   Star,
   GripVertical,
   Image as ImageIcon,
+  Loader2,
+  ChevronRight,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Progress } from "@/components/ui/progress";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import {
   Dialog,
   DialogContent,
@@ -53,6 +65,7 @@ export default function PortfolioEditor() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   
   // Form state
   const [title, setTitle] = useState("");
@@ -168,11 +181,14 @@ export default function PortfolioEditor() {
     if (!files || files.length === 0) return;
 
     setUploading(true);
+    setUploadProgress(0);
     const uploadedImages: PortfolioImage[] = [];
+    const totalFiles = files.length;
 
     try {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
+        setUploadProgress(((i + 1) / totalFiles) * 100);
         
         // Validate file size (10MB max)
         if (file.size > 10 * 1024 * 1024) {
@@ -230,6 +246,7 @@ export default function PortfolioEditor() {
       });
     } finally {
       setUploading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -367,14 +384,50 @@ export default function PortfolioEditor() {
 
   if (loading) {
     return (
-      <div className="p-8 flex items-center justify-center">
-        <p>Loading...</p>
+      <div className="p-8 max-w-7xl mx-auto space-y-6">
+        <Skeleton className="h-8 w-64" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-6">
+            <Card className="p-6 space-y-4">
+              <Skeleton className="h-6 w-48" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-24 w-full" />
+            </Card>
+          </div>
+          <div className="space-y-6">
+            <Card className="p-6">
+              <Skeleton className="h-48 w-full" />
+            </Card>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-6">
+      {/* Breadcrumb */}
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/admin">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator>
+            <ChevronRight className="w-4 h-4" />
+          </BreadcrumbSeparator>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/admin/portfolio">Portfolio</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator>
+            <ChevronRight className="w-4 h-4" />
+          </BreadcrumbSeparator>
+          <BreadcrumbItem>
+            <BreadcrumbPage>{isEditMode ? "Edit" : "New"} Case Study</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -382,16 +435,17 @@ export default function PortfolioEditor() {
             variant="ghost"
             size="sm"
             onClick={() => navigate("/admin/portfolio")}
+            className="hover:bg-accent/10"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back
           </Button>
           <div>
-            <h1 className="text-3xl font-bold">
+            <h1 className="text-4xl font-display font-bold text-gradient-metal">
               {isEditMode ? "Edit" : "New"} Case Study
             </h1>
-            <p className="text-muted-foreground">
-              Create a portfolio showcase
+            <p className="text-base text-muted-foreground">
+              {isEditMode ? "Update your portfolio showcase" : "Create a portfolio showcase"}
             </p>
           </div>
         </div>
@@ -401,12 +455,25 @@ export default function PortfolioEditor() {
             variant="outline"
             onClick={() => handleSave(false)}
             disabled={saving}
+            className="hover:bg-accent/10 hover:border-accent transition-all"
           >
-            <Save className="mr-2 h-4 w-4" />
+            {saving ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Save className="mr-2 h-4 w-4" />
+            )}
             Save Draft
           </Button>
-          <Button onClick={() => handleSave(true)} disabled={saving}>
-            <Eye className="mr-2 h-4 w-4" />
+          <Button 
+            onClick={() => handleSave(true)} 
+            disabled={saving}
+            className="shadow-glow hover:shadow-[0_0_40px_rgba(255,215,0,0.4)] transition-all"
+          >
+            {saving ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Eye className="mr-2 h-4 w-4" />
+            )}
             Publish
           </Button>
         </div>
@@ -415,8 +482,11 @@ export default function PortfolioEditor() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Panel - Form */}
         <div className="lg:col-span-2 space-y-6">
-          <Card className="p-6 space-y-4">
-            <h2 className="text-xl font-semibold">Basic Information</h2>
+          <Card className="p-6 space-y-4 bg-card/50 backdrop-blur-sm border-border/50">
+            <div className="flex items-center gap-2 pb-2 border-b border-accent/20">
+              <div className="h-1 w-8 bg-gradient-to-r from-accent to-transparent" />
+              <h2 className="text-xl font-display font-semibold">Basic Information</h2>
+            </div>
 
             <div className="space-y-2">
               <Label htmlFor="title">
@@ -427,6 +497,7 @@ export default function PortfolioEditor() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Royal Wedding Transportation"
+                className="focus:ring-2 focus:ring-accent transition-all"
               />
             </div>
 
@@ -474,8 +545,11 @@ export default function PortfolioEditor() {
             </div>
           </Card>
 
-          <Card className="p-6 space-y-4">
-            <h2 className="text-xl font-semibold">Classification</h2>
+          <Card className="p-6 space-y-4 bg-card/50 backdrop-blur-sm border-border/50">
+            <div className="flex items-center gap-2 pb-2 border-b border-accent/20">
+              <div className="h-1 w-8 bg-gradient-to-r from-accent to-transparent" />
+              <h2 className="text-xl font-display font-semibold">Classification</h2>
+            </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -554,8 +628,11 @@ export default function PortfolioEditor() {
             </div>
           </Card>
 
-          <Card className="p-6 space-y-4">
-            <h2 className="text-xl font-semibold">Testimonial (Optional)</h2>
+          <Card className="p-6 space-y-4 bg-card/50 backdrop-blur-sm border-border/50">
+            <div className="flex items-center gap-2 pb-2 border-b border-accent/20">
+              <div className="h-1 w-8 bg-gradient-to-r from-accent to-transparent" />
+              <h2 className="text-xl font-display font-semibold">Testimonial (Optional)</h2>
+            </div>
 
             <div className="space-y-2">
               <Label htmlFor="quote">Quote</Label>
@@ -579,8 +656,11 @@ export default function PortfolioEditor() {
             </div>
           </Card>
 
-          <Card className="p-6 space-y-4">
-            <h2 className="text-xl font-semibold">Visibility & Features</h2>
+          <Card className="p-6 space-y-4 bg-card/50 backdrop-blur-sm border-border/50">
+            <div className="flex items-center gap-2 pb-2 border-b border-accent/20">
+              <div className="h-1 w-8 bg-gradient-to-r from-accent to-transparent" />
+              <h2 className="text-xl font-display font-semibold">Visibility & Features</h2>
+            </div>
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
@@ -657,16 +737,22 @@ export default function PortfolioEditor() {
 
         {/* Right Panel - Images */}
         <div className="space-y-6">
-          <Card className="p-6 space-y-4">
-            <h2 className="text-xl font-semibold">Images</h2>
+          <Card className="p-6 space-y-4 bg-card/50 backdrop-blur-sm border-border/50">
+            <div className="flex items-center gap-2 pb-2 border-b border-accent/20">
+              <div className="h-1 w-8 bg-gradient-to-r from-accent to-transparent" />
+              <h2 className="text-xl font-display font-semibold">Images</h2>
+            </div>
 
             {/* Upload Zone */}
             <div
-              className="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors"
+              className="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-accent hover:bg-accent/5 transition-all duration-300 group"
               onClick={() => document.getElementById("image-upload")?.click()}
             >
-              <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-              <p className="text-sm text-muted-foreground mb-2">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-accent to-accent/60 opacity-0 group-hover:opacity-20 blur-2xl rounded-full transition-all" />
+                <Upload className="relative mx-auto h-12 w-12 text-muted-foreground group-hover:text-accent transition-colors mb-4" />
+              </div>
+              <p className="text-sm text-muted-foreground mb-2 group-hover:text-foreground transition-colors">
                 Click to upload or drag and drop
               </p>
               <p className="text-xs text-muted-foreground">
@@ -685,9 +771,13 @@ export default function PortfolioEditor() {
             </div>
 
             {uploading && (
-              <p className="text-sm text-muted-foreground text-center">
-                Uploading...
-              </p>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">Uploading images...</span>
+                  <span className="text-accent font-medium">{Math.round(uploadProgress)}%</span>
+                </div>
+                <Progress value={uploadProgress} className="h-2" />
+              </div>
             )}
 
             {/* Image Gallery */}

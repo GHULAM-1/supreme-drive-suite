@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Shield, Award, Users, Globe, CheckCircle, Quote, BadgeCheck, Phone } from "lucide-react";
 import protectionHero from "@/assets/service-protection.jpg";
 import CloseProtectionEnquiryForm from "@/components/CloseProtectionEnquiryForm";
+import { PortfolioCarousel } from "@/components/portfolio/PortfolioCarousel";
 
 const CloseProtection = () => {
   const features = [
@@ -214,8 +215,15 @@ const CloseProtection = () => {
         </div>
       </section>
 
+      {/* Recent Assignments Carousel */}
+      <PortfolioCarousel 
+        serviceType="close_protection"
+        title="Recent Assignments"
+        subtitle="Explore our portfolio of successful protection operations"
+      />
+
       {/* Trusted by High-Profile Clients */}
-      <section className="py-24 md:py-28 lg:py-32 bg-muted/30">
+      <section className="py-24 md:py-28 lg:py-32 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16 animate-fade-in">
