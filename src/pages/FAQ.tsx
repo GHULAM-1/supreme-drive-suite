@@ -20,7 +20,8 @@ const FAQ = () => {
       .from("faqs")
       .select("*")
       .eq("is_active", true)
-      .order("display_order");
+      .order("category", { ascending: true })
+      .order("display_order", { ascending: true });
     
     if (data) {
       setFaqs(data);
