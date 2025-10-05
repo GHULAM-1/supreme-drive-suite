@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -241,7 +242,9 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
                 </div>
               </form>
 
-              <div className="ml-auto flex items-center gap-4">
+              <div className="ml-auto flex items-center gap-3">
+                <ThemeToggle />
+                
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="sm" className="gap-2">
