@@ -705,6 +705,78 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          accent_color: string | null
+          availability: string
+          company_name: string
+          created_at: string | null
+          dark_logo_url: string | null
+          email: string
+          facebook_url: string | null
+          favicon_url: string | null
+          footer_tagline: string | null
+          id: string
+          instagram_url: string | null
+          light_logo_url: string | null
+          linkedin_url: string | null
+          notification_emails: string[] | null
+          notify_new_booking: boolean | null
+          notify_new_enquiry: boolean | null
+          office_address: string
+          phone: string
+          privacy_policy_url: string | null
+          terms_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          accent_color?: string | null
+          availability?: string
+          company_name?: string
+          created_at?: string | null
+          dark_logo_url?: string | null
+          email?: string
+          facebook_url?: string | null
+          favicon_url?: string | null
+          footer_tagline?: string | null
+          id?: string
+          instagram_url?: string | null
+          light_logo_url?: string | null
+          linkedin_url?: string | null
+          notification_emails?: string[] | null
+          notify_new_booking?: boolean | null
+          notify_new_enquiry?: boolean | null
+          office_address?: string
+          phone?: string
+          privacy_policy_url?: string | null
+          terms_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          accent_color?: string | null
+          availability?: string
+          company_name?: string
+          created_at?: string | null
+          dark_logo_url?: string | null
+          email?: string
+          facebook_url?: string | null
+          favicon_url?: string | null
+          footer_tagline?: string | null
+          id?: string
+          instagram_url?: string | null
+          light_logo_url?: string | null
+          linkedin_url?: string | null
+          notification_emails?: string[] | null
+          notify_new_booking?: boolean | null
+          notify_new_enquiry?: boolean | null
+          office_address?: string
+          phone?: string
+          privacy_policy_url?: string | null
+          terms_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       testimonials: {
         Row: {
           content: string
