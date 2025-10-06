@@ -67,6 +67,7 @@ export const PortfolioFilters = ({ onFilter, items }: PortfolioFiltersProps) => 
             <SelectItem value="all">All Services</SelectItem>
             <SelectItem value="chauffeur">Chauffeur</SelectItem>
             <SelectItem value="close_protection">Close Protection</SelectItem>
+            <SelectItem value="both">Both Services</SelectItem>
           </SelectContent>
         </Select>
 

@@ -349,6 +349,7 @@ export default function PortfolioManagement() {
             <SelectItem value="all">All Services</SelectItem>
             <SelectItem value="chauffeur">Chauffeur</SelectItem>
             <SelectItem value="close_protection">Close Protection</SelectItem>
+            <SelectItem value="both">Both Services</SelectItem>
           </SelectContent>
         </Select>
 
@@ -496,7 +497,9 @@ export default function PortfolioManagement() {
                     <Badge variant="outline">
                       {item.service_type === "chauffeur"
                         ? "Chauffeur"
-                        : "Close Protection"}
+                        : item.service_type === "close_protection"
+                        ? "Close Protection"
+                        : "Both Services"}
                     </Badge>
                   </TableCell>
                   <TableCell>{item.location}</TableCell>

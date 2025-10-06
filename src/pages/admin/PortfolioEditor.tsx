@@ -565,6 +565,7 @@ export default function PortfolioEditor() {
                     <SelectItem value="close_protection">
                       Close Protection
                     </SelectItem>
+                    <SelectItem value="both">Both Services</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
