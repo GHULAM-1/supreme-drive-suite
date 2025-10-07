@@ -51,11 +51,11 @@ export const PortfolioCarousel = ({ serviceType, title, subtitle }: PortfolioCar
   };
 
   const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? items.length - 3 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? items.length - 2 : prev - 2));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev >= items.length - 3 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev >= items.length - 2 ? 0 : prev + 2));
   };
 
   if (loading) {
@@ -67,8 +67,8 @@ export const PortfolioCarousel = ({ serviceType, title, subtitle }: PortfolioCar
               <Skeleton className="h-12 w-64 mx-auto" />
               <Skeleton className="h-6 w-96 mx-auto" />
             </div>
-            <div className="grid md:grid-cols-3 gap-8">
-              {[...Array(3)].map((_, i) => (
+            <div className="grid md:grid-cols-2 gap-10">
+              {[...Array(2)].map((_, i) => (
                 <div key={i} className="space-y-4">
                   <Skeleton className="h-64 w-full rounded-lg" />
                   <Skeleton className="h-6 w-3/4" />
@@ -107,7 +107,7 @@ export const PortfolioCarousel = ({ serviceType, title, subtitle }: PortfolioCar
 
           <div className="relative">
             {/* Navigation Buttons */}
-            {items.length > 3 && (
+            {items.length > 2 && (
               <>
                 <Button
                   variant="outline"
@@ -133,10 +133,10 @@ export const PortfolioCarousel = ({ serviceType, title, subtitle }: PortfolioCar
             {/* Carousel */}
             <div className="overflow-hidden">
               <div 
-                className="grid md:grid-cols-3 gap-8 transition-transform duration-500 ease-out"
+                className="grid md:grid-cols-2 gap-10 transition-transform duration-500 ease-out"
                 style={{ 
-                  transform: `translateX(-${currentIndex * (100 / 3)}%)`,
-                  width: `${(items.length / 3) * 100}%`
+                  transform: `translateX(-${currentIndex * (100 / 2)}%)`,
+                  width: `${(items.length / 2) * 100}%`
                 }}
               >
                 {items.map((item, index) => (
