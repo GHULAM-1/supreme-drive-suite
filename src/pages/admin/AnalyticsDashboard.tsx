@@ -122,11 +122,8 @@ const AnalyticsDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Header */}
-        <div className="mb-8 animate-fade-in">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div className="space-y-6 animate-fade-in">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 animate-fade-in">
             <div>
               <h1 className="text-3xl font-display font-bold text-gradient-metal mb-2">
                 Analytics & Reports
@@ -149,7 +146,6 @@ const AnalyticsDashboard = () => {
               </Select>
             )}
           </div>
-        </div>
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
@@ -427,7 +423,6 @@ const AnalyticsDashboard = () => {
             <ReportsDataTable />
           </TabsContent>
         </Tabs>
-      </div>
     </div>
   );
 };

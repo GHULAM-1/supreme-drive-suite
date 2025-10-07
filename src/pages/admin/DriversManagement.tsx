@@ -237,16 +237,9 @@ const DriversManagement = () => {
 
   return (
     <TooltipProvider>
-      <div className="space-y-8 p-6">
-        {/* Header Section with Breadcrumb */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span>Dashboard</span>
-            <ChevronRight className="w-4 h-4" />
-            <span className="text-accent">Drivers Management</span>
-          </div>
-          
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="space-y-6 animate-fade-in">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h1 className="text-3xl font-display font-bold text-gradient-metal mb-2">Drivers Management</h1>
               <p className="text-muted-foreground">
@@ -391,10 +384,9 @@ const DriversManagement = () => {
             </form>
           </DialogContent>
         </Dialog>
-          </div>
-        </div>
+      </div>
 
-        {/* Filter & Search Bar */}
+      {/* Filter & Search Bar */}
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />

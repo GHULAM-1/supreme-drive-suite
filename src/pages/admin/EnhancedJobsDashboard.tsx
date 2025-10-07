@@ -315,15 +315,6 @@ export default function EnhancedJobsDashboard() {
   return (
     <TooltipProvider>
       <div className="space-y-6 animate-fade-in">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span className="hover:text-accent cursor-pointer transition-colors" onClick={() => navigate("/admin")}>
-            Dashboard
-          </span>
-          <ChevronRight className="w-4 h-4" />
-          <span className="text-foreground font-medium">Jobs Management</span>
-        </div>
-
         {/* Header */}
         <div className="flex justify-between items-start gap-4">
           <div>

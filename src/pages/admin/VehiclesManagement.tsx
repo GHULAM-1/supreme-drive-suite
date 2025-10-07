@@ -267,14 +267,14 @@ const VehiclesManagement = () => {
     });
   };
 
-  if (loading) {
-    return (
-      <TooltipProvider>
-        <div className="space-y-6 p-6">
-          <div className="space-y-2">
-            <Skeleton className="h-10 w-96" />
-            <Skeleton className="h-4 w-full max-w-2xl" />
-          </div>
+  return (
+    <TooltipProvider>
+      <div className="space-y-6 animate-fade-in">
+        {/* Header */}
+        <div className="space-y-2">
+          <Skeleton className="h-10 w-96" />
+          <Skeleton className="h-4 w-full max-w-2xl" />
+        </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
               <Card key={i} className="overflow-hidden">
@@ -300,14 +300,7 @@ const VehiclesManagement = () => {
 
   return (
     <TooltipProvider>
-      <div className="space-y-6 p-6">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-          <span>Dashboard</span>
-          <ChevronRight className="w-4 h-4" />
-          <span className="text-accent">Vehicles Management</span>
-        </div>
-
+      <div className="space-y-6 animate-fade-in">
         {/* Header */}
         <div className="flex justify-between items-start">
           <div>

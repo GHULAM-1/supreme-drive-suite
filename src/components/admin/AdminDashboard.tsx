@@ -293,7 +293,7 @@ export default function AdminDashboard() {
 
   return (
     <TooltipProvider>
-      <div className="space-y-8 pb-8">
+      <div className="space-y-6 animate-fade-in">
         {/* Header with Date/Time */}
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
           <div>
