@@ -362,6 +362,75 @@ export type Database = {
         }
         Relationships: []
       }
+      feedback_submissions: {
+        Row: {
+          admin_notes: string | null
+          booking_reference: string | null
+          converted_to_testimonial_id: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string | null
+          feedback_message: string
+          id: string
+          rating: number
+          reviewed_at: string | null
+          reviewed_by: string | null
+          service_type: string | null
+          status: string
+          would_recommend: boolean | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          booking_reference?: string | null
+          converted_to_testimonial_id?: string | null
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone?: string | null
+          feedback_message: string
+          id?: string
+          rating: number
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          service_type?: string | null
+          status?: string
+          would_recommend?: boolean | null
+        }
+        Update: {
+          admin_notes?: string | null
+          booking_reference?: string | null
+          converted_to_testimonial_id?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string | null
+          feedback_message?: string
+          id?: string
+          rating?: number
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          service_type?: string | null
+          status?: string
+          would_recommend?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_submissions_converted_to_testimonial_id_fkey"
+            columns: ["converted_to_testimonial_id"]
+            isOneToOne: false
+            referencedRelation: "testimonials"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feedback_submissions_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fixed_routes: {
         Row: {
           created_at: string | null
