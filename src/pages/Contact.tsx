@@ -12,6 +12,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { Link } from "react-router-dom";
 import PWAInstall from "@/components/PWAInstall";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // UK phone validation regex (various UK formats)
 const ukPhoneRegex = /^(?:(?:\(?(?:0(?:0|11)\)?[\s-]?\(?|\+)44\)?[\s-]?(?:\(?0\)?[\s-]?)?)|(?:\(?0))(?:(?:\d{5}\)?[\s-]?\d{4,5})|(?:\d{4}\)?[\s-]?(?:\d{5}|\d{3}[\s-]?\d{3}))|(?:\d{3}\)?[\s-]?\d{3}[\s-]?\d{3,4})|(?:\d{2}\)?[\s-]?\d{4}[\s-]?\d{4}))(?:[\s-]?(?:x|ext\.?|\#)\d{3,4})?$/;
@@ -26,6 +28,7 @@ const contactSchema = z.object({
 });
 
 const Contact = () => {
+  const { settings, isLoading: settingsLoading } = useSiteSettings();
   const [loading, setLoading] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -37,6 +40,13 @@ const Contact = () => {
     message: "",
     gdprConsent: false,
   });
+  
+  // Format phone number for tel: link (remove spaces and special chars except +)
+  const phoneLink = settings.phone.replace(/[^\d+]/g, '');
+  // Format WhatsApp number (remove all non-digits and add country code)
+  const whatsappNumber = settings.whatsapp_number 
+    ? settings.whatsapp_number.replace(/[^\d]/g, '') 
+    : phoneLink;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,121 +116,139 @@ const Contact = () => {
           <div className="grid lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
             {/* Left Column - Contact Info */}
             <div className="space-y-6 animate-fade-in animation-delay-200">
-              {/* Phone Card */}
-              <Card className="group p-6 shadow-metal bg-card/50 backdrop-blur border-t-2 border-t-accent/30 transition-all duration-300 hover:scale-[1.01] hover:shadow-glow">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 group-hover:bg-accent/20 transition-colors flex-shrink-0">
-                    <Phone className="w-6 h-6 text-accent" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-display font-semibold mb-2 text-gradient-silver">Phone</h3>
-                    <a 
-                      href="tel:08001234567" 
-                      className="text-lg text-accent hover:underline block mb-2 font-medium"
-                    >
-                      0800 123 4567
-                    </a>
-                    <p className="text-sm text-muted-foreground">
-                      Available 24/7 for bookings and emergencies
-                    </p>
-                  </div>
-                </div>
-              </Card>
+              {settingsLoading ? (
+                <>
+                  {[...Array(5)].map((_, i) => (
+                    <Card key={i} className="p-6">
+                      <div className="flex items-start gap-4">
+                        <Skeleton className="w-12 h-12 rounded-lg" />
+                        <div className="flex-1 space-y-2">
+                          <Skeleton className="h-6 w-24" />
+                          <Skeleton className="h-5 w-full" />
+                          <Skeleton className="h-4 w-3/4" />
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {/* Phone Card */}
+                  <Card className="group p-6 shadow-metal bg-card/50 backdrop-blur border-t-2 border-t-accent/30 transition-all duration-300 hover:scale-[1.01] hover:shadow-glow">
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 group-hover:bg-accent/20 transition-colors flex-shrink-0">
+                        <Phone className="w-6 h-6 text-accent" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-display font-semibold mb-2 text-gradient-silver">Phone</h3>
+                        <a 
+                          href={`tel:${phoneLink}`}
+                          className="text-lg text-accent hover:underline block mb-2 font-medium"
+                        >
+                          {settings.phone}
+                        </a>
+                        <p className="text-sm text-muted-foreground">
+                          {settings.availability}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
 
-              {/* Email Card */}
-              <Card className="group p-6 shadow-metal bg-card/50 backdrop-blur border-t-2 border-t-accent/30 transition-all duration-300 hover:scale-[1.01] hover:shadow-glow">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 group-hover:bg-accent/20 transition-colors flex-shrink-0">
-                    <Mail className="w-6 h-6 text-accent" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-display font-semibold mb-2 text-gradient-silver">Email</h3>
-                    <a 
-                      href="mailto:info@supremedrive.co.uk" 
-                      className="text-lg text-accent hover:underline block mb-2 font-medium break-all"
-                    >
-                      info@supremedrive.co.uk
-                    </a>
-                    <p className="text-sm text-muted-foreground">
-                      We typically reply within 2 hours during business hours
-                    </p>
-                  </div>
-                </div>
-              </Card>
+                  {/* Email Card */}
+                  <Card className="group p-6 shadow-metal bg-card/50 backdrop-blur border-t-2 border-t-accent/30 transition-all duration-300 hover:scale-[1.01] hover:shadow-glow">
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 group-hover:bg-accent/20 transition-colors flex-shrink-0">
+                        <Mail className="w-6 h-6 text-accent" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-display font-semibold mb-2 text-gradient-silver">Email</h3>
+                        <a 
+                          href={`mailto:${settings.email}`}
+                          className="text-lg text-accent hover:underline block mb-2 font-medium break-all"
+                        >
+                          {settings.email}
+                        </a>
+                        <p className="text-sm text-muted-foreground">
+                          We typically reply within 2 hours during business hours
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
 
-              {/* Office Card */}
-              <Card className="group p-6 shadow-metal bg-card/50 backdrop-blur border-t-2 border-t-accent/30 transition-all duration-300 hover:scale-[1.01] hover:shadow-glow">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 group-hover:bg-accent/20 transition-colors flex-shrink-0">
-                    <MapPin className="w-6 h-6 text-accent" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-display font-semibold mb-2 text-gradient-silver">Office</h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Mayfair, London<br />
-                      United Kingdom
-                    </p>
-                  </div>
-                </div>
-              </Card>
+                  {/* Office Card */}
+                  <Card className="group p-6 shadow-metal bg-card/50 backdrop-blur border-t-2 border-t-accent/30 transition-all duration-300 hover:scale-[1.01] hover:shadow-glow">
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 group-hover:bg-accent/20 transition-colors flex-shrink-0">
+                        <MapPin className="w-6 h-6 text-accent" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-display font-semibold mb-2 text-gradient-silver">Office</h3>
+                        <p className="text-muted-foreground leading-relaxed">
+                          {settings.office_address}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
 
-              {/* Availability Card */}
-              <Card className="group p-6 shadow-metal bg-card/50 backdrop-blur border-t-2 border-t-accent/30 transition-all duration-300 hover:scale-[1.01] hover:shadow-glow">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 group-hover:bg-accent/20 transition-colors flex-shrink-0">
-                    <Clock className="w-6 h-6 text-accent" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-display font-semibold mb-2 text-gradient-silver">Availability</h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      Available 24/7, 365 days a year
-                    </p>
-                  </div>
-                </div>
-              </Card>
+                  {/* Availability Card */}
+                  <Card className="group p-6 shadow-metal bg-card/50 backdrop-blur border-t-2 border-t-accent/30 transition-all duration-300 hover:scale-[1.01] hover:shadow-glow">
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 group-hover:bg-accent/20 transition-colors flex-shrink-0">
+                        <Clock className="w-6 h-6 text-accent" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-display font-semibold mb-2 text-gradient-silver">Availability</h3>
+                        <p className="text-muted-foreground leading-relaxed">
+                          {settings.availability}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
 
-              {/* WhatsApp Button */}
-              <Card className="group p-6 shadow-metal bg-card/50 backdrop-blur border-t-2 border-t-accent/30 transition-all duration-300 hover:scale-[1.01] hover:shadow-glow">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 group-hover:bg-accent/20 transition-colors flex-shrink-0">
-                    <MessageCircle className="w-6 h-6 text-accent" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-display font-semibold mb-2 text-gradient-silver">WhatsApp</h3>
-                    <a 
-                      href="https://wa.me/448001234567" 
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-lg text-accent hover:underline block mb-2 font-medium"
-                    >
-                      Message us on WhatsApp
-                    </a>
-                    <p className="text-sm text-muted-foreground">
-                      Quick response for urgent enquiries
-                    </p>
-                  </div>
-                </div>
-              </Card>
+                  {/* WhatsApp Button */}
+                  <Card className="group p-6 shadow-metal bg-card/50 backdrop-blur border-t-2 border-t-accent/30 transition-all duration-300 hover:scale-[1.01] hover:shadow-glow">
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 group-hover:bg-accent/20 transition-colors flex-shrink-0">
+                        <MessageCircle className="w-6 h-6 text-accent" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-display font-semibold mb-2 text-gradient-silver">WhatsApp</h3>
+                        <a 
+                          href={`https://wa.me/${whatsappNumber}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-lg text-accent hover:underline block mb-2 font-medium"
+                        >
+                          Message us on WhatsApp
+                        </a>
+                        <p className="text-sm text-muted-foreground">
+                          Quick response for urgent enquiries
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
 
-              {/* Trust Badges */}
-              <Card className="p-6 shadow-metal bg-gradient-to-br from-card via-secondary/20 to-card backdrop-blur border-accent/20">
-                <div className="flex items-center justify-around text-center gap-4">
-                  <div className="flex-1">
-                    <Shield className="w-8 h-8 text-accent mx-auto mb-2" />
-                    <p className="text-xs text-muted-foreground font-medium">Secure</p>
-                  </div>
-                  <div className="h-10 w-[1px] bg-accent/20" />
-                  <div className="flex-1">
-                    <Lock className="w-8 h-8 text-accent mx-auto mb-2" />
-                    <p className="text-xs text-muted-foreground font-medium">Confidential</p>
-                  </div>
-                  <div className="h-10 w-[1px] bg-accent/20" />
-                  <div className="flex-1">
-                    <Clock className="w-8 h-8 text-accent mx-auto mb-2" />
-                    <p className="text-xs text-muted-foreground font-medium">24/7</p>
-                  </div>
-                </div>
-              </Card>
+                  {/* Trust Badges */}
+                  <Card className="p-6 shadow-metal bg-gradient-to-br from-card via-secondary/20 to-card backdrop-blur border-accent/20">
+                    <div className="flex items-center justify-around text-center gap-4">
+                      <div className="flex-1">
+                        <Shield className="w-8 h-8 text-accent mx-auto mb-2" />
+                        <p className="text-xs text-muted-foreground font-medium">Secure</p>
+                      </div>
+                      <div className="h-10 w-[1px] bg-accent/20" />
+                      <div className="flex-1">
+                        <Lock className="w-8 h-8 text-accent mx-auto mb-2" />
+                        <p className="text-xs text-muted-foreground font-medium">Confidential</p>
+                      </div>
+                      <div className="h-10 w-[1px] bg-accent/20" />
+                      <div className="flex-1">
+                        <Clock className="w-8 h-8 text-accent mx-auto mb-2" />
+                        <p className="text-xs text-muted-foreground font-medium">24/7</p>
+                      </div>
+                    </div>
+                  </Card>
+                </>
+              )}
             </div>
 
             {/* Right Column - Contact Form */}

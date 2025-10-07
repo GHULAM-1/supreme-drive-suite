@@ -731,6 +731,7 @@ export type Database = {
           privacy_policy_url: string | null
           terms_url: string | null
           updated_at: string | null
+          whatsapp_number: string | null
         }
         Insert: {
           accent_color?: string | null
@@ -754,6 +755,7 @@ export type Database = {
           privacy_policy_url?: string | null
           terms_url?: string | null
           updated_at?: string | null
+          whatsapp_number?: string | null
         }
         Update: {
           accent_color?: string | null
@@ -777,6 +779,7 @@ export type Database = {
           privacy_policy_url?: string | null
           terms_url?: string | null
           updated_at?: string | null
+          whatsapp_number?: string | null
         }
         Relationships: []
       }

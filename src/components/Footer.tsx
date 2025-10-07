@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin } from "lucide-react";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 const Footer = () => {
+  const { settings } = useSiteSettings();
+  
   return <footer className="border-t border-border bg-card/30 backdrop-blur">
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-xl font-display font-bold text-gradient-metal mb-4">Travel in Supreme Style</h3>
+            <h3 className="text-xl font-display font-bold text-gradient-metal mb-4">{settings.company_name}</h3>
             <p className="text-sm text-muted-foreground">
-              Luxury chauffeur and close protection services for discerning clients.
+              {settings.footer_tagline}
             </p>
           </div>
 
@@ -58,15 +61,15 @@ const Footer = () => {
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="w-4 h-4" />
-                0800 123 4567
+                {settings.phone}
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Mail className="w-4 h-4" />
-                info@supremedrive.co.uk
+                {settings.email}
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <MapPin className="w-4 h-4" />
-                London, United Kingdom
+                {settings.office_address}
               </li>
             </ul>
           </div>

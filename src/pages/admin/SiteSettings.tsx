@@ -21,6 +21,7 @@ const companySchema = z.object({
   email: z.string().email("Invalid email address"),
   office_address: z.string().min(1, "Address is required"),
   availability: z.string().min(1, "Availability is required"),
+  whatsapp_number: z.string().regex(/^(\+44|0)[0-9\s]{9,13}$/, "Invalid UK phone number").optional().or(z.literal("")),
 });
 
 const brandingSchema = z.object({
@@ -100,6 +101,7 @@ export default function SiteSettings() {
           email: data.email,
           office_address: data.office_address,
           availability: data.availability,
+          whatsapp_number: data.whatsapp_number || "",
         });
 
         brandingForm.reset({
@@ -417,6 +419,20 @@ export default function SiteSettings() {
                       <FormLabel>Availability</FormLabel>
                       <FormControl>
                         <Input {...field} placeholder="24 hours a day, 7 days a week" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={companyForm.control}
+                  name="whatsapp_number"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>WhatsApp Number (Optional)</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="+44 7900 123456" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

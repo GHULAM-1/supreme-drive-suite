@@ -3,11 +3,16 @@ import { Menu, Phone, X, Lock, Shield } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { settings } = useSiteSettings();
   const isActive = (path: string) => location.pathname === path;
+  
+  // Format phone number for tel: link (remove spaces and special chars except +)
+  const phoneLink = settings.phone.replace(/[^\d+]/g, '');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,10 +76,10 @@ const Navigation = () => {
                 <span className="text-xs">Admin</span>
               </Button>
             </Link>
-            <a href="tel:08001234567">
+            <a href={`tel:${phoneLink}`}>
               <Button className="gradient-accent shadow-glow text-sm font-semibold">
                 <Phone className="w-4 h-4 mr-2" />
-                0800 123 4567
+                {settings.phone}
               </Button>
             </a>
           </div>
@@ -100,10 +105,10 @@ const Navigation = () => {
                   Admin Login
                 </Button>
               </Link>
-              <a href="tel:08001234567">
+              <a href={`tel:${phoneLink}`}>
                 <Button className="w-full gradient-accent shadow-glow">
                   <Phone className="w-4 h-4 mr-2" />
-                  0800 123 4567
+                  {settings.phone}
                 </Button>
               </a>
             </div>
