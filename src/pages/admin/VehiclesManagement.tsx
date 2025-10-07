@@ -582,7 +582,7 @@ const VehiclesManagement = () => {
                 <div className="h-48 w-full bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center overflow-hidden">
                 {vehicle.image_url ? (
                     <img
-                      src={`${vehicle.image_url}?t=${lastUpdated.getTime()}`}
+                      src={`${vehicle.image_url}?t=${Date.now()}`}
                       alt={vehicle.name}
                       className="w-full h-full object-cover"
                       loading="lazy"
