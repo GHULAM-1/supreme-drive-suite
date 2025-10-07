@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Building2, Palette, Bell, Scale } from "lucide-react";
+import { Building2, Bell, Scale } from "lucide-react";
 import { logAuditEvent, generateFieldSummary } from "@/lib/auditLogger";
 
 // Validation schemas
@@ -23,13 +23,6 @@ const companySchema = z.object({
   office_address: z.string().min(1, "Address is required"),
   availability: z.string().min(1, "Availability is required"),
   whatsapp_number: z.string().regex(/^(\+44|0)[0-9\s]{9,13}$/, "Invalid UK phone number").optional().or(z.literal("")),
-});
-
-const brandingSchema = z.object({
-  light_logo_url: z.string().url("Invalid URL").optional().or(z.literal("")),
-  dark_logo_url: z.string().url("Invalid URL").optional().or(z.literal("")),
-  favicon_url: z.string().url("Invalid URL").optional().or(z.literal("")),
-  accent_color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Invalid hex color"),
 });
 
 const notificationsSchema = z.object({
@@ -48,7 +41,6 @@ const legalSchema = z.object({
 });
 
 type CompanyData = z.infer<typeof companySchema>;
-type BrandingData = z.infer<typeof brandingSchema>;
 type NotificationsData = z.infer<typeof notificationsSchema>;
 type LegalData = z.infer<typeof legalSchema>;
 
@@ -61,10 +53,6 @@ export default function SiteSettings() {
 
   const companyForm = useForm<CompanyData>({
     resolver: zodResolver(companySchema),
-  });
-
-  const brandingForm = useForm<BrandingData>({
-    resolver: zodResolver(brandingSchema),
   });
 
   const notificationsForm = useForm<NotificationsData>({
@@ -111,13 +99,6 @@ export default function SiteSettings() {
           office_address: data.office_address,
           availability: data.availability,
           whatsapp_number: data.whatsapp_number || "",
-        });
-
-        brandingForm.reset({
-          light_logo_url: data.light_logo_url || "",
-          dark_logo_url: data.dark_logo_url || "",
-          favicon_url: data.favicon_url || "",
-          accent_color: data.accent_color,
         });
 
         notificationsForm.reset({
@@ -189,48 +170,6 @@ export default function SiteSettings() {
       toast({
         title: "Settings saved successfully",
         description: "Company information has been updated.",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-  };
-
-  const saveBranding = async (data: BrandingData) => {
-    if (!settingsId) return;
-    
-    try {
-      const before = await getCurrentSettings();
-      
-      const { error } = await supabase
-        .from("site_settings")
-        .update(data)
-        .eq("id", settingsId);
-
-      if (error) throw error;
-
-      const changedFields = Object.keys(data).filter(
-        key => JSON.stringify(before?.[key]) !== JSON.stringify(data[key as keyof BrandingData])
-      );
-      
-      await logAuditEvent({
-        action: "update",
-        entityType: "Site Settings",
-        entityId: settingsId,
-        summary: generateFieldSummary("Branding", changedFields),
-        before: before ? Object.fromEntries(changedFields.map(k => [k, before[k]])) : {},
-        after: data,
-      });
-      
-      // Invalidate cache to refresh settings across all components
-      queryClient.invalidateQueries({ queryKey: ["site-settings"] });
-      
-      toast({
-        title: "Settings saved successfully",
-        description: "Branding has been updated.",
       });
     } catch (error: any) {
       toast({
@@ -359,7 +298,7 @@ export default function SiteSettings() {
           Site Settings
         </h1>
         <p className="text-muted-foreground">
-          Manage global site configuration and branding
+          Manage global site configuration
         </p>
       </div>
 
@@ -457,92 +396,6 @@ export default function SiteSettings() {
                       <FormControl>
                         <Input {...field} placeholder="+44 7900 123456" />
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <Button type="submit" className="w-full">
-                  Save Changes
-                </Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
-
-        {/* Branding */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Palette className="w-5 h-5 text-primary" />
-              Branding
-            </CardTitle>
-            <CardDescription>
-              Manage logos, favicon, and accent colour
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...brandingForm}>
-              <form onSubmit={brandingForm.handleSubmit(saveBranding)} className="space-y-4">
-                <FormField
-                  control={brandingForm.control}
-                  name="light_logo_url"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Light Logo URL</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="https://example.com/logo-light.png" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={brandingForm.control}
-                  name="dark_logo_url"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Dark Logo URL</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="https://example.com/logo-dark.png" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={brandingForm.control}
-                  name="favicon_url"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Favicon URL</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="https://example.com/favicon.png" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={brandingForm.control}
-                  name="accent_color"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Accent Colour</FormLabel>
-                      <div className="flex gap-2">
-                        <FormControl>
-                          <Input {...field} type="color" className="w-20 h-10" />
-                        </FormControl>
-                        <Input
-                          value={field.value}
-                          onChange={(e) => field.onChange(e.target.value)}
-                          placeholder="#D4AF37"
-                          className="flex-1"
-                        />
-                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
