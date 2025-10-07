@@ -42,6 +42,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -202,7 +203,8 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
 
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="min-h-screen flex w-full bg-background">
+      <TooltipProvider>
+        <div className="min-h-screen flex w-full bg-background">
         <AdminSidebar />
         
         <div className="flex-1 flex flex-col">
@@ -253,6 +255,7 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
           </main>
         </div>
       </div>
+      </TooltipProvider>
     </SidebarProvider>
   );
 }
