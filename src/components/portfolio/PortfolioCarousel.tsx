@@ -29,7 +29,7 @@ export const PortfolioCarousel = ({ serviceType, title, subtitle }: PortfolioCar
       const { data, error } = await supabase
         .from("portfolio")
         .select("*")
-        .eq(column, true)
+        .or(`${column}.eq.true,service_type.eq.both`)
         .eq("status", "published")
         .eq("is_active", true)
         .order("is_featured", { ascending: false })

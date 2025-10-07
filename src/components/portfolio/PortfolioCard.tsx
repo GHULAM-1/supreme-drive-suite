@@ -31,34 +31,39 @@ export const PortfolioCard = ({ item }: PortfolioCardProps) => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-500" />
           
-          {/* Confidential Badge */}
-          {item.is_confidential && (
-            <div className="absolute top-4 right-4">
-              <Badge className="bg-secondary/80 backdrop-blur-sm text-secondary-foreground border-border gap-1">
+          {/* Service Type Badge - Top Left */}
+          <div className="absolute top-4 left-4 z-10">
+            <Badge 
+              variant={
+                item.service_type === "both" 
+                  ? "default" 
+                  : item.service_type === "chauffeur" 
+                  ? "default" 
+                  : "secondary"
+              }
+              className="backdrop-blur-sm shadow-md"
+            >
+              {item.service_type === "chauffeur" 
+                ? "Chauffeur" 
+                : item.service_type === "close_protection"
+                ? "Close Protection"
+                : "Both Services"}
+            </Badge>
+          </div>
+
+          {/* Status Badge - Top Right */}
+          <div className="absolute top-4 right-4 z-10">
+            {item.is_confidential ? (
+              <Badge className="bg-secondary/90 backdrop-blur-sm text-secondary-foreground border-border gap-1 shadow-md">
                 <Shield className="w-3 h-3" />
                 Confidential
               </Badge>
-            </div>
-          )}
-
-          {/* Featured Badge */}
-          {item.is_featured && !item.is_confidential && (
-            <div className="absolute top-4 right-4">
+            ) : item.is_featured ? (
               <Badge className="bg-accent/90 backdrop-blur-sm text-accent-foreground border-accent-foreground/20 gap-1 shadow-[0_0_20px_rgba(255,215,0,0.3)]">
                 <Star className="w-3 h-3 fill-current" />
                 Featured
               </Badge>
-            </div>
-          )}
-
-          {/* Service Type Badge */}
-          <div className="absolute top-4 left-4">
-            <Badge 
-              variant={item.service_type === "chauffeur" ? "default" : "secondary"}
-              className="backdrop-blur-sm"
-            >
-              {item.service_type === "chauffeur" ? "Chauffeur" : "Close Protection"}
-            </Badge>
+            ) : null}
           </div>
         </div>
 
