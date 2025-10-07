@@ -29,6 +29,7 @@ interface Vehicle {
   base_price_per_mile: number;
   overnight_surcharge: number;
   features: string[];
+  image_url?: string;
 }
 
 const getVehicleIcon = (category: string) => {
@@ -90,12 +91,33 @@ const Pricing = () => {
                   
                   <div className="relative p-8 md:p-10">
                     <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8">
+                      {/* Vehicle Image */}
+                      {vehicle.image_url ? (
+                        <div className="w-full lg:w-64 flex-shrink-0">
+                          <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-glow border border-accent/20">
+                            <img
+                              src={vehicle.image_url}
+                              alt={`${vehicle.name} - Luxury vehicle`}
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              loading="lazy"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="hidden lg:flex w-64 aspect-[4/3] items-center justify-center rounded-lg bg-accent/10 border border-accent/20">
+                          <VehicleIcon className="w-16 h-16 text-accent/40" />
+                        </div>
+                      )}
+                      
                       {/* Left Content */}
                       <div className="flex-1 space-y-6">
                         <div className="flex items-start gap-4">
-                          <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 group-hover:bg-accent/20 transition-colors">
-                            <VehicleIcon className="w-6 h-6 text-accent" />
-                          </div>
+                          {!vehicle.image_url && (
+                            <div className="lg:hidden p-3 rounded-lg bg-accent/10 border border-accent/20 group-hover:bg-accent/20 transition-colors">
+                              <VehicleIcon className="w-6 h-6 text-accent" />
+                            </div>
+                          )}
                           <div>
                             <div className="flex items-center gap-3 mb-2">
                               <h3 className="text-3xl md:text-4xl font-display font-bold text-gradient-silver">
