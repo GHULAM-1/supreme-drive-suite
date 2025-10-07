@@ -130,7 +130,7 @@ export default function EnhancedJobsDashboard() {
     try {
       const [bookingsRes, driversRes, vehiclesRes] = await Promise.all([
         supabase.from("bookings").select("*").order("created_at", { ascending: false }),
-        supabase.from("drivers").select("id, name, is_available").eq("is_active", true),
+        supabase.from("drivers").select("id, name, is_available").eq("is_available", true),
         supabase.from("vehicles").select("id, name, category").eq("is_active", true),
       ]);
 

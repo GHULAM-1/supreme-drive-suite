@@ -120,7 +120,7 @@ export default function AdminDashboard() {
 
       const [bookingsRes, driversRes, vehiclesRes] = await Promise.all([
         supabase.from("bookings").select("status, total_price, created_at, service_type"),
-        supabase.from("drivers").select("is_active, is_available"),
+        supabase.from("drivers").select("is_available"),
         supabase.from("vehicles").select("is_active, service_status"),
       ]);
 

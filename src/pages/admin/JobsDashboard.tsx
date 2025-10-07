@@ -50,7 +50,7 @@ const JobsDashboard = () => {
           drivers (name)
         `)
         .order("pickup_date", { ascending: true }),
-      supabase.from("drivers").select("*").eq("is_active", true),
+      supabase.from("drivers").select("*").eq("is_available", true),
     ]);
 
     if (bookingsRes.error) {
