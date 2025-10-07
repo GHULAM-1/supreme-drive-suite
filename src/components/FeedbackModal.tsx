@@ -65,7 +65,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
         rating: validated.rating,
         feedback_message: validated.feedback_message,
         would_recommend: validated.would_recommend,
-      });
+      }, { returning: 'minimal' });
 
       if (error) throw error;
 
