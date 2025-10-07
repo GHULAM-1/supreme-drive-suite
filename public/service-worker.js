@@ -1,4 +1,4 @@
-const CACHE_NAME = 'supreme-drive-v1';
+const CACHE_NAME = 'supreme-drive-v2';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
