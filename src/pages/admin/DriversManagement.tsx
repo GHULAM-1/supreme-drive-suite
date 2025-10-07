@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -244,9 +244,10 @@ const DriversManagement = () => {
   }
 
   return (
-    <div className="space-y-8 p-6">
-      {/* Header Section with Breadcrumb */}
-      <div className="space-y-4">
+    <TooltipProvider>
+      <div className="space-y-8 p-6">
+        {/* Header Section with Breadcrumb */}
+        <div className="space-y-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>Dashboard</span>
             <ChevronRight className="w-4 h-4" />
@@ -265,15 +266,22 @@ const DriversManagement = () => {
             </div>
             
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DialogTrigger asChild>
-                <Button 
-                  className="gradient-accent shadow-glow hover:shadow-[0_0_40px_rgba(244,197,66,0.3)] transition-all duration-300" 
-                  onClick={resetForm}
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add Driver
-                </Button>
-              </DialogTrigger>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DialogTrigger asChild>
+                    <Button 
+                      className="gradient-accent shadow-glow hover:shadow-[0_0_40px_rgba(244,197,66,0.3)] transition-all duration-300" 
+                      onClick={resetForm}
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Driver
+                    </Button>
+                  </DialogTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Add new driver profile</p>
+                </TooltipContent>
+              </Tooltip>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="font-display text-2xl">
@@ -573,25 +581,37 @@ const DriversManagement = () => {
 
                   {/* Action Buttons - Bottom Right */}
                   <div className="flex justify-end gap-2 pt-4">
-                    <Button 
-                      size="icon" 
-                      variant="outline" 
-                      onClick={() => handleEdit(driver)}
-                      className="hover:bg-accent/10 hover:border-accent hover:scale-110 transition-all"
-                      aria-label="Edit Driver Profile"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </Button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button 
+                          size="icon" 
+                          variant="outline" 
+                          onClick={() => handleEdit(driver)}
+                          className="hover:bg-accent/10 hover:border-accent hover:scale-110 transition-all"
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Edit Driver Profile</p>
+                      </TooltipContent>
+                    </Tooltip>
 
-                    <Button 
-                      size="icon" 
-                      variant="destructive" 
-                      onClick={() => handleDeleteClick(driver)}
-                      className="hover:bg-destructive/90 hover:scale-110 transition-all"
-                      aria-label="Remove Driver"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button 
+                          size="icon" 
+                          variant="destructive" 
+                          onClick={() => handleDeleteClick(driver)}
+                          className="hover:bg-destructive/90 hover:scale-110 transition-all"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Remove Driver</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                 </div>
               </Card>
@@ -621,7 +641,8 @@ const DriversManagement = () => {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    );
-  };
+    </TooltipProvider>
+  );
+};
 
 export default DriversManagement;

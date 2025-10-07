@@ -19,6 +19,7 @@ import { toast } from "@/hooks/use-toast";
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
@@ -951,8 +952,9 @@ export default function PortfolioEditor() {
           )}
         </div>
         <div className="flex gap-1">
-          <Tooltip>
-            <TooltipTrigger asChild>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <Button
                   size="sm"
                   variant="ghost"
@@ -977,8 +979,10 @@ export default function PortfolioEditor() {
                 <p>Set as Cover Image</p>
               </TooltipContent>
             </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <Button
                   size="sm"
                   variant="ghost"
@@ -994,8 +998,10 @@ export default function PortfolioEditor() {
                 <p>Edit Details</p>
               </TooltipContent>
             </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <Button
                   size="sm"
                   variant="ghost"
@@ -1010,6 +1016,7 @@ export default function PortfolioEditor() {
                 <p>Delete Image</p>
               </TooltipContent>
             </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
     );
