@@ -186,6 +186,8 @@ export default function PortfolioEditor() {
     const totalFiles = files.length;
 
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         setUploadProgress(((i + 1) / totalFiles) * 100);
@@ -233,11 +235,40 @@ export default function PortfolioEditor() {
         });
       }
 
-      setImages([...images, ...uploadedImages]);
-      toast({
-        title: "Success",
-        description: `Uploaded ${uploadedImages.length} images`,
-      });
+      // If in edit mode, save images to database immediately
+      if (isEditMode && id && uploadedImages.length > 0) {
+        const imagesToInsert = uploadedImages.map((img) => ({
+          portfolio_id: id,
+          image_url: img.image_url,
+          caption: img.caption || null,
+          alt_text: img.alt_text,
+          display_order: img.display_order,
+          is_cover: img.is_cover,
+          is_visible: img.is_visible,
+          uploaded_by: user?.id,
+        }));
+
+        const { error: insertError } = await supabase
+          .from("portfolio_images")
+          .insert(imagesToInsert);
+
+        if (insertError) throw insertError;
+
+        // Reload images from database to get proper IDs
+        await loadImages();
+
+        toast({
+          title: "Success",
+          description: `Uploaded and saved ${uploadedImages.length} images`,
+        });
+      } else {
+        // For new portfolio items, just add to local state
+        setImages([...images, ...uploadedImages]);
+        toast({
+          title: "Success",
+          description: `Uploaded ${uploadedImages.length} images (will be saved with portfolio)`,
+        });
+      }
     } catch (error: any) {
       toast({
         title: "Upload failed",
