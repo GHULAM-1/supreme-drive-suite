@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
@@ -39,39 +39,12 @@ const PortfolioDetail = () => {
   const [galleryImages, setGalleryImages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showPrice, setShowPrice] = useState(false);
-  const overviewRef = useRef<HTMLDivElement>(null);
-  const detailsRef = useRef<HTMLDivElement>(null);
-  const galleryRef = useRef<HTMLDivElement>(null);
-  const summaryRef = useRef<HTMLDivElement>(null);
-  const testimonialRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (slug) {
       fetchPortfolioItem();
     }
   }, [slug]);
-
-  useEffect(() => {
-    // Scroll animation observer
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('scroll-fade-in');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const refs = [overviewRef, detailsRef, galleryRef, summaryRef, testimonialRef];
-    refs.forEach((ref) => {
-      if (ref.current) observer.observe(ref.current);
-    });
-
-    return () => observer.disconnect();
-  }, [item]);
 
   const fetchPortfolioItem = async () => {
     try {
@@ -201,14 +174,14 @@ const PortfolioDetail = () => {
               {/* Main Content */}
               <div className="lg:col-span-2 space-y-8">
                 {/* Summary */}
-                <div ref={overviewRef} className="opacity-0">
+                <div className="animate-fade-in">
                   <h2 className="text-3xl font-display font-semibold section-heading">Overview</h2>
                   <p className="text-lg text-white/90 leading-relaxed">{item.summary}</p>
                 </div>
 
                 {/* Special Requirements */}
                 {item.special_requirements && (
-                  <div ref={detailsRef} className="opacity-0 mt-8">
+                  <div className="animate-fade-in animation-delay-200 mt-8">
                     <h2 className="text-3xl font-display font-semibold section-heading">Service Details</h2>
                     <p className="text-white/80 leading-relaxed whitespace-pre-line">
                       {item.special_requirements}
@@ -218,7 +191,7 @@ const PortfolioDetail = () => {
 
                 {/* Gallery */}
                 {galleryImages.length > 0 && (
-                  <div ref={galleryRef} className="opacity-0 mt-8">
+                  <div className="animate-fade-in animation-delay-400 mt-8">
                     <h2 className="text-3xl font-display font-semibold section-heading mb-6">Gallery</h2>
                     <PortfolioGallery images={galleryImages.map(img => ({
                       url: img.image_url,
@@ -230,7 +203,7 @@ const PortfolioDetail = () => {
 
                 {/* Testimonial */}
                 {item.testimonial_quote && (
-                  <div ref={testimonialRef} className="opacity-0 mt-8">
+                  <div className="animate-fade-in animation-delay-600 mt-8">
                     <Card className="card-glass border-l-2 border-l-accent/65">
                       <CardContent className="p-6">
                         <Quote className="h-5 w-5 text-accent/70 mb-3" />
@@ -250,7 +223,7 @@ const PortfolioDetail = () => {
 
               {/* Sidebar */}
               <div className="space-y-6">
-                <div ref={summaryRef} className="opacity-0">
+                <div className="animate-fade-in animation-delay-200">
                   <Card className="card-glass sticky top-24">
                     <CardContent className="p-6">
                       <h3 className="text-xl font-display font-semibold mb-4">Project Summary</h3>
