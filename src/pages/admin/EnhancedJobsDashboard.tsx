@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -313,7 +313,8 @@ export default function EnhancedJobsDashboard() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <TooltipProvider>
+      <div className="space-y-6 animate-fade-in">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <span className="hover:text-accent cursor-pointer transition-colors" onClick={() => navigate("/admin")}>
@@ -739,5 +740,6 @@ export default function EnhancedJobsDashboard() {
         )}
       </div>
     </div>
+    </TooltipProvider>
   );
 }
