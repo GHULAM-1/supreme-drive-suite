@@ -28,11 +28,16 @@ export const PortfolioCard = ({ item }: PortfolioCardProps) => {
             alt={item.title}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             loading="lazy"
+            onError={(e) => {
+              console.error("Failed to load portfolio image:", item.cover_image_url, "for item:", item.slug);
+              e.currentTarget.src = "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&h=600&fit=crop";
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-500" />
           
-          {/* Service Type Badge - Top Left */}
-          <div className="absolute top-4 left-4 z-10">
+          {/* Badges Container - Prevents Overlap */}
+          <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2 z-10">
+            {/* Service Type Badge - Left */}
             <Badge 
               variant={
                 item.service_type === "both" 
@@ -41,7 +46,7 @@ export const PortfolioCard = ({ item }: PortfolioCardProps) => {
                   ? "default" 
                   : "secondary"
               }
-              className="backdrop-blur-sm shadow-md"
+              className="backdrop-blur-md shadow-lg border-background/20 flex-shrink-0"
             >
               {item.service_type === "chauffeur" 
                 ? "Chauffeur" 
@@ -49,17 +54,15 @@ export const PortfolioCard = ({ item }: PortfolioCardProps) => {
                 ? "Close Protection"
                 : "Both Services"}
             </Badge>
-          </div>
 
-          {/* Status Badge - Top Right */}
-          <div className="absolute top-4 right-4 z-10">
+            {/* Status Badge - Right */}
             {item.is_confidential ? (
-              <Badge className="bg-secondary/90 backdrop-blur-sm text-secondary-foreground border-border gap-1 shadow-md">
+              <Badge className="bg-secondary/95 backdrop-blur-md text-secondary-foreground border-background/20 gap-1.5 shadow-lg flex-shrink-0">
                 <Shield className="w-3 h-3" />
                 Confidential
               </Badge>
             ) : item.is_featured ? (
-              <Badge className="bg-accent/90 backdrop-blur-sm text-accent-foreground border-accent-foreground/20 gap-1 shadow-[0_0_20px_rgba(255,215,0,0.3)]">
+              <Badge className="bg-accent/95 backdrop-blur-md text-accent-foreground border-accent-foreground/20 gap-1.5 shadow-[0_0_20px_rgba(255,215,0,0.3)] flex-shrink-0">
                 <Star className="w-3 h-3 fill-current" />
                 Featured
               </Badge>

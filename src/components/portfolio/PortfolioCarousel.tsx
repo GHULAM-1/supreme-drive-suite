@@ -29,14 +29,19 @@ export const PortfolioCarousel = ({ serviceType, title, subtitle }: PortfolioCar
       const { data, error } = await supabase
         .from("portfolio")
         .select("*")
-        .or(`${column}.eq.true,service_type.eq.both`)
         .eq("status", "published")
         .eq("is_active", true)
+        .or(`${column}.eq.true,service_type.eq.both`)
         .order("is_featured", { ascending: false })
         .order("event_date", { ascending: false })
         .limit(6);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Portfolio fetch error:", error);
+        throw error;
+      }
+      
+      console.log(`Fetched ${data?.length || 0} portfolio items for ${serviceType}:`, data);
       setItems(data || []);
     } catch (error) {
       console.error("Error fetching portfolio items:", error);
