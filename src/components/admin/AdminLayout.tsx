@@ -30,7 +30,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,6 +42,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -119,6 +119,7 @@ function AdminSidebar() {
           transition-all duration-200 cursor-pointer
         `}
         aria-current={active ? "page" : undefined}
+        aria-label={item.label}
       >
         <Icon className="h-5 w-5" />
         {open && (
@@ -135,24 +136,6 @@ function AdminSidebar() {
         )}
       </SidebarMenuButton>
     );
-
-    if (!open) {
-      return (
-        <TooltipProvider delayDuration={0}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              {button}
-            </TooltipTrigger>
-            <TooltipContent side="right" className="font-medium">
-              {item.label}
-              {item.badge !== undefined && item.badge > 0 && (
-                <span className="ml-2 text-xs text-muted-foreground">({item.badge})</span>
-              )}
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      );
-    }
 
     return button;
   };
@@ -220,7 +203,8 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
 
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="min-h-screen flex w-full bg-background">
+      <TooltipProvider>
+        <div className="min-h-screen flex w-full bg-background">
         <AdminSidebar />
         
         <div className="flex-1 flex flex-col">
@@ -271,6 +255,7 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
           </main>
         </div>
       </div>
+      </TooltipProvider>
     </SidebarProvider>
   );
 }

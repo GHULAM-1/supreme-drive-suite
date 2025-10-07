@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
@@ -269,38 +269,35 @@ const VehiclesManagement = () => {
 
   if (loading) {
     return (
-      <TooltipProvider>
-        <div className="space-y-6 p-6">
-          <div className="space-y-2">
-            <Skeleton className="h-10 w-96" />
-            <Skeleton className="h-4 w-full max-w-2xl" />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <Card key={i} className="overflow-hidden">
-                <Skeleton className="h-48 w-full" />
-                <CardContent className="p-8 space-y-4">
-                  <Skeleton className="h-8 w-3/4" />
-                  <Skeleton className="h-4 w-1/2" />
-                  <Skeleton className="h-16 w-full" />
-                  <div className="grid grid-cols-2 gap-3">
-                    <Skeleton className="h-20" />
-                    <Skeleton className="h-20" />
-                    <Skeleton className="h-20" />
-                    <Skeleton className="h-20" />
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+      <div className="space-y-6 p-6">
+        <div className="space-y-2">
+          <Skeleton className="h-10 w-96" />
+          <Skeleton className="h-4 w-full max-w-2xl" />
         </div>
-      </TooltipProvider>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, i) => (
+            <Card key={i} className="overflow-hidden">
+              <Skeleton className="h-48 w-full" />
+              <CardContent className="p-8 space-y-4">
+                <Skeleton className="h-8 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-16 w-full" />
+                <div className="grid grid-cols-2 gap-3">
+                  <Skeleton className="h-20" />
+                  <Skeleton className="h-20" />
+                  <Skeleton className="h-20" />
+                  <Skeleton className="h-20" />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
     );
   }
 
   return (
-    <TooltipProvider>
-      <div className="space-y-6 p-6">
+    <div className="space-y-6 p-6">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
           <span>Dashboard</span>
@@ -724,7 +721,6 @@ const VehiclesManagement = () => {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </TooltipProvider>
   );
 };
 

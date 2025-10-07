@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -113,9 +113,8 @@ const PricingManagement = () => {
             Manage service pricing, extras, and vehicle rates for automated booking calculations.
           </p>
         </div>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
+        <Tooltip>
+          <TooltipTrigger asChild>
               <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Sync to Booking Engine
@@ -125,7 +124,6 @@ const PricingManagement = () => {
               <p>Push latest prices to the live booking calculator</p>
             </TooltipContent>
           </Tooltip>
-        </TooltipProvider>
       </div>
 
       {/* Tabs */}
@@ -418,9 +416,8 @@ const PricingExtras = ({ extras, loadData, logAudit }: {
                 )}
                 
                 <div className="flex gap-2 pt-2 border-t border-border">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                         <Button 
                           size="sm" 
                           variant="outline" 
@@ -432,11 +429,9 @@ const PricingExtras = ({ extras, loadData, logAudit }: {
                       </TooltipTrigger>
                       <TooltipContent>Edit extra</TooltipContent>
                     </Tooltip>
-                  </TooltipProvider>
                   
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                         <Button 
                           size="sm" 
                           variant="destructive" 
@@ -451,7 +446,6 @@ const PricingExtras = ({ extras, loadData, logAudit }: {
                       </TooltipTrigger>
                       <TooltipContent>Delete extra</TooltipContent>
                     </Tooltip>
-                  </TooltipProvider>
                 </div>
               </div>
             </Card>
@@ -847,9 +841,8 @@ const FixedRoutes = ({ routes, vehicles, loadData, logAudit }: {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex gap-2 justify-end">
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                             <Button
                               size="sm"
                               variant="outline"
@@ -860,11 +853,9 @@ const FixedRoutes = ({ routes, vehicles, loadData, logAudit }: {
                           </TooltipTrigger>
                           <TooltipContent>Edit route</TooltipContent>
                         </Tooltip>
-                      </TooltipProvider>
 
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                             <Button
                               size="sm"
                               variant="destructive"
@@ -878,7 +869,6 @@ const FixedRoutes = ({ routes, vehicles, loadData, logAudit }: {
                           </TooltipTrigger>
                           <TooltipContent>Delete route</TooltipContent>
                         </Tooltip>
-                      </TooltipProvider>
                     </div>
                   </TableCell>
                 </TableRow>

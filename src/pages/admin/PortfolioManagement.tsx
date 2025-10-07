@@ -47,7 +47,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
@@ -298,9 +297,8 @@ export default function PortfolioManagement() {
             </p>
           )}
         </div>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
+        <Tooltip>
+          <TooltipTrigger asChild>
               <Button 
                 onClick={() => navigate("/admin/portfolio/new")}
                 className="shadow-glow hover:shadow-[0_0_40px_rgba(255,215,0,0.4)] transition-all"
@@ -313,7 +311,6 @@ export default function PortfolioManagement() {
               <p>Create a new portfolio showcase</p>
             </TooltipContent>
           </Tooltip>
-        </TooltipProvider>
       </div>
 
       {/* Filters */}
@@ -520,9 +517,8 @@ export default function PortfolioManagement() {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                             <Button
                               size="sm"
                               variant="ghost"
@@ -534,10 +530,8 @@ export default function PortfolioManagement() {
                           </TooltipTrigger>
                           <TooltipContent><p>Edit</p></TooltipContent>
                         </Tooltip>
-                      </TooltipProvider>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                             <Button
                               size="sm"
                               variant="ghost"
@@ -549,10 +543,8 @@ export default function PortfolioManagement() {
                           </TooltipTrigger>
                           <TooltipContent><p>Duplicate</p></TooltipContent>
                         </Tooltip>
-                      </TooltipProvider>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                             <Button
                               size="sm"
                               variant="ghost"
@@ -567,7 +559,6 @@ export default function PortfolioManagement() {
                           </TooltipTrigger>
                           <TooltipContent><p>Delete</p></TooltipContent>
                         </Tooltip>
-                      </TooltipProvider>
                     </div>
                   </TableCell>
                 </TableRow>

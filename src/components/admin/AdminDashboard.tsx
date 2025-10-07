@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Briefcase, Users, Car, PoundSterling, TrendingUp, Clock, Shield, BarChart3, Plus, CheckCircle2, UserCheck, CreditCard, Gauge, Target, AlertCircle, ArrowRight, TrendingDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface DashboardMetrics {
   upcomingJobs: number;
@@ -292,10 +291,9 @@ export default function AdminDashboard() {
   }
 
   return (
-    <TooltipProvider>
-      <div className="space-y-8 pb-8">
-        {/* Header with Date/Time */}
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+    <div className="space-y-8 pb-8">
+      {/* Header with Date/Time */}
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
           <div>
             <h1 className="text-4xl font-display font-bold text-gradient-metal mb-2">
               Dashboard
@@ -437,83 +435,67 @@ export default function AdminDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link to="/admin/jobs">
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start gap-3 h-auto py-3 px-4 hover:bg-muted/50 transition-all group"
-                    >
-                      <div className="p-2 rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
-                        <Briefcase className="h-4 w-4 text-accent" />
-                      </div>
-                      <div className="text-left flex-1">
-                        <p className="font-medium text-sm">View All Jobs</p>
-                        <p className="text-xs text-muted-foreground">Manage bookings</p>
-                      </div>
-                      <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </Button>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>Assign drivers and track job progress</TooltipContent>
-              </Tooltip>
+              <Link to="/admin/jobs">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start gap-3 h-auto py-3 px-4 hover:bg-muted/50 transition-all group"
+                  title="Assign drivers and track job progress"
+                >
+                  <div className="p-2 rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
+                    <Briefcase className="h-4 w-4 text-accent" />
+                  </div>
+                  <div className="text-left flex-1">
+                    <p className="font-medium text-sm">View All Jobs</p>
+                    <p className="text-xs text-muted-foreground">Manage bookings</p>
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Button>
+              </Link>
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link to="/admin/drivers">
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start gap-3 h-auto py-3 px-4 hover:bg-muted/50 transition-all group"
-                    >
-                      <div className="p-2 rounded-lg bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors">
-                        <Users className="h-4 w-4 text-blue-400" />
-                      </div>
-                      <div className="text-left flex-1">
-                        <p className="font-medium text-sm">Manage Drivers</p>
-                        <p className="text-xs text-muted-foreground">Update availability</p>
-                      </div>
-                      <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </Button>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>Update driver schedules and availability</TooltipContent>
-              </Tooltip>
+              <Link to="/admin/drivers">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start gap-3 h-auto py-3 px-4 hover:bg-muted/50 transition-all group"
+                  title="Update driver schedules and availability"
+                >
+                  <div className="p-2 rounded-lg bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors">
+                    <Users className="h-4 w-4 text-blue-400" />
+                  </div>
+                  <div className="text-left flex-1">
+                    <p className="font-medium text-sm">Manage Drivers</p>
+                    <p className="text-xs text-muted-foreground">Update availability</p>
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Button>
+              </Link>
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link to="/admin/analytics">
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start gap-3 h-auto py-3 px-4 hover:bg-muted/50 transition-all group"
-                    >
-                      <div className="p-2 rounded-lg bg-purple-500/10 group-hover:bg-purple-500/20 transition-colors">
-                        <BarChart3 className="h-4 w-4 text-purple-400" />
-                      </div>
-                      <div className="text-left flex-1">
-                        <p className="font-medium text-sm">View Analytics</p>
-                        <p className="text-xs text-muted-foreground">Performance insights</p>
-                      </div>
-                      <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </Button>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>Deep dive into analytics and reports</TooltipContent>
-              </Tooltip>
+              <Link to="/admin/analytics">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start gap-3 h-auto py-3 px-4 hover:bg-muted/50 transition-all group"
+                  title="Deep dive into analytics and reports"
+                >
+                  <div className="p-2 rounded-lg bg-purple-500/10 group-hover:bg-purple-500/20 transition-colors">
+                    <BarChart3 className="h-4 w-4 text-purple-400" />
+                  </div>
+                  <div className="text-left flex-1">
+                    <p className="font-medium text-sm">View Analytics</p>
+                    <p className="text-xs text-muted-foreground">Performance insights</p>
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Button>
+              </Link>
 
               <div className="pt-2">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link to="/admin/jobs?action=new">
-                      <Button
-                        className="w-full justify-center gap-2 bg-accent hover:bg-accent/90 text-accent-foreground shadow-[0_0_20px_rgba(244,197,66,0.3)] hover:shadow-[0_0_30px_rgba(244,197,66,0.5)] transition-all"
-                      >
-                        <Plus className="h-4 w-4" />
-                        Add New Job
-                      </Button>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>Create a new booking</TooltipContent>
-                </Tooltip>
+                <Link to="/admin/jobs?action=new">
+                  <Button
+                    className="w-full justify-center gap-2 bg-accent hover:bg-accent/90 text-accent-foreground shadow-[0_0_20px_rgba(244,197,66,0.3)] hover:shadow-[0_0_30px_rgba(244,197,66,0.5)] transition-all"
+                    title="Create a new booking"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add New Job
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>
@@ -617,7 +599,6 @@ export default function AdminDashboard() {
             </CardContent>
           </Link>
         </Card>
-      </div>
-    </TooltipProvider>
+    </div>
   );
 }

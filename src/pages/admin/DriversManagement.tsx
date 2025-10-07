@@ -9,11 +9,20 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { toast } from "sonner";
 import { Plus, Edit, Trash2, Phone, Mail, Shield, Car, Users, ChevronRight, Search, X } from "lucide-react";
+
+// Standard specialization categories
+const SPECIALIZATIONS = [
+  "Chauffeur",
+  "Close Protection",
+  "Executive",
+  "Long Distance",
+] as const;
 
 interface Driver {
   id: string;
@@ -42,7 +51,7 @@ const DriversManagement = () => {
     email: "",
     phone: "",
     license_number: "",
-    specializations: "",
+    specializations: [] as string[],
     is_available: true,
   });
 
@@ -87,10 +96,10 @@ const DriversManagement = () => {
       }
     }
 
-    // Role filter
+    // Role filter - exact match with standardized values
     if (roleFilter !== "all") {
       filtered = filtered.filter(driver =>
-        driver.specializations?.some(s => s.toLowerCase().includes(roleFilter.toLowerCase()))
+        driver.specializations?.includes(roleFilter)
       );
     }
 
@@ -122,14 +131,13 @@ const DriversManagement = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const specializationsArray = formData.specializations
-      .split(",")
-      .map(s => s.trim())
-      .filter(s => s);
-
     const driverData = {
-      ...formData,
-      specializations: specializationsArray,
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      license_number: formData.license_number,
+      specializations: formData.specializations,
+      is_available: formData.is_available,
     };
 
     if (editingDriver) {
@@ -186,7 +194,7 @@ const DriversManagement = () => {
       email: driver.email || "",
       phone: driver.phone || "",
       license_number: driver.license_number || "",
-      specializations: driver.specializations?.join(", ") || "",
+      specializations: driver.specializations || [],
       is_available: driver.is_available,
     });
     setDialogOpen(true);
@@ -199,7 +207,7 @@ const DriversManagement = () => {
       email: "",
       phone: "",
       license_number: "",
-      specializations: "",
+      specializations: [],
       is_available: true,
     });
   };
@@ -236,10 +244,9 @@ const DriversManagement = () => {
   }
 
   return (
-    <TooltipProvider>
-      <div className="space-y-8 p-6">
-        {/* Header Section with Breadcrumb */}
-        <div className="space-y-4">
+    <div className="space-y-8 p-6">
+      {/* Header Section with Breadcrumb */}
+      <div className="space-y-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>Dashboard</span>
             <ChevronRight className="w-4 h-4" />
@@ -258,22 +265,15 @@ const DriversManagement = () => {
             </div>
             
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <DialogTrigger asChild>
-                    <Button 
-                      className="gradient-accent shadow-glow hover:shadow-[0_0_40px_rgba(244,197,66,0.3)] transition-all duration-300" 
-                      onClick={resetForm}
-                    >
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Driver
-                    </Button>
-                  </DialogTrigger>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Add new driver profile</p>
-                </TooltipContent>
-              </Tooltip>
+              <DialogTrigger asChild>
+                <Button 
+                  className="gradient-accent shadow-glow hover:shadow-[0_0_40px_rgba(244,197,66,0.3)] transition-all duration-300" 
+                  onClick={resetForm}
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Driver
+                </Button>
+              </DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="font-display text-2xl">
@@ -348,19 +348,29 @@ const DriversManagement = () => {
                 <p className="text-xs text-muted-foreground">Use format: UK-DRV-XXX</p>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="specializations" className="text-sm font-semibold">
-                  Specializations <span className="text-muted-foreground text-xs">(comma-separated)</span>
+              <div className="space-y-3">
+                <Label className="text-sm font-semibold">
+                  Specializations <span className="text-destructive">*</span>
                 </Label>
-                <Input
-                  id="specializations"
+                <ToggleGroup 
+                  type="multiple" 
                   value={formData.specializations}
-                  onChange={(e) => setFormData({ ...formData, specializations: e.target.value })}
-                  className="focus-visible:ring-accent focus-visible:ring-2 transition-all"
-                  placeholder="Chauffeur, Close Protection, Executive Transport"
-                />
+                  onValueChange={(value) => setFormData({ ...formData, specializations: value })}
+                  className="flex flex-wrap gap-2 justify-start"
+                >
+                  {SPECIALIZATIONS.map((spec) => (
+                    <ToggleGroupItem
+                      key={spec}
+                      value={spec}
+                      aria-label={`Toggle ${spec}`}
+                      className="data-[state=on]:bg-accent data-[state=on]:text-accent-foreground border-2 data-[state=on]:border-accent hover:bg-accent/10"
+                    >
+                      {spec}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
                 <p className="text-xs text-muted-foreground">
-                  Common: Chauffeur, Close Protection, Executive, Long Distance
+                  Select all applicable specializations
                 </p>
               </div>
 
@@ -436,9 +446,9 @@ const DriversManagement = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Roles</SelectItem>
-              <SelectItem value="chauffeur">Chauffeur</SelectItem>
-              <SelectItem value="close protection">Close Protection</SelectItem>
-              <SelectItem value="executive">Executive Transport</SelectItem>
+              {SPECIALIZATIONS.map((spec) => (
+                <SelectItem key={spec} value={spec}>{spec}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
@@ -563,37 +573,25 @@ const DriversManagement = () => {
 
                   {/* Action Buttons - Bottom Right */}
                   <div className="flex justify-end gap-2 pt-4">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          size="icon" 
-                          variant="outline" 
-                          onClick={() => handleEdit(driver)}
-                          className="hover:bg-accent/10 hover:border-accent hover:scale-110 transition-all"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Edit Driver Profile</p>
-                      </TooltipContent>
-                    </Tooltip>
+                    <Button 
+                      size="icon" 
+                      variant="outline" 
+                      onClick={() => handleEdit(driver)}
+                      className="hover:bg-accent/10 hover:border-accent hover:scale-110 transition-all"
+                      aria-label="Edit Driver Profile"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Button>
 
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          size="icon" 
-                          variant="destructive" 
-                          onClick={() => handleDeleteClick(driver)}
-                          className="hover:bg-destructive/90 hover:scale-110 transition-all"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Remove Driver</p>
-                      </TooltipContent>
-                    </Tooltip>
+                    <Button 
+                      size="icon" 
+                      variant="destructive" 
+                      onClick={() => handleDeleteClick(driver)}
+                      className="hover:bg-destructive/90 hover:scale-110 transition-all"
+                      aria-label="Remove Driver"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
               </Card>
@@ -623,8 +621,7 @@ const DriversManagement = () => {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </TooltipProvider>
-  );
-};
+    );
+  };
 
 export default DriversManagement;
