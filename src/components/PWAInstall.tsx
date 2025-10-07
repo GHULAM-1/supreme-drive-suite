@@ -101,7 +101,7 @@ const PWAInstall = () => {
                 <CheckCircle2 className="h-6 w-6 text-accent" /> App Installed
               </h3>
               <p className="text-base text-muted-foreground">
-                Supreme Drive is installed on your device. Find it on your home screen for quick access.
+                Supreme Style is installed on your device. Find it on your home screen for quick access.
               </p>
             </div>
           </div>
@@ -116,12 +116,12 @@ const PWAInstall = () => {
         <div className="pwa-card">
           <div className="flex-1">
             <h3 className="text-2xl md:text-3xl font-display font-bold mb-2 text-foreground">
-              Install Supreme Drive
+              Install Supreme Style
             </h3>
             <p className="text-base text-muted-foreground mb-6">
               {isMobile 
                 ? "Add our app to your home screen for faster booking and instant access."
-                : "Scan the QR code with your phone to install our app for faster booking."}
+                : "Scan the QR code with your phone to install our app as a PWA for faster booking."}
             </p>
 
             <div className="flex flex-wrap gap-3 mb-4">
@@ -174,7 +174,7 @@ const PWAInstall = () => {
                         <li>Tap the <strong className="text-foreground">Share</strong> button (⤴︎) at the bottom of Safari</li>
                         <li>Scroll down and choose <strong className="text-foreground">Add to Home Screen</strong></li>
                         <li>Tap <strong className="text-foreground">Add</strong> in the top right</li>
-                        <li>Find the Supreme Drive icon on your home screen</li>
+                        <li>Find the Supreme Style icon on your home screen</li>
                       </ol>
                     </div>
                   </TabsContent>
@@ -200,7 +200,7 @@ const PWAInstall = () => {
                       ) : isChrome ? (
                         <ol className="space-y-2 text-sm text-muted-foreground list-decimal list-inside">
                           <li>Click the <strong className="text-foreground">⋮</strong> menu (top right)</li>
-                          <li>Select <strong className="text-foreground">Install Supreme Drive</strong></li>
+                          <li>Select <strong className="text-foreground">Install Supreme Style</strong></li>
                           <li>Click <strong className="text-foreground">Install</strong></li>
                         </ol>
                       ) : isEdge ? (
@@ -228,7 +228,7 @@ const PWAInstall = () => {
                 width={144}
                 height={144}
                 className="rounded-lg border border-accent/20"
-                aria-label="QR code to open Supreme Drive"
+                aria-label="QR code to open Supreme Style"
               />
               <p className="text-xs text-muted-foreground text-center">
                 Scan to open on your phone
