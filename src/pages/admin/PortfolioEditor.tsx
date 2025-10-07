@@ -14,7 +14,14 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   ArrowLeft,
   Save,
@@ -812,72 +819,48 @@ export default function PortfolioEditor() {
               </div>
             )}
 
-            {/* Image Gallery */}
-            <div className="space-y-2">
-              {images.map((image, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-2 p-2 border rounded-lg hover:border-primary transition-colors"
-                >
-                  <GripVertical className="h-4 w-4 text-muted-foreground cursor-move" />
-                  <img
-                    src={image.image_url}
-                    alt={image.alt_text}
-                    className="w-16 h-16 object-cover rounded"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">
-                      {image.alt_text}
-                    </p>
-                    {image.caption && (
-                      <p className="text-xs text-muted-foreground truncate">
-                        {image.caption}
-                      </p>
-                    )}
+            {/* Helper Text */}
+            {images.length === 0 && (
+              <div className="text-sm text-muted-foreground p-4 border border-dashed rounded-lg text-center">
+                <p className="font-medium mb-1">Upload Portfolio Images</p>
+                <p>Add multiple images - mark one with the star as your cover/thumbnail image</p>
+              </div>
+            )}
+
+            {/* Image Gallery Sections */}
+            {images.length > 0 && (
+              <div className="space-y-6">
+                {/* Cover Image Section */}
+                {images.some(img => img.is_cover) && (
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium flex items-center gap-2">
+                      <Star className="h-4 w-4 text-accent fill-accent" />
+                      Cover Image (Thumbnail)
+                    </h4>
+                    <div className="space-y-2">
+                      {images.filter(img => img.is_cover).map((image, index) => (
+                        <ImageCard key={index} image={image} index={images.indexOf(image)} isCover={true} />
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex gap-1">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => {
-                        const newImages = images.map((img, i) => ({
-                          ...img,
-                          is_cover: i === index,
-                        }));
-                        setImages(newImages);
-                      }}
-                    >
-                      <Star
-                        className={`h-4 w-4 ${
-                          image.is_cover
-                            ? "text-accent fill-accent"
-                            : "text-muted-foreground"
-                        }`}
-                      />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => {
-                        setEditingImage(image);
-                        setImageDialogOpen(true);
-                      }}
-                    >
+                )}
+
+                {/* Gallery Images Section */}
+                {images.filter(img => !img.is_cover).length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium flex items-center gap-2">
                       <ImageIcon className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => {
-                        setImages(images.filter((_, i) => i !== index));
-                      }}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
+                      Gallery Images ({images.filter(img => !img.is_cover).length})
+                    </h4>
+                    <div className="space-y-2">
+                      {images.filter(img => !img.is_cover).map((image, index) => (
+                        <ImageCard key={index} image={image} index={images.indexOf(image)} isCover={false} />
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                )}
+              </div>
+            )}
           </Card>
         </div>
       </div>
@@ -953,4 +936,102 @@ export default function PortfolioEditor() {
       </Dialog>
     </div>
   );
-}
+
+  // Helper component for image cards
+  function ImageCard({ image, index, isCover }: { image: any, index: number, isCover: boolean }) {
+    return (
+      <div className="flex items-center gap-2 p-3 border rounded-lg hover:border-primary transition-colors bg-card">
+        <GripVertical className="h-4 w-4 text-muted-foreground cursor-move" />
+        <div className="relative">
+          <img
+            src={image.image_url}
+            alt={image.alt_text}
+            className="w-20 h-20 object-cover rounded"
+          />
+          {isCover && (
+            <Badge className="absolute -top-2 -right-2 text-xs px-1.5 py-0.5 bg-accent">
+              COVER
+            </Badge>
+          )}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium truncate">
+            {image.alt_text}
+          </p>
+          {image.caption && (
+            <p className="text-xs text-muted-foreground truncate">
+              {image.caption}
+            </p>
+          )}
+        </div>
+        <div className="flex gap-1">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    const newImages = images.map((img, i) => ({
+                      ...img,
+                      is_cover: i === index,
+                    }));
+                    setImages(newImages);
+                  }}
+                >
+                  <Star
+                    className={`h-5 w-5 ${
+                      image.is_cover
+                        ? "text-accent fill-accent"
+                        : "text-muted-foreground"
+                    }`}
+                  />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Set as Cover Image</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    setEditingImage(image);
+                    setImageDialogOpen(true);
+                  }}
+                >
+                  <ImageIcon className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Edit Details</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    setImages(images.filter((_, i) => i !== index));
+                  }}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Delete Image</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      </div>
+    );
+  }
+};

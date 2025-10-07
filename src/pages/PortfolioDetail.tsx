@@ -37,6 +37,7 @@ const PortfolioDetail = () => {
   const navigate = useNavigate();
   const [item, setItem] = useState<PortfolioItem | null>(null);
   const [relatedItems, setRelatedItems] = useState<PortfolioItem[]>([]);
+  const [galleryImages, setGalleryImages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showPrice, setShowPrice] = useState(false);
 
@@ -57,6 +58,17 @@ const PortfolioDetail = () => {
 
       if (error) throw error;
       setItem(data);
+
+      // Fetch gallery images from portfolio_images table
+      const { data: images } = await supabase
+        .from("portfolio_images")
+        .select("*")
+        .eq("portfolio_id", data.id)
+        .eq("is_visible", true)
+        .eq("is_cover", false)
+        .order("display_order", { ascending: true });
+
+      setGalleryImages(images || []);
 
       // Fetch related items
       const { data: related } = await supabase
@@ -172,10 +184,14 @@ const PortfolioDetail = () => {
                 )}
 
                 {/* Gallery */}
-                {item.gallery_images && item.gallery_images.length > 0 && (
+                {galleryImages.length > 0 && (
                   <div>
                     <h2 className="text-2xl font-semibold mb-4">Gallery</h2>
-                    <PortfolioGallery images={item.gallery_images} />
+                    <PortfolioGallery images={galleryImages.map(img => ({
+                      url: img.image_url,
+                      alt: img.alt_text,
+                      caption: img.caption
+                    }))} />
                   </div>
                 )}
 
