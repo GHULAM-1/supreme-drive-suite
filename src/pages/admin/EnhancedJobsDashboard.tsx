@@ -108,9 +108,8 @@ export default function EnhancedJobsDashboard() {
     dateRange.from !== undefined
   ].filter(Boolean).length;
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  // Removed auto-reload on mount to preserve optimistic updates
+  // Data loads once when Admin component mounts
 
   useEffect(() => {
     // Apply URL filters on mount
@@ -338,6 +337,15 @@ export default function EnhancedJobsDashboard() {
             <p className="text-muted-foreground">Manage bookings, drivers, and route assignments in real time.</p>
           </div>
           <div className="flex gap-2">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button onClick={loadData} variant="outline" className="gap-2 hover:border-accent/40 transition-all">
+                  <Download className="w-4 h-4" />
+                  Refresh
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Reload jobs data</TooltipContent>
+            </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button onClick={exportToCSV} variant="outline" className="gap-2 hover:border-accent/40 transition-all">

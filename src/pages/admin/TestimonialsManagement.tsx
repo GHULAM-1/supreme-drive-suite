@@ -184,9 +184,7 @@ const TestimonialsManagement = () => {
     })
   );
 
-  useEffect(() => {
-    loadTestimonials();
-  }, []);
+  // Removed auto-reload on mount to preserve optimistic updates
 
   const loadTestimonials = async () => {
     setLoading(true);
@@ -427,14 +425,20 @@ const TestimonialsManagement = () => {
           </p>
         </div>
 
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="gradient-accent shadow-glow" onClick={resetForm}>
-              <Plus className="w-4 h-4 mr-2" />
-              Add Testimonial
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="flex gap-2">
+          <Button onClick={loadTestimonials} variant="outline" className="gap-2">
+            <Plus className="w-4 h-4" />
+            Refresh
+          </Button>
+          
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="gradient-accent shadow-glow" onClick={resetForm}>
+                <Plus className="w-4 h-4 mr-2" />
+                Add Testimonial
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingTestimonial ? "Edit Testimonial" : "Add New Testimonial"}
@@ -553,6 +557,7 @@ const TestimonialsManagement = () => {
             </form>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       {/* Toolbar */}

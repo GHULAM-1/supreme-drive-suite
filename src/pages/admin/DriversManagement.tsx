@@ -56,9 +56,7 @@ const DriversManagement = () => {
       .slice(0, 2);
   };
 
-  useEffect(() => {
-    loadDrivers();
-  }, []);
+  // Removed auto-reload on mount to preserve optimistic updates
 
   useEffect(() => {
     filterDrivers();
@@ -254,24 +252,37 @@ const DriversManagement = () => {
               </p>
             </div>
             
-            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <div className="flex gap-2">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <DialogTrigger asChild>
-                    <Button 
-                      className="gradient-accent shadow-glow hover:shadow-[0_0_40px_rgba(244,197,66,0.3)] transition-all duration-300" 
-                      onClick={resetForm}
-                    >
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Driver
-                    </Button>
-                  </DialogTrigger>
+                  <Button onClick={loadDrivers} variant="outline" className="gap-2">
+                    <Plus className="w-4 h-4" />
+                    Refresh
+                  </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Add new driver profile</p>
+                  <p>Reload drivers data</p>
                 </TooltipContent>
               </Tooltip>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+              
+              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <DialogTrigger asChild>
+                      <Button 
+                        className="gradient-accent shadow-glow hover:shadow-[0_0_40px_rgba(244,197,66,0.3)] transition-all duration-300" 
+                        onClick={resetForm}
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Driver
+                      </Button>
+                    </DialogTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Add new driver profile</p>
+                  </TooltipContent>
+                </Tooltip>
+                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="font-display text-2xl">
                 {editingDriver ? "Edit Driver Profile" : "Add New Driver"}
@@ -391,7 +402,8 @@ const DriversManagement = () => {
             </form>
           </DialogContent>
         </Dialog>
-      </div>
+              </div>
+            </div>
 
       {/* Filter & Search Bar */}
         <div className="flex flex-col sm:flex-row gap-4">

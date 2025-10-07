@@ -50,9 +50,7 @@ const VehiclesManagement = () => {
     image_url: null as string | null,
   });
 
-  useEffect(() => {
-    loadVehicles();
-  }, []);
+  // Removed auto-reload on mount to preserve optimistic updates
 
   const loadVehicles = async () => {
     setLoading(true);
@@ -323,21 +321,34 @@ const VehiclesManagement = () => {
             </p>
           </div>
           
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <div className="flex gap-2">
             <Tooltip>
               <TooltipTrigger asChild>
-                <DialogTrigger asChild>
-                  <Button className="gradient-accent shadow-glow" onClick={resetForm}>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add Vehicle
-                  </Button>
-                </DialogTrigger>
+                <Button onClick={loadVehicles} variant="outline" className="gap-2">
+                  <Plus className="w-4 h-4" />
+                  Refresh
+                </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Add new vehicle to fleet</p>
+                <p>Reload vehicles data</p>
               </TooltipContent>
             </Tooltip>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            
+            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DialogTrigger asChild>
+                    <Button className="gradient-accent shadow-glow" onClick={resetForm}>
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Vehicle
+                    </Button>
+                  </DialogTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Add new vehicle to fleet</p>
+                </TooltipContent>
+              </Tooltip>
+              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-display">
                   {editingVehicle ? "Edit Vehicle" : "Add Vehicle"}
@@ -540,7 +551,8 @@ const VehiclesManagement = () => {
               </form>
             </DialogContent>
           </Dialog>
-        </div>
+            </div>
+          </div>
 
         {/* Empty State */}
         {vehicles.length === 0 ? (
