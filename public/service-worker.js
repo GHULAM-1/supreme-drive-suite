@@ -1,4 +1,4 @@
-const CACHE_NAME = 'supreme-drive-v2';
+const CACHE_NAME = 'supreme-drive-v3';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
@@ -35,8 +35,12 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // Skip admin routes and API calls from caching
-  if (url.pathname.startsWith('/admin') || url.pathname.includes('/api/')) {
+  // Skip admin routes, API calls, and JavaScript files from caching
+  if (url.pathname.startsWith('/admin') || 
+      url.pathname.includes('/api/') ||
+      url.pathname.endsWith('.js') ||
+      url.pathname.includes('node_modules') ||
+      url.pathname.includes('/src/')) {
     return;
   }
 
@@ -56,7 +60,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Others: cache-first
+  // Static assets only: cache-first (images, fonts, icons)
   event.respondWith(
     caches.match(req).then(
       (cached) =>
