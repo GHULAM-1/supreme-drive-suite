@@ -17,6 +17,7 @@ interface PortfolioItem {
   title: string;
   slug: string;
   summary: string;
+  full_description: string | null;
   cover_image_url: string;
   service_type: string;
   vehicle_used: string;
@@ -178,6 +179,16 @@ const PortfolioDetail = () => {
                   <h2 className="text-3xl font-display font-semibold section-heading">Overview</h2>
                   <p className="text-lg text-white/90 leading-relaxed">{item.summary}</p>
                 </div>
+
+                {/* Full Description */}
+                {item.full_description && (
+                  <div className="animate-fade-in animation-delay-100 mt-8">
+                    <h2 className="text-3xl font-display font-semibold section-heading">Detailed Description</h2>
+                    <p className="text-white/80 leading-relaxed whitespace-pre-line">
+                      {item.full_description}
+                    </p>
+                  </div>
+                )}
 
                 {/* Special Requirements */}
                 {item.special_requirements && (
