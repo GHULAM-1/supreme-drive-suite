@@ -15,6 +15,7 @@ import {
   Home,
   BarChart2,
   Tag,
+  RefreshCw,
 } from "lucide-react";
 import {
   Sidebar,
@@ -218,6 +219,15 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
     }
   };
 
+  const handleClearCache = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    toast.success("Cache cleared! Reloading...");
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+  };
+
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-background">
@@ -243,6 +253,22 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
               </form>
 
               <div className="ml-auto flex items-center gap-3">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleClearCache}
+                      className="h-9 w-9 p-0"
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Clear Cache & Reload</p>
+                  </TooltipContent>
+                </Tooltip>
+
                 <ThemeToggle />
                 
                 <DropdownMenu>
