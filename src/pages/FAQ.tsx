@@ -71,7 +71,7 @@ const FAQ = () => {
                 </p>
 
                 <Tabs defaultValue={categories[0]} className="w-full">
-                  <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5">
+                  <TabsList className="grid w-full grid-cols-3 md:grid-cols-5">
                     {categories.map(category => (
                       <TabsTrigger key={category} value={category}>
                         {category}
