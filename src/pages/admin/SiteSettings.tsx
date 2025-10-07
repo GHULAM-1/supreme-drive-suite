@@ -5,7 +5,6 @@ import * as z from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -56,7 +55,7 @@ type LegalData = z.infer<typeof legalSchema>;
 export default function SiteSettings() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { settings, isLoading } = useSiteSettings();
+  const [loading, setLoading] = useState(true);
   const [settingsId, setSettingsId] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string>("");
 
@@ -76,54 +75,70 @@ export default function SiteSettings() {
     resolver: zodResolver(legalSchema),
   });
 
-  // Invalidate cache on mount to ensure fresh data
   useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ["site-settings"] });
+    loadSettings();
     loadUserEmail();
-  }, [queryClient]);
+  }, []);
 
   const loadUserEmail = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user?.email) setUserEmail(user.email);
   };
 
-  // Populate forms when settings are loaded
-  useEffect(() => {
-    if (settings && settings.id) {
-      setSettingsId(settings.id);
-      
-      companyForm.reset({
-        company_name: settings.company_name,
-        phone: settings.phone,
-        email: settings.email,
-        office_address: settings.office_address,
-        availability: settings.availability,
-        whatsapp_number: settings.whatsapp_number || "",
-      });
+  const loadSettings = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("site_settings")
+        .select("*")
+        .maybeSingle();
 
-      brandingForm.reset({
-        light_logo_url: settings.light_logo_url || "",
-        dark_logo_url: settings.dark_logo_url || "",
-        favicon_url: settings.favicon_url || "",
-        accent_color: settings.accent_color,
-      });
+      if (error) throw error;
 
-      notificationsForm.reset({
-        notify_new_booking: settings.notify_new_booking,
-        notify_new_enquiry: settings.notify_new_enquiry,
-        notification_emails: (settings.notification_emails || []).join(", "),
-      });
+      if (data) {
+        setSettingsId(data.id);
+        
+        companyForm.reset({
+          company_name: data.company_name,
+          phone: data.phone,
+          email: data.email,
+          office_address: data.office_address,
+          availability: data.availability,
+          whatsapp_number: data.whatsapp_number || "",
+        });
 
-      legalForm.reset({
-        privacy_policy_url: settings.privacy_policy_url || "",
-        terms_url: settings.terms_url || "",
-        footer_tagline: settings.footer_tagline || "",
-        instagram_url: settings.instagram_url || "",
-        facebook_url: settings.facebook_url || "",
-        linkedin_url: settings.linkedin_url || "",
+        brandingForm.reset({
+          light_logo_url: data.light_logo_url || "",
+          dark_logo_url: data.dark_logo_url || "",
+          favicon_url: data.favicon_url || "",
+          accent_color: data.accent_color,
+        });
+
+        notificationsForm.reset({
+          notify_new_booking: data.notify_new_booking,
+          notify_new_enquiry: data.notify_new_enquiry,
+          notification_emails: (data.notification_emails || []).join(", "),
+        });
+
+        legalForm.reset({
+          privacy_policy_url: data.privacy_policy_url || "",
+          terms_url: data.terms_url || "",
+          footer_tagline: data.footer_tagline || "",
+          instagram_url: data.instagram_url || "",
+          facebook_url: data.facebook_url || "",
+          linkedin_url: data.linkedin_url || "",
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
-  }, [settings]);
+  };
 
   const getCurrentSettings = async () => {
     const { data } = await supabase
@@ -162,6 +177,9 @@ export default function SiteSettings() {
       
       // Invalidate cache to refresh settings across all components
       await queryClient.invalidateQueries({ queryKey: ["site-settings"] });
+      
+      // Reload settings to show fresh data
+      await loadSettings();
       
       toast({
         title: "Settings saved successfully",
@@ -204,6 +222,9 @@ export default function SiteSettings() {
       
       // Invalidate cache to refresh settings across all components
       await queryClient.invalidateQueries({ queryKey: ["site-settings"] });
+      
+      // Reload settings to show fresh data
+      await loadSettings();
       
       toast({
         title: "Settings saved successfully",
@@ -258,6 +279,9 @@ export default function SiteSettings() {
       // Invalidate cache to refresh settings across all components
       await queryClient.invalidateQueries({ queryKey: ["site-settings"] });
       
+      // Reload settings to show fresh data
+      await loadSettings();
+      
       toast({
         title: "Settings saved successfully",
         description: "Notification preferences have been updated.",
@@ -300,6 +324,9 @@ export default function SiteSettings() {
       // Invalidate cache to refresh settings across all components
       await queryClient.invalidateQueries({ queryKey: ["site-settings"] });
       
+      // Reload settings to show fresh data
+      await loadSettings();
+      
       toast({
         title: "Settings saved successfully",
         description: "Legal and footer information has been updated.",
@@ -313,7 +340,7 @@ export default function SiteSettings() {
     }
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="space-y-6">
         <div>
