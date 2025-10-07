@@ -67,9 +67,9 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
         would_recommend: validated.would_recommend,
       });
 
-      // Log error for debugging but don't block submission (data is being inserted successfully)
       if (error) {
-        console.log('RLS read-back error (can be ignored):', error);
+        console.error('Feedback submission error:', error);
+        throw new Error(error.message || 'Failed to submit feedback');
       }
 
       toast({
