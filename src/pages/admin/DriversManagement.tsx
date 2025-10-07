@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -244,10 +244,9 @@ const DriversManagement = () => {
   }
 
   return (
-    <TooltipProvider>
-      <div className="space-y-8 p-6">
-        {/* Header Section with Breadcrumb */}
-        <div className="space-y-4">
+    <div className="space-y-8 p-6">
+      {/* Header Section with Breadcrumb */}
+      <div className="space-y-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>Dashboard</span>
             <ChevronRight className="w-4 h-4" />
@@ -641,8 +640,7 @@ const DriversManagement = () => {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-    </TooltipProvider>
-  );
-};
+    );
+  };
 
 export default DriversManagement;
