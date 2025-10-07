@@ -220,6 +220,11 @@ export default function EnhancedJobsDashboard() {
 
   const updateBookingStatus = async (id: string, newStatus: string) => {
     try {
+      // Optimistic UI update
+      setBookings(prev => prev.map(b => 
+        b.id === id ? { ...b, status: newStatus } : b
+      ));
+
       const { error } = await supabase
         .from("bookings")
         .update({ status: newStatus })
@@ -227,24 +232,33 @@ export default function EnhancedJobsDashboard() {
 
       if (error) throw error;
       toast.success("Status updated successfully");
-      loadData();
     } catch (error: any) {
       toast.error("Failed to update status: " + error.message);
+      // Revert optimistic update on error
+      loadData();
     }
   };
 
   const assignDriver = async (bookingId: string, driverId: string) => {
     try {
+      const assignedAt = new Date().toISOString();
+      
+      // Optimistic UI update
+      setBookings(prev => prev.map(b => 
+        b.id === bookingId ? { ...b, driver_id: driverId, assigned_at: assignedAt } : b
+      ));
+
       const { error } = await supabase
         .from("bookings")
-        .update({ driver_id: driverId, assigned_at: new Date().toISOString() })
+        .update({ driver_id: driverId, assigned_at: assignedAt })
         .eq("id", bookingId);
 
       if (error) throw error;
       toast.success("Driver assigned successfully");
-      loadData();
     } catch (error: any) {
       toast.error("Failed to assign driver: " + error.message);
+      // Revert optimistic update on error
+      loadData();
     }
   };
 
