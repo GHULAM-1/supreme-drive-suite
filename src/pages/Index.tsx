@@ -12,6 +12,7 @@ import MobileActions from "@/components/MobileActions";
 import ScrollToTop from "@/components/ScrollToTop";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import PWAInstall from "@/components/PWAInstall";
 
 const Index = () => {
   const businessSchema = {
@@ -135,6 +136,8 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      <PWAInstall />
 
       <Footer />
       <MobileActions />
