@@ -33,22 +33,12 @@ interface PricingExtra {
   description: string;
 }
 
-interface FixedRoute {
-  id: string;
-  route_name: string;
-  pickup_location: string;
-  dropoff_location: string;
-  fixed_price: number;
-  vehicle_id: string | null;
-}
 
 const EnhancedBookingWidget = () => {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [pricingExtras, setPricingExtras] = useState<PricingExtra[]>([]);
-  const [fixedRoutes, setFixedRoutes] = useState<FixedRoute[]>([]);
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
-  const [matchedRoute, setMatchedRoute] = useState<FixedRoute | null>(null);
   const [estimatedMiles, setEstimatedMiles] = useState(50);
   const [waitTimeHours, setWaitTimeHours] = useState(0);
   const [isLongDrive, setIsLongDrive] = useState(false);
@@ -74,39 +64,20 @@ const EnhancedBookingWidget = () => {
     loadData();
   }, []);
 
-  useEffect(() => {
-    checkForFixedRoute();
-  }, [formData.pickupLocation, formData.dropoffLocation]);
-
   const loadData = async () => {
-    const [vehiclesRes, extrasRes, routesRes] = await Promise.all([
+    const [vehiclesRes, extrasRes] = await Promise.all([
       supabase.from("vehicles").select("*").eq("is_active", true).order("base_price_per_mile"),
-      supabase.from("pricing_extras").select("*").eq("is_active", true),
-      supabase.from("fixed_routes").select("*").eq("is_active", true)
+      supabase.from("pricing_extras").select("*").eq("is_active", true)
     ]);
 
     if (vehiclesRes.data) setVehicles(vehiclesRes.data);
     if (extrasRes.data) setPricingExtras(extrasRes.data);
-    if (routesRes.data) setFixedRoutes(routesRes.data);
-  };
-
-  const checkForFixedRoute = () => {
-    const route = fixedRoutes.find(
-      r => r.pickup_location.toLowerCase().includes(formData.pickupLocation.toLowerCase()) &&
-           r.dropoff_location.toLowerCase().includes(formData.dropoffLocation.toLowerCase())
-    );
-    setMatchedRoute(route || null);
   };
 
   const calculatePriceBreakdown = () => {
     if (!selectedVehicle) return { basePrice: 0, extras: 0, waitTime: 0, overnight: 0, total: 0 };
 
-    let basePrice = selectedVehicle.base_price_per_mile * estimatedMiles;
-    
-    // Override with fixed route if matched
-    if (matchedRoute) {
-      basePrice = matchedRoute.fixed_price;
-    }
+    const basePrice = selectedVehicle.base_price_per_mile * estimatedMiles;
 
     const extrasTotal = selectedExtras.reduce((sum, extraId) => {
       const extra = pricingExtras.find(e => e.id === extraId);
@@ -215,13 +186,6 @@ const EnhancedBookingWidget = () => {
       <h3 className="text-2xl font-display font-bold mb-6 text-gradient-metal">Book Your Journey</h3>
       
       <form onSubmit={handleSubmit} className="space-y-6">
-        {matchedRoute && (
-          <div className="bg-accent/10 border border-accent/30 rounded-lg p-4">
-            <p className="text-sm font-medium text-accent">✓ Fixed Route Available: {matchedRoute.route_name}</p>
-            <p className="text-xs text-muted-foreground mt-1">Special rate applied: £{matchedRoute.fixed_price}</p>
-          </div>
-        )}
-
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="pickupLocation">Pickup Location</Label>
@@ -328,21 +292,19 @@ const EnhancedBookingWidget = () => {
           </div>
         </div>
 
-        {!matchedRoute && (
-          <div className="space-y-2">
-            <Label htmlFor="estimatedMiles">Estimated Miles</Label>
-            <Input
-              id="estimatedMiles"
-              type="number"
-              value={estimatedMiles}
-              onChange={(e) => {
-                const value = parseInt(e.target.value);
-                setEstimatedMiles(isNaN(value) ? 50 : value);
-              }}
-              min="1"
-            />
-          </div>
-        )}
+        <div className="space-y-2">
+          <Label htmlFor="estimatedMiles">Estimated Miles</Label>
+          <Input
+            id="estimatedMiles"
+            type="number"
+            value={estimatedMiles}
+            onChange={(e) => {
+              const value = parseInt(e.target.value);
+              setEstimatedMiles(isNaN(value) ? 50 : value);
+            }}
+            min="1"
+          />
+        </div>
 
         <div className="space-y-4">
           <div className="flex items-center space-x-2">
@@ -474,7 +436,7 @@ const EnhancedBookingWidget = () => {
               
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span>Base fare ({matchedRoute ? "Fixed route" : `${estimatedMiles} miles`})</span>
+                  <span>Base fare ({estimatedMiles} miles)</span>
                   <span>£{breakdown.basePrice.toFixed(2)}</span>
                 </div>
                 

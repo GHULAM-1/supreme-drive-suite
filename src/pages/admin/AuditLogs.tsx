@@ -44,7 +44,6 @@ const ENTITY_TYPES = [
   "vehicles",
   "portfolio",
   "pricing_extras",
-  "fixed_routes",
   "bookings"
 ];
 const DATE_RANGES = [
@@ -181,7 +180,6 @@ const AuditLogs = () => {
       portfolio: "bg-orange-500/20 text-orange-300 border-orange-500/30",
       Pricing: "bg-accent/20 text-accent border-accent/30",
       pricing_extras: "bg-accent/20 text-accent border-accent/30",
-      fixed_routes: "bg-accent/20 text-accent border-accent/30",
       Booking: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
       bookings: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
     };

@@ -36,22 +36,12 @@ interface PricingExtra {
   description: string | null;
 }
 
-interface FixedRoute {
-  id: string;
-  route_name: string;
-  pickup_location: string;
-  dropoff_location: string;
-  fixed_price: number;
-  vehicle_id: string | null;
-}
 
 const MultiStepBookingWidget = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [extras, setExtras] = useState<PricingExtra[]>([]);
-  const [fixedRoutes, setFixedRoutes] = useState<FixedRoute[]>([]);
   const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
-  const [matchedRoute, setMatchedRoute] = useState<FixedRoute | null>(null);
   const [loading, setLoading] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [bookingReference, setBookingReference] = useState("");
@@ -99,11 +89,6 @@ const MultiStepBookingWidget = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (formData.pickupLocation && formData.dropoffLocation) {
-      checkForFixedRoute();
-    }
-  }, [formData.pickupLocation, formData.dropoffLocation]);
 
   const loadData = async () => {
     const { data: vehiclesData } = await supabase
@@ -117,42 +102,13 @@ const MultiStepBookingWidget = () => {
       .select("*")
       .eq("is_active", true);
 
-    const { data: routesData } = await supabase
-      .from("fixed_routes")
-      .select("*")
-      .eq("is_active", true);
-
     if (vehiclesData) setVehicles(vehiclesData);
     if (extrasData) setExtras(extrasData);
-    if (routesData) setFixedRoutes(routesData);
-  };
-
-  const checkForFixedRoute = () => {
-    const route = fixedRoutes.find(
-      (r) =>
-        r.pickup_location.toLowerCase().includes(formData.pickupLocation.toLowerCase()) &&
-        r.dropoff_location.toLowerCase().includes(formData.dropoffLocation.toLowerCase())
-    );
-    setMatchedRoute(route || null);
   };
 
   const calculatePriceBreakdown = () => {
     const selectedVehicle = vehicles.find((v) => v.id === formData.vehicleId);
     if (!selectedVehicle) return null;
-
-    if (matchedRoute) {
-      const extrasTotal = selectedExtras.reduce((sum, extraId) => {
-        const extra = extras.find((e) => e.id === extraId);
-        return sum + (extra?.price || 0);
-      }, 0);
-
-      return {
-        basePrice: matchedRoute.fixed_price,
-        extrasTotal,
-        totalPrice: matchedRoute.fixed_price + extrasTotal,
-        isFixedRoute: true
-      };
-    }
 
     const miles = parseFloat(formData.estimatedMiles) || 0;
     const waitHours = parseFloat(formData.waitTime) || 0;
@@ -172,8 +128,7 @@ const MultiStepBookingWidget = () => {
       waitTimePrice,
       overnightFee,
       extrasTotal,
-      totalPrice,
-      isFixedRoute: false
+      totalPrice
     };
   };
 
@@ -394,7 +349,7 @@ const MultiStepBookingWidget = () => {
               </div>
 
               {/* Distance Calculator */}
-              {!matchedRoute && formData.pickupLocation && formData.dropoffLocation && (
+              {formData.pickupLocation && formData.dropoffLocation && (
                 <div className="flex items-center gap-3 p-4 bg-accent/5 border border-accent/20 rounded-lg">
                   <Calculator className="w-5 h-5 text-accent" />
                   {calculatedDistance && !distanceOverride ? (
@@ -474,7 +429,7 @@ const MultiStepBookingWidget = () => {
                 />
               </div>
 
-              {!matchedRoute && (distanceOverride || !calculatedDistance) && (
+              {(distanceOverride || !calculatedDistance) && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="estimatedMiles">Estimated Miles</Label>
@@ -807,30 +762,21 @@ const MultiStepBookingWidget = () => {
                   
                   {priceBreakdown ? (
                     <div className="space-y-3">
-                      {priceBreakdown.isFixedRoute ? (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Mileage</span>
+                        <span className="font-medium text-[#C5A572]">£{priceBreakdown.mileagePrice.toFixed(2)}</span>
+                      </div>
+                      {priceBreakdown.waitTimePrice > 0 && (
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Fixed Route</span>
-                          <span className="font-medium text-[#C5A572]">£{priceBreakdown.basePrice.toFixed(2)}</span>
+                          <span className="text-muted-foreground">Wait Time</span>
+                          <span className="font-medium text-[#C5A572]">£{priceBreakdown.waitTimePrice.toFixed(2)}</span>
                         </div>
-                      ) : (
-                        <>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Mileage</span>
-                            <span className="font-medium text-[#C5A572]">£{priceBreakdown.mileagePrice.toFixed(2)}</span>
-                          </div>
-                          {priceBreakdown.waitTimePrice > 0 && (
-                            <div className="flex justify-between">
-                              <span className="text-muted-foreground">Wait Time</span>
-                              <span className="font-medium text-[#C5A572]">£{priceBreakdown.waitTimePrice.toFixed(2)}</span>
-                            </div>
-                          )}
-                          {priceBreakdown.overnightFee > 0 && (
-                            <div className="flex justify-between">
-                              <span className="text-muted-foreground">Overnight</span>
-                              <span className="font-medium text-[#C5A572]">£{priceBreakdown.overnightFee.toFixed(2)}</span>
-                            </div>
-                          )}
-                        </>
+                      )}
+                      {priceBreakdown.overnightFee > 0 && (
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Overnight</span>
+                          <span className="font-medium text-[#C5A572]">£{priceBreakdown.overnightFee.toFixed(2)}</span>
+                        </div>
                       )}
                       
                       {priceBreakdown.extrasTotal > 0 && (
