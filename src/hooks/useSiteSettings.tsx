@@ -55,16 +55,20 @@ export const useSiteSettings = () => {
   const { data: settings, isLoading, error } = useQuery({
     queryKey: ["site-settings"],
     queryFn: async () => {
+      // Force fresh data with cache-busting filter
       const { data, error } = await supabase
         .from("site_settings")
         .select("*")
+        .gte('created_at', '1970-01-01') // Cache-buster: always true
+        .order("updated_at", { ascending: false })
         .limit(1)
         .maybeSingle();
 
       if (error) throw error;
       return data as SiteSettings | null;
     },
-    staleTime: 1000 * 30, // Cache for 30 seconds for public components
+    staleTime: 0, // Don't cache - always fetch fresh data
+    refetchOnMount: true, // Refetch when component mounts
   });
 
   return {
