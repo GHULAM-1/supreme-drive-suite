@@ -9,8 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { ArrowLeft, MapPin, Clock, User, Car, Phone, Mail, FileText, Shield, AlertTriangle } from "lucide-react";
+import { ArrowLeft, MapPin, Clock, User, Car, Phone, Mail, FileText, Shield, AlertTriangle, Navigation } from "lucide-react";
 import { format } from "date-fns";
+import { getNavigationUrl } from "@/lib/utils";
 
 interface JobDetail {
   id: string;
@@ -366,11 +367,33 @@ export default function JobDetail() {
           ) : (
             <div className="space-y-3">
               <div>
-                <p className="text-sm text-muted-foreground">Pickup</p>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-sm text-muted-foreground">Pickup</p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 gap-2 hover:bg-accent/10 hover:text-accent"
+                    onClick={() => window.open(getNavigationUrl(job?.pickup_location || ''), '_blank')}
+                  >
+                    <Navigation className="w-3 h-3" />
+                    Navigate
+                  </Button>
+                </div>
                 <p className="font-medium">{job?.pickup_location}</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Dropoff</p>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-sm text-muted-foreground">Dropoff</p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 gap-2 hover:bg-accent/10 hover:text-accent"
+                    onClick={() => window.open(getNavigationUrl(job?.dropoff_location || ''), '_blank')}
+                  >
+                    <Navigation className="w-3 h-3" />
+                    Navigate
+                  </Button>
+                </div>
                 <p className="font-medium">{job?.dropoff_location}</p>
               </div>
               <div className="grid grid-cols-2 gap-4">

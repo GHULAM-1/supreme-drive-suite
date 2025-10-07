@@ -28,9 +28,10 @@ import {
   CheckCircle2,
   XCircle,
   AlertCircle,
-  MoreVertical
+  MoreVertical,
+  Navigation
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, getNavigationUrl } from "@/lib/utils";
 
 interface Booking {
   id: string;
@@ -577,13 +578,29 @@ export default function EnhancedJobsDashboard() {
                   <TableCell>
                     <div className="flex items-start gap-2 max-w-[250px]">
                       <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 opacity-60 flex-shrink-0" />
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <div className="text-sm text-foreground truncate">{booking.pickup_location}</div>
                         <div className="flex items-center gap-1 text-xs text-accent/80">
                           <ChevronRight className="w-3 h-3" />
                           <span className="truncate">{booking.dropoff_location}</span>
                         </div>
                       </div>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-accent/10 hover:text-accent"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.open(getNavigationUrl(booking.pickup_location), '_blank');
+                            }}
+                          >
+                            <Navigation className="w-4 h-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Open in Google Maps</TooltipContent>
+                      </Tooltip>
                     </div>
                   </TableCell>
                   <TableCell>
