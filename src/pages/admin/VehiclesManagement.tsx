@@ -586,16 +586,13 @@ const VehiclesManagement = () => {
                       variant={vehicle.is_active ? "default" : "secondary"}
                       className={`absolute top-4 right-4 z-10 rounded-full px-3 py-1.5 text-xs font-medium shadow-lg ${
                         vehicle.is_active 
-                          ? "bg-green-500/20 text-green-400 border border-green-500/30 shadow-[0_0_10px_rgba(34,197,94,0.3)]" 
+                          ? "bg-white text-green-400 border border-green-500/30 shadow-[0_0_10px_rgba(34,197,94,0.3)]" 
                           : "bg-muted text-muted-foreground border"
                       }`}
                     >
                       {vehicle.is_active ? "🟢 Active" : "🔴 Inactive"}
                     </Badge>
                   </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Vehicle currently {vehicle.is_active ? "visible" : "hidden"} on website</p>
-                  </TooltipContent>
                 </Tooltip>
 
                 {/* Vehicle Image */}
