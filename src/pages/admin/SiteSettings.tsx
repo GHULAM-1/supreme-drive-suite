@@ -18,11 +18,20 @@ import { logAuditEvent, generateFieldSummary } from "@/lib/auditLogger";
 // Validation schemas
 const companySchema = z.object({
   company_name: z.string().min(1, "Company name is required"),
-  phone: z.string().regex(/^(\+44|0)[0-9\s]{9,13}$/, "Invalid UK phone number"),
+  phone: z.string().refine((val) => {
+    const cleaned = val.replace(/[\s\-()]/g, '');
+    const digitCount = (cleaned.match(/\d/g) || []).length;
+    return digitCount >= 7 && digitCount <= 15;
+  }, "Please enter a valid phone number (7-15 digits)"),
   email: z.string().email("Invalid email address"),
   office_address: z.string().min(1, "Address is required"),
   availability: z.string().min(1, "Availability is required"),
-  whatsapp_number: z.string().regex(/^(\+44|0)[0-9\s]{9,13}$/, "Invalid UK phone number").optional().or(z.literal("")),
+  whatsapp_number: z.string().refine((val) => {
+    if (!val || val === "") return true;
+    const cleaned = val.replace(/[\s\-()]/g, '');
+    const digitCount = (cleaned.match(/\d/g) || []).length;
+    return digitCount >= 7 && digitCount <= 15;
+  }, "Please enter a valid phone number (7-15 digits)").optional().or(z.literal("")),
 });
 
 const notificationsSchema = z.object({

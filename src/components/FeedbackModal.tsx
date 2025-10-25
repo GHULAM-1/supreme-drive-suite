@@ -30,15 +30,11 @@ const feedbackSchema = z.object({
     .max(20)
     .refine((val) => {
       if (!val || val === "") return true; // Optional field
-      // Remove all spaces, hyphens, parentheses for validation
       const cleaned = val.replace(/[\s\-()]/g, '');
-      // UK phone number: must start with 0 or +44, and have correct length
-      const ukPattern = /^(\+44|0)[1-9]\d{9,10}$/;
-      const isValidUK = ukPattern.test(cleaned);
-      // Count actual digits
       const digitCount = (cleaned.match(/\d/g) || []).length;
-      return isValidUK || (cleaned.startsWith('+44') && digitCount >= 12 && digitCount <= 13) || (cleaned.startsWith('0') && digitCount >= 10 && digitCount <= 11);
-    }, "Please enter a valid UK phone number (e.g., 07XXX XXXXXX or +44 7XXX XXXXXX)")
+      // Valid international phone: 7-15 digits
+      return digitCount >= 7 && digitCount <= 15;
+    }, "Please enter a valid phone number (7-15 digits)")
     .optional(),
   service_type: z.string()
     .min(1, "Please select a service type")
