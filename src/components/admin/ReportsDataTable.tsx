@@ -192,7 +192,7 @@ export const ReportsDataTable = () => {
       job.service_type || "—",
       job.drivers?.name || "—",
       job.vehicles?.name || "—",
-      `$${job.total_price || 0}`,
+      `£${job.total_price || 0}`,
       job.distance_miles ? `${job.distance_miles} mi` : "—",
       job.status || "—",
     ]);
@@ -403,7 +403,7 @@ export const ReportsDataTable = () => {
                       {job.vehicles?.name || "—"}
                     </TableCell>
                     <TableCell className="text-right font-semibold">
-                      ${job.total_price || 0}
+                      £{job.total_price || 0}
                     </TableCell>
                     <TableCell className="text-right text-muted-foreground">
                       {job.distance_miles ? `${job.distance_miles} mi` : "—"}

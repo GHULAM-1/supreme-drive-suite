@@ -45,8 +45,8 @@ ALTER COLUMN status SET DEFAULT 'new';
 
 -- Add check constraint for valid statuses
 ALTER TABLE public.bookings
-ADD CONSTRAINT valid_booking_status 
-CHECK (status IN ('new', 'confirmed', 'in_progress', 'completed', 'canceled'));
+ADD CONSTRAINT valid_booking_status
+CHECK (status IN ('new', 'confirmed', 'in_progress', 'completed', 'cancelled'));
 
 -- Create index for faster queries
 CREATE INDEX idx_bookings_status ON public.bookings(status);

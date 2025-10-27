@@ -736,7 +736,7 @@ export default function EnhancedJobsDashboard() {
                       "font-semibold",
                       booking.total_price && booking.total_price > 500 ? "text-accent" : "text-foreground"
                     )}>
-                      ${booking.total_price?.toFixed(2) || "0.00"}
+                      £{booking.total_price?.toFixed(2) || "0.00"}
                     </div>
                   </TableCell>
                   <TableCell onClick={(e) => e.stopPropagation()}>

@@ -188,19 +188,19 @@ const Pricing = () => {
                       <div className="lg:text-right space-y-4 lg:min-w-[200px]">
                         <div className="space-y-2">
                           <div className="text-5xl md:text-6xl font-display font-bold bg-gradient-to-br from-accent to-accent/70 bg-clip-text text-transparent">
-                            ${vehicle.base_price_per_mile}
+                            £{vehicle.base_price_per_mile}
                           </div>
                           <div className="text-sm text-muted-foreground uppercase tracking-wider">
                             per mile
                           </div>
                         </div>
-                        
+
                         {vehicle.overnight_surcharge > 0 && (
                           <>
                             <Separator className="my-4" />
                             <div className="space-y-2">
                               <div className="text-3xl font-display font-semibold text-gradient-metal">
-                                +${vehicle.overnight_surcharge}
+                                +£{vehicle.overnight_surcharge}
                               </div>
                               <div className="text-xs text-muted-foreground uppercase tracking-wider">
                                 overnight surcharge

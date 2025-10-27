@@ -85,7 +85,7 @@ const EnhancedBookingWidget = () => {
       return sum + (extra?.price || 0);
     }, 0);
 
-    const waitTimeTotal = waitTimeHours * 25; // $25 per hour wait time
+    const waitTimeTotal = waitTimeHours * 25; // £25 per hour wait time
     const overnightTotal = hasOvernightStop ? selectedVehicle.overnight_surcharge : 0;
 
     return {
@@ -373,7 +373,7 @@ const EnhancedBookingWidget = () => {
                       {vehicle.capacity} passengers
                     </span>
                     <span className="font-semibold text-accent">
-                      ${vehicle.base_price_per_mile.toFixed(2)}/mile
+                      £{vehicle.base_price_per_mile.toFixed(2)}/mile
                     </span>
                   </div>
 
@@ -402,7 +402,7 @@ const EnhancedBookingWidget = () => {
                   />
                   <div className="flex-1">
                     <Label htmlFor={extra.id} className="cursor-pointer font-medium">
-                      {extra.extra_name} - ${extra.price}
+                      {extra.extra_name} - £{extra.price}
                     </Label>
                     <p className="text-xs text-muted-foreground">{extra.description}</p>
                   </div>
@@ -434,27 +434,27 @@ const EnhancedBookingWidget = () => {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span>Base fare ({estimatedMiles} miles)</span>
-                  <span>${breakdown.basePrice.toFixed(2)}</span>
+                  <span>£{breakdown.basePrice.toFixed(2)}</span>
                 </div>
 
                 {breakdown.extras > 0 && (
                   <div className="flex justify-between text-muted-foreground">
                     <span>Extras</span>
-                    <span>${breakdown.extras.toFixed(2)}</span>
+                    <span>£{breakdown.extras.toFixed(2)}</span>
                   </div>
                 )}
 
                 {breakdown.waitTime > 0 && (
                   <div className="flex justify-between text-muted-foreground">
                     <span>Wait time ({waitTimeHours}h)</span>
-                    <span>${breakdown.waitTime.toFixed(2)}</span>
+                    <span>£{breakdown.waitTime.toFixed(2)}</span>
                   </div>
                 )}
 
                 {breakdown.overnight > 0 && (
                   <div className="flex justify-between text-muted-foreground">
                     <span>Overnight surcharge</span>
-                    <span>${breakdown.overnight.toFixed(2)}</span>
+                    <span>£{breakdown.overnight.toFixed(2)}</span>
                   </div>
                 )}
 
@@ -463,7 +463,7 @@ const EnhancedBookingWidget = () => {
                 <div className="flex justify-between items-center pt-2">
                   <span className="font-semibold">Total Price:</span>
                   <span className="text-3xl font-display font-bold text-accent">
-                    ${breakdown.total.toFixed(2)}
+                    £{breakdown.total.toFixed(2)}
                   </span>
                 </div>
               </div>

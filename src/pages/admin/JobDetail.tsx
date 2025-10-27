@@ -623,7 +623,7 @@ export default function JobDetail() {
           <div className="space-y-2">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Total Price</span>
-              <span className="font-bold text-2xl">${job.total_price?.toFixed(2) || "0.00"}</span>
+              <span className="font-bold text-2xl">£{job.total_price?.toFixed(2) || "0.00"}</span>
             </div>
             {job.is_long_drive && (
               <div className="flex justify-between text-sm">

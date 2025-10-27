@@ -188,7 +188,7 @@ export default function AdminDashboard() {
       recentActivities.push({
         id: `payment-${booking.id}`,
         icon: "payment",
-        description: `Payment received ($${booking.total_price?.toFixed(2) || "0.00"})`,
+        description: `Payment received (£${booking.total_price?.toFixed(2) || "0.00"})`,
         timestamp: new Date(booking.updated_at || booking.created_at),
       });
     });
@@ -295,7 +295,7 @@ export default function AdminDashboard() {
     },
     {
       title: "Revenue This Week",
-      value: `$${metrics.revenueThisWeek.toFixed(2)}`,
+      value: `£${metrics.revenueThisWeek.toFixed(2)}`,
       icon: PoundSterling,
       gradient: "from-accent/10 via-accent/5 to-transparent",
       iconBg: "bg-accent/10",

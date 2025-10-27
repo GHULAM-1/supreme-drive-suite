@@ -69,7 +69,7 @@ const BookingConfirmation = ({ bookingDetails, onClose }: BookingConfirmationPro
         <div className="pt-4 border-t border-border flex justify-between items-center">
           <span className="text-lg font-semibold">Total Price:</span>
           <span className="text-3xl font-display font-bold text-accent">
-            ${bookingDetails.totalPrice}
+            £{bookingDetails.totalPrice}
           </span>
         </div>
       </div>

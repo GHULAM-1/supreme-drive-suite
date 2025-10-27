@@ -483,7 +483,7 @@ const VehiclesManagement = () => {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="price" className="text-sm font-medium">
-                      Base Price per Mile ($) <span className="text-destructive">*</span>
+                      Base Price per Mile (£) <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       id="price"
@@ -500,7 +500,7 @@ const VehiclesManagement = () => {
 
                   <div className="space-y-2">
                     <Label htmlFor="overnight" className="text-sm font-medium">
-                      Overnight Surcharge ($) <span className="text-destructive">*</span>
+                      Overnight Surcharge (£) <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       id="overnight"
@@ -651,7 +651,7 @@ const VehiclesManagement = () => {
                         <PoundSterling className="h-3.5 w-3.5" />
                         <span>Price/Mile</span>
                       </div>
-                      <p className="font-semibold text-foreground">${vehicle.base_price_per_mile.toFixed(2)}</p>
+                      <p className="font-semibold text-foreground">£{vehicle.base_price_per_mile.toFixed(2)}</p>
                     </div>
 
                     <div className="p-3 rounded-lg bg-muted/50 space-y-1.5 transition-colors hover:bg-muted/70">
@@ -660,7 +660,7 @@ const VehiclesManagement = () => {
                         <span>Overnight</span>
                       </div>
                       <p className="font-semibold text-foreground">
-                        {vehicle.overnight_surcharge > 0 ? `$${vehicle.overnight_surcharge}` : "N/A"}
+                        {vehicle.overnight_surcharge > 0 ? `£${vehicle.overnight_surcharge}` : "N/A"}
                       </p>
                     </div>
                   </div>

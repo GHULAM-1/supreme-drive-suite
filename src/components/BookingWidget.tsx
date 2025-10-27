@@ -335,7 +335,7 @@ const BookingWidget = () => {
                       {vehicle.capacity} passengers
                     </span>
                     <span className="font-semibold text-accent">
-                      ${vehicle.base_price_per_mile.toFixed(2)}/mile
+                      £{vehicle.base_price_per_mile.toFixed(2)}/mile
                     </span>
                   </div>
 
@@ -370,7 +370,7 @@ const BookingWidget = () => {
               <div className="flex justify-between items-center pt-2 border-t border-border">
                 <span className="text-sm">Estimated Price:</span>
                 <span className="text-2xl font-display font-bold text-accent">
-                  ${calculatePrice()}
+                  £{calculatePrice()}
                 </span>
               </div>
             </div>

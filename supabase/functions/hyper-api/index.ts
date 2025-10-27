@@ -103,7 +103,7 @@ serve(async (req) => {
 
                 ${hasPrice ? `
                   <div class="total">
-                    Total: $${bookingDetails.totalPrice}
+                    Total: £${bookingDetails.totalPrice}
                   </div>
                 ` : ''}
               </div>
@@ -158,7 +158,7 @@ Drop-off Location: ${bookingDetails.dropoffLocation}
 Date & Time: ${bookingDetails.pickupDate} at ${bookingDetails.pickupTime}
 Vehicle: ${bookingDetails.vehicleName}
 Passengers: ${bookingDetails.passengers || 'N/A'}
-${hasPrice ? `Total: $${bookingDetails.totalPrice}` : ''}
+${hasPrice ? `Total: £${bookingDetails.totalPrice}` : ''}
 
 ${bookingDetails.additionalRequirements ? `Additional Information:\n${bookingDetails.additionalRequirements}` : ''}
 

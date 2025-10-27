@@ -166,7 +166,7 @@ const JobsDashboard = () => {
                   <Badge className={getStatusColor(booking.status)}>
                     {booking.status.replace("_", " ").toUpperCase()}
                   </Badge>
-                  <p className="text-2xl font-display font-bold mt-2">${booking.total_price}</p>
+                  <p className="text-2xl font-display font-bold mt-2">£{booking.total_price}</p>
                 </div>
                 
                 <Select

@@ -12,24 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Plus, Edit, Trash2, Star, MessageSquareQuote, GripVertical, Search, ChevronLeft, ChevronRight, RefreshCcw } from "lucide-react";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import { Plus, Edit, Trash2, Star, MessageSquareQuote, Search, ChevronLeft, ChevronRight, RefreshCcw } from "lucide-react";
 
 interface Testimonial {
   id: string;
@@ -50,119 +33,99 @@ const MIN_NAME = 2;
 const MAX_NAME = 80;
 const MAX_TITLE = 80;
 
-const SortableTestimonialCard = ({ testimonial, onEdit, onDelete, onToggleActive, onToggleFeatured }: {
+const TestimonialListItem = ({ testimonial, onEdit, onDelete, onToggleActive, onToggleFeatured }: {
   testimonial: Testimonial;
   onEdit: (t: Testimonial) => void;
   onDelete: (id: string) => void;
   onToggleActive: (id: string, value: boolean) => void;
   onToggleFeatured: (id: string, value: boolean) => void;
 }) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-  } = useSortable({ id: testimonial.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+  const now = new Date();
+  const createdAt = new Date(testimonial.created_at);
+  const hoursDiff = (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60);
+  const isNew = hoursDiff < 24;
 
   return (
-    <Card
-      ref={setNodeRef}
-      style={style}
-      className="p-6 shadow-metal hover:shadow-glow transition-all duration-300 hover:-translate-y-1 flex flex-col"
-    >
-      <div className="space-y-3 flex-1">
-        <div className="flex justify-between items-start gap-3">
-          <div
-            {...attributes}
-            {...listeners}
-            className="cursor-grab active:cursor-grabbing touch-none"
-            aria-label="Drag to reorder testimonial"
-          >
-            <GripVertical className="w-5 h-5 text-muted-foreground hover:text-accent transition-colors" />
-          </div>
-          
-          <div className="flex-1">
-            <h3 className="text-lg font-display font-bold text-gradient-silver">{testimonial.customer_name}</h3>
-            {testimonial.customer_title && (
-              <p className="text-sm text-muted-foreground">{testimonial.customer_title}</p>
-            )}
-          </div>
+    <div className="p-4 border-b border-border/50 hover:bg-muted/30 transition-colors">
+      <div className="flex items-start gap-4">
+        {/* Customer Info */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start gap-2 mb-2">
+            <div className="flex-1">
+              <h3 className="font-semibold text-foreground">{testimonial.customer_name}</h3>
+              {testimonial.customer_title && (
+                <p className="text-sm text-muted-foreground">{testimonial.customer_title}</p>
+              )}
+            </div>
 
-          <div className="flex gap-1.5 flex-wrap justify-end">
-            {(() => {
-              const now = new Date();
-              const createdAt = new Date(testimonial.created_at);
-              const hoursDiff = (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60);
-              const isNew = hoursDiff < 24; // Show "New" badge for 24 hours
-              return isNew && (
-                <Badge className="bg-blue-500/20 hover:bg-transparent text-blue-400 border-blue-500/30">New</Badge>
-              );
-            })()}
-            {testimonial.is_featured && (
-              <Badge className="bg-accent/20 hover:bg-transparent hover:cursor-pointer text-accent border-accent/30">Featured</Badge>
-            )}
-            {!testimonial.is_active && (
-              <Badge variant="secondary" className="hover:cursor-pointer">Inactive</Badge>
-            )}
-          </div>
-        </div>
-
-        <div className="flex gap-1" aria-label={`${testimonial.rating} out of 5 stars`}>
-          {[...Array(testimonial.rating || 5)].map((_, i) => (
-            <Star key={i} className="w-4 h-4 fill-accent text-accent" aria-hidden="true" />
-          ))}
-        </div>
-
-        <p className="text-sm italic text-foreground/90 line-clamp-5" title={testimonial.content}>
-          "{testimonial.content}"
-        </p>
-
-        <div className="flex items-center gap-4 pt-3 flex-wrap border-t border-border/50">
-          <div className="flex items-center gap-2">
-            <Switch
-              checked={testimonial.is_active}
-              onCheckedChange={(checked) => onToggleActive(testimonial.id, checked)}
-              aria-label={`Toggle active status for ${testimonial.customer_name}'s testimonial`}
-            />
-            <Label className="text-xs text-muted-foreground">Active</Label>
+            {/* Badges */}
+            <div className="flex gap-1.5 flex-wrap">
+              {isNew && (
+                <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 text-xs">New</Badge>
+              )}
+              {testimonial.is_featured && (
+                <Badge className="bg-accent/20 text-accent border-accent/30 text-xs">Featured</Badge>
+              )}
+              {!testimonial.is_active && (
+                <Badge variant="secondary" className="text-xs">Inactive</Badge>
+              )}
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Switch
-              checked={testimonial.is_featured}
-              onCheckedChange={(checked) => onToggleFeatured(testimonial.id, checked)}
-              aria-label={`Toggle featured status for ${testimonial.customer_name}'s testimonial`}
-            />
-            <Label className="text-xs text-muted-foreground">Featured</Label>
+          {/* Rating */}
+          <div className="flex gap-1 mb-2" aria-label={`${testimonial.rating} out of 5 stars`}>
+            {[...Array(testimonial.rating || 5)].map((_, i) => (
+              <Star key={i} className="w-4 h-4 fill-accent text-accent" aria-hidden="true" />
+            ))}
           </div>
 
-          <div className="flex gap-2 ml-auto">
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => onEdit(testimonial)}
-              aria-label={`Edit testimonial for ${testimonial.customer_name}`}
-            >
-              <Edit className="w-4 h-4" />
-            </Button>
-            <Button
-              size="sm"
-              variant="destructive"
-              onClick={() => onDelete(testimonial.id)}
-              aria-label={`Delete testimonial for ${testimonial.customer_name}`}
-            >
-              <Trash2 className="w-4 h-4" />
-            </Button>
+          {/* Content */}
+          <p className="text-sm text-foreground/80 italic line-clamp-2 mb-3">
+            "{testimonial.content}"
+          </p>
+
+          {/* Controls */}
+          <div className="flex items-center gap-4 flex-wrap">
+            <div className="flex items-center gap-2">
+              <Switch
+                checked={testimonial.is_active}
+                onCheckedChange={(checked) => onToggleActive(testimonial.id, checked)}
+                aria-label={`Toggle active status for ${testimonial.customer_name}'s testimonial`}
+              />
+              <Label className="text-xs text-muted-foreground">Active</Label>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Switch
+                checked={testimonial.is_featured}
+                onCheckedChange={(checked) => onToggleFeatured(testimonial.id, checked)}
+                aria-label={`Toggle featured status for ${testimonial.customer_name}'s testimonial`}
+              />
+              <Label className="text-xs text-muted-foreground">Featured</Label>
+            </div>
+
+            <div className="flex gap-2 ml-auto">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onEdit(testimonial)}
+                aria-label={`Edit testimonial for ${testimonial.customer_name}`}
+              >
+                <Edit className="w-4 h-4" />
+              </Button>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => onDelete(testimonial.id)}
+                aria-label={`Delete testimonial for ${testimonial.customer_name}`}
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
 
@@ -186,13 +149,6 @@ const TestimonialsManagement = () => {
     is_active: true,
   });
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
   useEffect(() => {
     loadTestimonials();
   }, []);
@@ -210,37 +166,6 @@ const TestimonialsManagement = () => {
       setTestimonials(data || []);
     }
     setLoading(false);
-  };
-
-  const handleDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (!over || active.id === over.id) return;
-
-    const oldIndex = testimonials.findIndex((t) => t.id === active.id);
-    const newIndex = testimonials.findIndex((t) => t.id === over.id);
-
-    const newOrder = arrayMove(testimonials, oldIndex, newIndex);
-    setTestimonials(newOrder);
-
-    // Update display_order for all affected items
-    const updates = newOrder.map((item, index) => ({
-      id: item.id,
-      display_order: index,
-    }));
-
-    try {
-      for (const update of updates) {
-        await supabase
-          .from("testimonials")
-          .update({ display_order: update.display_order })
-          .eq("id", update.id);
-      }
-      toast.success("Order updated");
-    } catch (error) {
-      toast.error("Couldn't save changes, please try again");
-      loadTestimonials(); // Rollback
-    }
   };
 
   const handleToggleActive = async (id: string, value: boolean) => {
@@ -629,9 +554,9 @@ const TestimonialsManagement = () => {
 
       {/* Content */}
       {loading ? (
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="space-y-2">
           {[...Array(6)].map((_, i) => (
-            <Skeleton key={i} className="h-64 rounded-lg" />
+            <Skeleton key={i} className="h-32 rounded-lg" />
           ))}
         </div>
       ) : paginatedTestimonials.length === 0 ? (
@@ -648,22 +573,20 @@ const TestimonialsManagement = () => {
         </Card>
       ) : (
         <>
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={paginatedTestimonials.map(t => t.id)} strategy={verticalListSortingStrategy}>
-              <div className="grid md:grid-cols-2 gap-6">
-                {paginatedTestimonials.map((testimonial) => (
-                  <SortableTestimonialCard
-                    key={testimonial.id}
-                    testimonial={testimonial}
-                    onEdit={handleEdit}
-                    onDelete={confirmDelete}
-                    onToggleActive={handleToggleActive}
-                    onToggleFeatured={handleToggleFeatured}
-                  />
-                ))}
-              </div>
-            </SortableContext>
-          </DndContext>
+          <Card className="shadow-metal">
+            <div className="divide-y divide-border/50">
+              {paginatedTestimonials.map((testimonial) => (
+                <TestimonialListItem
+                  key={testimonial.id}
+                  testimonial={testimonial}
+                  onEdit={handleEdit}
+                  onDelete={confirmDelete}
+                  onToggleActive={handleToggleActive}
+                  onToggleFeatured={handleToggleFeatured}
+                />
+              ))}
+            </div>
+          </Card>
 
           {/* Pagination */}
           {totalPages > 1 && (

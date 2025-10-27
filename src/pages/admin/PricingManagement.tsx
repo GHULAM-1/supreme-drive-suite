@@ -317,7 +317,7 @@ const PricingExtras = ({ extras, loadData, logAudit }: {
               
               <div className="space-y-2">
                 <Label htmlFor="price">
-                  Price ($) <span className="text-destructive">*</span>
+                  Price (£) <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="price"
@@ -406,7 +406,7 @@ const PricingExtras = ({ extras, loadData, logAudit }: {
                 </div>
                 
                 <p className="text-3xl font-display font-bold text-accent">
-                  ${extra.price.toFixed(2)}
+                  £{extra.price.toFixed(2)}
                 </p>
                 
                 {extra.description && (
@@ -575,7 +575,7 @@ const VehicleRates = ({ vehicles, loadData, logAudit }: {
                 <div className="space-y-3">
                   <div className="space-y-2">
                     <Label htmlFor={`price-${vehicle.id}`} className="text-xs text-muted-foreground">
-                      Price per Mile ($)
+                      Price per Mile (£)
                     </Label>
                     <Input
                       id={`price-${vehicle.id}`}
@@ -590,7 +590,7 @@ const VehicleRates = ({ vehicles, loadData, logAudit }: {
                   
                   <div className="space-y-2">
                     <Label htmlFor={`surcharge-${vehicle.id}`} className="text-xs text-muted-foreground">
-                      Overnight Surcharge ($)
+                      Overnight Surcharge (£)
                     </Label>
                     <Input
                       id={`surcharge-${vehicle.id}`}

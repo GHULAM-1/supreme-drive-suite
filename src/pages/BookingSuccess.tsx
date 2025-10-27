@@ -78,7 +78,7 @@ const BookingSuccess = () => {
             // Send SMS confirmation - DISABLED FOR TRIAL (Pakistan numbers not supported on Twilio trial)
             // Uncomment when Twilio account is upgraded
             /*
-            const smsMessage = `Supreme Drive Suite - Booking Confirmed!\n\nThank you ${booking.customerName}!\n\nPickup: ${booking.pickupLocation}\nDate: ${booking.pickupDate} at ${booking.pickupTime}\nVehicle: ${booking.vehicleName}\nTotal: $${booking.totalPrice}\n\nWe'll contact you within 24hrs.`;
+            const smsMessage = `Supreme Drive Suite - Booking Confirmed!\n\nThank you ${booking.customerName}!\n\nPickup: ${booking.pickupLocation}\nDate: ${booking.pickupDate} at ${booking.pickupTime}\nVehicle: ${booking.vehicleName}\nTotal: £${booking.totalPrice}\n\nWe'll contact you within 24hrs.`;
 
             await supabase.functions.invoke('send-sms', {
               body: {

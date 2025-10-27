@@ -316,7 +316,7 @@ const AnalyticsDashboard = () => {
   const kpis = [
     {
       label: "Total Revenue",
-      value: `$${analyticsData.totalRevenue.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
+      value: `£${analyticsData.totalRevenue.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
       isPositive: true,
       icon: DollarSign,
     },
@@ -328,7 +328,7 @@ const AnalyticsDashboard = () => {
     },
     {
       label: "Average Job Value",
-      value: `$${analyticsData.avgJobValue.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
+      value: `£${analyticsData.avgJobValue.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
       isPositive: true,
       icon: Target,
     },
@@ -347,7 +347,7 @@ const AnalyticsDashboard = () => {
         <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
           <p className="text-sm font-medium text-foreground mb-1">{label}</p>
           <p className="text-sm text-accent font-semibold">
-            {payload[0].name === "revenue" ? "$" : ""}{payload[0].value.toLocaleString()}
+            {payload[0].name === "revenue" ? "£" : ""}{payload[0].value.toLocaleString()}
           </p>
         </div>
       );
@@ -585,15 +585,6 @@ const AnalyticsDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-muted-foreground">On-Time Arrivals</span>
-                    <span className="text-2xl font-bold text-accent">{analyticsData.onTimeRate.toFixed(0)}%</span>
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {analyticsData.onTimeRate >= 90 ? "Above target of 90%" : "Below target of 90%"}
-                  </div>
-                </div>
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-muted-foreground">Cancellation Rate</span>
