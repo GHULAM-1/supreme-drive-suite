@@ -1,7 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'onboarding@resend.dev'
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'contact@travelinsupremestyle.co.uk'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -160,7 +160,7 @@ serve(async (req) => {
                 📧 <a href="mailto:${supportEmail}" style="color: #C5A572; text-decoration: none;">${supportEmail}</a>
               </p>
               <p style="margin: 5px 0;">
-                📞 <a href="tel:+441234567890" style="color: #C5A572; text-decoration: none;">+44 1234 567 890</a>
+                📞 <a href="tel:+448009202040" style="color: #C5A572; text-decoration: none;">0800 920 2040</a>
               </p>
               <p style="margin: 5px 0;">
                 📍 <a href="https://maps.google.com/?q=London,UK" style="color: #C5A572; text-decoration: none;" target="_blank">London, United Kingdom</a>
@@ -213,7 +213,7 @@ CONFIDENTIAL - Handle with discretion
 Supreme Drive Suite
 Close Protection & Executive Security Services
 Email: ${supportEmail}
-Phone: +44 1234 567 890
+Phone: 0800 920 2040
 `,
       }),
     })
