@@ -1,7 +1,8 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'contact@travelinsupremestyle.co.uk' // Verified domain
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'contact@travelinsupremestyle.co.uk'
+const ADMIN_EMAIL = 'Travelinsupremestyle@gmail.com'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -26,7 +27,57 @@ serve(async (req) => {
       adminEmail
     } = await req.json()
 
-    const emailHtml = `
+    // Email template for CUSTOMER (acknowledgment)
+    const customerEmailHtml = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #1a1a1a, #2d2d2d); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .header h1 { margin: 0; font-size: 28px; }
+            .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+            .message-card { background: white; border: 2px solid #FFD700; border-radius: 8px; padding: 20px; margin: 20px 0; }
+            .footer { background: #1a1a1a; color: #999; padding: 20px; text-align: center; font-size: 12px; margin-top: 20px; border-radius: 10px; }
+            .checkmark { color: #10b981; margin-right: 8px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Travel in Supreme Style</h1>
+              <p style="margin: 10px 0 0 0; font-size: 16px;">Message Received</p>
+            </div>
+
+            <div class="content">
+              <h2 style="color: #1a1a1a; margin-top: 0;">Thank You, ${name.split(' ')[0]}!</h2>
+              <p>We have received your message and our team is reviewing it. We'll get back to you as soon as possible.</p>
+
+              <div class="message-card">
+                <h3 style="margin-top: 0; color: #FFD700;">Your Message</h3>
+                <p><strong>Subject:</strong> ${subject}</p>
+                <p style="white-space: pre-wrap; background: #f5f5f5; padding: 15px; border-radius: 4px;">${message}</p>
+              </div>
+
+              <h3 style="color: #1a1a1a;">What Happens Next?</h3>
+              <p style="margin: 10px 0;"><span class="checkmark">✓</span> Our team will review your enquiry</p>
+              <p style="margin: 10px 0;"><span class="checkmark">✓</span> We typically respond within 24 hours</p>
+              <p style="margin: 10px 0;"><span class="checkmark">✓</span> For urgent matters, call us at 0800 920 2040</p>
+            </div>
+
+            <div class="footer">
+              <p style="margin: 5px 0;"><strong>Travel in Supreme Style</strong></p>
+              <p style="margin: 5px 0;">Luxury Chauffeur & Close Protection Services</p>
+              <p style="margin: 15px 0 5px 0;">Phone: 0800 920 2040</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `
+
+    // Email template for ADMIN (notification)
+    const adminEmailHtml = `
       <!DOCTYPE html>
       <html>
         <head>
@@ -42,19 +93,21 @@ serve(async (req) => {
             .detail-value { color: #333; }
             .message-box { background: #f5f5f5; padding: 15px; border-left: 4px solid #FFD700; margin: 15px 0; border-radius: 4px; }
             .footer { background: #1a1a1a; color: #999; padding: 20px; text-align: center; font-size: 12px; margin-top: 20px; border-radius: 10px; }
-            .icon { color: #FFD700; margin-right: 8px; }
+            .priority-badge { background: #FFD700; color: #1a1a1a; padding: 8px 16px; border-radius: 4px; display: inline-block; font-weight: bold; }
           </style>
         </head>
         <body>
           <div class="container">
             <div class="header">
-              <h1>🛡️ Contact Form Submission</h1>
-              <p style="margin: 10px 0 0 0; font-size: 16px;">New Message Received</p>
+              <h1>New Contact Form Submission</h1>
+              <p style="margin: 10px 0 0 0; font-size: 16px;">Admin Notification</p>
             </div>
 
             <div class="content">
+              <div class="priority-badge">NEW MESSAGE</div>
+
               <div class="message-card">
-                <h2 style="margin-top: 0; color: #FFD700;">📬 Contact Details</h2>
+                <h2 style="margin-top: 0; color: #FFD700;">Contact Details</h2>
 
                 <div class="detail-row">
                   <span class="detail-label">Name:</span>
@@ -78,12 +131,12 @@ serve(async (req) => {
               </div>
 
               <div class="message-box">
-                <h3 style="margin-top: 0; color: #333;">💬 Message:</h3>
+                <h3 style="margin-top: 0; color: #333;">Message:</h3>
                 <p style="margin: 0; white-space: pre-wrap;">${message}</p>
               </div>
 
               <div style="background: #fff3cd; border-left: 4px solid #FFD700; padding: 15px; margin: 20px 0; border-radius: 4px;">
-                <strong>⏰ Received:</strong> ${new Date().toLocaleString('en-GB', {
+                <strong>Received:</strong> ${new Date().toLocaleString('en-GB', {
                   dateStyle: 'full',
                   timeStyle: 'short',
                   timeZone: 'Europe/London'
@@ -99,15 +152,15 @@ serve(async (req) => {
 
             <div class="footer">
               <p style="margin: 5px 0;"><strong>Travel in Supreme Style</strong></p>
-              <p style="margin: 5px 0;">Luxury Chauffeur & Close Protection Services</p>
-              <p style="margin: 15px 0 5px 0;">This email was sent from your contact form</p>
+              <p style="margin: 5px 0;">Admin Dashboard Notification</p>
             </div>
           </div>
         </body>
       </html>
     `
 
-    const res = await fetch('https://api.resend.com/emails', {
+    // Send acknowledgment email to CUSTOMER
+    const customerRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -115,45 +168,38 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         from: FROM_EMAIL,
-        to: [adminEmail],
-        subject: `New Contact Form Submission: ${subject}`,
-        html: emailHtml,
-        text: `Contact Form Submission
-
-Contact Details:
-Name: ${name}
-Email: ${email}
-Phone: ${phone}
-Subject: ${subject}
-
-Message:
-${message}
-
-Received: ${new Date().toLocaleString('en-GB', {
-          dateStyle: 'full',
-          timeStyle: 'short',
-          timeZone: 'Europe/London'
-        })}
-
----
-Reply to this customer at: ${email}
-
-Travel in Supreme Style
-Luxury Chauffeur & Close Protection Services
-`,
-        reply_to: email, // Set reply-to as customer's email
+        to: [email],
+        subject: `We've received your message - Travel in Supreme Style`,
+        html: customerEmailHtml,
       }),
     })
 
-    const data = await res.json()
+    // Send notification email to ADMIN
+    const adminRes = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+      },
+      body: JSON.stringify({
+        from: FROM_EMAIL,
+        to: [ADMIN_EMAIL],
+        subject: `New Contact Form: ${subject} - ${name}`,
+        html: adminEmailHtml,
+        reply_to: email,
+      }),
+    })
 
-    if (res.ok) {
-      return new Response(JSON.stringify({ success: true, data }), {
+    const customerData = await customerRes.json()
+    const adminData = await adminRes.json()
+
+    if (customerRes.ok && adminRes.ok) {
+      return new Response(JSON.stringify({ success: true, customerEmail: customerData, adminEmail: adminData }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200,
       })
     } else {
-      throw new Error(data.message || 'Failed to send email')
+      throw new Error('Failed to send one or more emails')
     }
   } catch (error) {
     console.error('Error sending contact email:', error)
