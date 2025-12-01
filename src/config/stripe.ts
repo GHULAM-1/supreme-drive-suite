@@ -4,5 +4,5 @@ import { loadStripe } from '@stripe/stripe-js';
 // TODO: Move this to environment variable
 export const stripePromise = loadStripe(
   import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ||
-  'pk_test_51OpazCHw4aNq4gdLwqocQbL63yx3IiQHUtQAUvR8oKI9zD2wLStLgx64lUOnmZ2y7TCgwayOM2rlr6K1oKman9Ht00Ecl9KJP9'
+  'pk_test_51SRwkb2ZtM9M31YYqLIU1GZK04IjUO1f8AEBYCLENR18wkKSXi8Sa9D4LAmAT9eQb56QVniEfnr52tPvs4yDNcf0004fJhqPeD'
 );

@@ -287,7 +287,7 @@ export default function JobDetail() {
                   type="tel"
                   value={customerPhone}
                   onChange={(e) => setCustomerPhone(e.target.value)}
-                  placeholder="+44 1234 567890"
+                  placeholder="0800 920 2040"
                 />
               </div>
             </div>

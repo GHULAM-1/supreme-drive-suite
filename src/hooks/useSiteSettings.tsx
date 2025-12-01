@@ -29,11 +29,11 @@ export interface SiteSettings {
 const defaultSettings: SiteSettings = {
   id: "",
   company_name: "Supreme Drive Suite",
-  phone: "+44 800 123 4567",
+  phone: "0800 920 2040",
   email: "info@supremedrivesuite.co.uk",
   office_address: "123 Luxury Lane, London, UK",
   availability: "24 hours a day, 7 days a week, 365 days a year",
-  whatsapp_number: "+447900123456",
+  whatsapp_number: "+448009202040",
   light_logo_url: null,
   dark_logo_url: null,
   favicon_url: null,

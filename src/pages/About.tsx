@@ -337,7 +337,7 @@ const About = () => {
                 className="shadow-glow hover:shadow-[0_0_40px_rgba(255,215,0,0.4)] transition-all text-base px-10 py-6"
                 asChild
               >
-                <a href="tel:08001234567">Call 0800 123 4567</a>
+                <a href="tel:08009202040">Call 0800 920 2040</a>
               </Button>
             </Card>
           </div>

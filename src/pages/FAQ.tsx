@@ -104,9 +104,9 @@ const FAQ = () => {
                   <p className="text-muted-foreground mb-6">
                     Our team is here to help. Contact us for personalized assistance.
                   </p>
-                  <a href="tel:08001234567" className="inline-block">
+                  <a href="tel:08009202040" className="inline-block">
                     <button className="gradient-accent shadow-glow px-8 py-3 rounded-md font-medium">
-                      Call 0800 123 4567
+                      Call 0800 920 2040
                     </button>
                   </a>
                 </Card>

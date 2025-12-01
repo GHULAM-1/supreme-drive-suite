@@ -82,8 +82,8 @@ const CloseProtection = () => {
             onClick: scrollToForm
           }}
           secondaryCTA={{
-            text: "Call 0800 123 4567",
-            href: "tel:08001234567",
+            text: "Call 0800 920 2040",
+            href: "tel:08009202040",
             icon: <Phone className="w-5 h-5" />
           }}
           trustLine={["Fully Licenced", "Global Coverage", "24/7 Availability"]}

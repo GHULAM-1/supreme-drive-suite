@@ -53,7 +53,7 @@ const Index = () => {
     "@type": "LocalBusiness",
     "name": "Supreme Drive Suite",
     "description": "Luxury chauffeur and close protection services in the UK",
-    "telephone": "+44-800-123-4567",
+    "telephone": "+44-800-920-2040",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "London",
@@ -84,8 +84,8 @@ const Index = () => {
           backgroundAlt="Ultra-luxury Rolls-Royce chauffeur service in prestigious city skyline"
           overlayStrength="medium"
           primaryCTA={{
-            text: "Call 0800 123 4567",
-            href: "tel:08001234567",
+            text: "Call 0800 920 2040",
+            href: "tel:08009202040",
             icon: <Phone className="w-5 h-5" />
           }}
           secondaryCTA={{

@@ -357,7 +357,7 @@ export default function SiteSettings() {
                     <FormItem>
                       <FormLabel>Phone</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="+44 800 123 4567" />
+                        <Input {...field} placeholder="0800 920 2040" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
