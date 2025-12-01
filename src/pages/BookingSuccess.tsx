@@ -25,7 +25,7 @@ const BookingSuccess = () => {
             // Send confirmation email to admin (until domain is configured)
             const isCloseProtection = booking.serviceType === 'close_protection';
             const emailBody = isCloseProtection ? {
-              customerEmail: 'ilyasghulam32@gmail.com',
+              customerEmail: 'admin@travelinsupremestyle.co.uk',
               customerName: booking.customerName,
               bookingDetails: {
                 pickupLocation: booking.pickupLocation,
@@ -52,9 +52,9 @@ const BookingSuccess = () => {
                   <strong>⚠️ HIGH PRIORITY - This is a confirmed close protection booking requiring immediate team assignment.</strong>
                 `
               },
-              supportEmail: 'ilyasghulam32@gmail.com'
+              supportEmail: 'admin@travelinsupremestyle.co.uk'
             } : {
-              customerEmail: 'ilyasghulam32@gmail.com',
+              customerEmail: 'admin@travelinsupremestyle.co.uk',
               customerName: booking.customerName,
               bookingDetails: {
                 pickupLocation: booking.pickupLocation,
@@ -68,7 +68,7 @@ const BookingSuccess = () => {
                 customerPhone: booking.customerPhone,
                 additionalRequirements: booking.additionalRequirements || ''
               },
-              supportEmail: 'ilyasghulam32@gmail.com'
+              supportEmail: 'admin@travelinsupremestyle.co.uk'
             };
 
             await supabase.functions.invoke('hyper-api', {

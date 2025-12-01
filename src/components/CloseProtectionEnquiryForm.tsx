@@ -127,7 +127,7 @@ const CloseProtectionEnquiryForm = () => {
       try {
         await supabase.functions.invoke('send-cp-enquiry', {
           body: {
-            adminEmail: 'ilyasghulam32@gmail.com',
+            adminEmail: 'admin@travelinsupremestyle.co.uk',
             customerName: data.fullName,
             customerEmail: data.email,
             customerPhone: data.phone,
@@ -142,7 +142,7 @@ const CloseProtectionEnquiryForm = () => {
               riskLevel: data.riskLevel,
               notes: data.notes || ''
             },
-            supportEmail: 'ilyasghulam32@gmail.com'
+            supportEmail: 'admin@travelinsupremestyle.co.uk'
           }
         });
       } catch (emailError) {

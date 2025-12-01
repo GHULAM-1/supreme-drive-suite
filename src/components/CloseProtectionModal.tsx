@@ -187,7 +187,7 @@ const CloseProtectionModal = ({
       };
 
       // Send email to admin about close protection request with booking
-      const adminEmail = 'ilyasghulam32@gmail.com';
+      const adminEmail = 'admin@travelinsupremestyle.co.uk';
 
       const emailData = {
         adminEmail: adminEmail,
