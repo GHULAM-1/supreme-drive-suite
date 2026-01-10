@@ -317,7 +317,7 @@ export default function SecurityTeamManagement() {
           <div className="relative">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search by name, title, or specialization..."
+              placeholder="Search by name, title, or specialisations..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
@@ -422,24 +422,17 @@ export default function SecurityTeamManagement() {
             ) : filteredMembers.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={8} className="py-16">
-                  <div className="flex flex-col items-center justify-center space-y-4 text-center">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-accent to-accent/60 opacity-20 blur-3xl rounded-full" />
-                      <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center">
-                        <ShieldCheck className="w-10 h-10 text-accent" />
-                      </div>
+                  <div className="flex flex-col items-center justify-center space-y-4">
+                    <div className="rounded-full bg-muted/50 p-6">
+                      <ShieldCheck className="w-16 h-16 text-muted-foreground/50" />
                     </div>
-                    <div className="space-y-2">
-                      <p className="text-xl font-display font-semibold text-foreground">
-                        No team members yet
-                      </p>
-                      <p className="text-sm text-muted-foreground max-w-sm">
-                        Add your security personnel to showcase your professional team
-                      </p>
-                    </div>
+                    <h3 className="text-xl font-display font-semibold">No team members yet</h3>
+                    <p className="text-muted-foreground text-center max-w-md">
+                      Add your security personnel to showcase your professional team
+                    </p>
                     <Button
                       onClick={() => navigate("/admin/security-team/new")}
-                      className="mt-4 shadow-glow"
+                      className="gradient-accent shadow-glow mt-2"
                     >
                       <Plus className="mr-2 h-4 w-4" />
                       Add Team Member

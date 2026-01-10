@@ -89,8 +89,8 @@ const Privacy = () => {
                 </h2>
                 <p className="text-muted-foreground">
                   For any privacy-related questions or requests, please contact us at{" "}
-                  <a href="mailto:privacy@supremedrive.co.uk" className="text-accent hover:underline">
-                    privacy@supremedrive.co.uk
+                  <a href="mailto:contact@travelinsupremestyle.co.uk" className="text-accent hover:underline">
+                    contact@travelinsupremestyle.co.uk
                   </a>
                 </p>
               </div>

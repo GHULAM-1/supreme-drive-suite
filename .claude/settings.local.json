@@ -5,7 +5,22 @@
       "Bash(grep:*)",
       "Bash(node write-auth.js:*)",
       "Bash(node:*)",
-      "Bash(supabase --version:*)"
+      "Bash(supabase --version:*)",
+      "Bash(cat:*)",
+      "Bash(supabase functions list:*)",
+      "Bash(supabase functions deploy:*)",
+      "Bash(npx supabase:*)",
+      "Bash(brew:*)",
+      "Bash(xargs basename:*)",
+      "Bash(supabase secrets set:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm install:*)",
+      "Bash(curl:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npx vercel:*)",
+      "Bash(vercel:*)"
     ],
     "deny": [],
     "ask": []

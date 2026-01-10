@@ -30,7 +30,7 @@ serve(async (req) => {
       line_items: [
         {
           price_data: {
-            currency: 'usd',
+            currency: 'gbp',
             product_data: {
               name: 'Chauffeur Service Booking',
               description: 'Luxury chauffeur service - Supreme Drive Suite',

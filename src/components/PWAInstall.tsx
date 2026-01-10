@@ -39,7 +39,7 @@ const PWAInstall = () => {
 
     // Generate QR code (only for desktop)
     if (canvasRef.current && !isMobile) {
-      const appUrl = "https://travelinsupremestyle.cortek.io/";
+      const appUrl = "https://travelinsupremestyle.co.uk/";
       QRCode.toCanvas(
         canvasRef.current,
         appUrl,

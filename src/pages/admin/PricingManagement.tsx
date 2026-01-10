@@ -368,26 +368,22 @@ const PricingExtras = ({ extras, loadData, logAudit }: {
 
       {/* Extras Grid */}
       {filteredExtras.length === 0 ? (
-        <Card className="p-12 text-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center">
-              <Package className="w-8 h-8 text-accent" />
-            </div>
-            <div>
-              <h3 className="font-display font-semibold text-lg">No extras yet</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                Add your first pricing extra to get started
-              </p>
-            </div>
-            <Button 
-              className="gradient-accent shadow-glow mt-2" 
-              onClick={() => setDialogOpen(true)}
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Extra
-            </Button>
+        <div className="flex flex-col items-center justify-center py-16 space-y-4">
+          <div className="rounded-full bg-muted/50 p-6">
+            <Package className="w-16 h-16 text-muted-foreground/50" />
           </div>
-        </Card>
+          <h3 className="text-xl font-display font-semibold">No extras yet</h3>
+          <p className="text-muted-foreground text-center max-w-md">
+            Add your first pricing extra to get started
+          </p>
+          <Button
+            className="gradient-accent shadow-glow mt-2"
+            onClick={() => setDialogOpen(true)}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Extra
+          </Button>
+        </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredExtras.map((extra) => (
@@ -536,19 +532,15 @@ const VehicleRates = ({ vehicles, loadData, logAudit }: {
 
       {/* Vehicle Rates Grid */}
       {filteredVehicles.length === 0 ? (
-        <Card className="p-12 text-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center">
-              <Car className="w-8 h-8 text-accent" />
-            </div>
-            <div>
-              <h3 className="font-display font-semibold text-lg">No vehicle rates configured</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                Add vehicles to configure their rates
-              </p>
-            </div>
+        <div className="flex flex-col items-center justify-center py-16 space-y-4">
+          <div className="rounded-full bg-muted/50 p-6">
+            <Car className="w-16 h-16 text-muted-foreground/50" />
           </div>
-        </Card>
+          <h3 className="text-xl font-display font-semibold">No vehicle rates configured</h3>
+          <p className="text-muted-foreground text-center max-w-md">
+            Add vehicles to configure their rates
+          </p>
+        </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredVehicles.map((vehicle) => (
@@ -861,9 +853,9 @@ const ServiceInclusions = ({ serviceInclusions, loadData, logAudit }: {
         <div className="space-y-4">
           <h3 className="text-xl font-display font-semibold text-gradient-silver">Standard Service</h3>
           {standardInclusions.length === 0 ? (
-            <Card className="p-8 text-center">
+            <div className="flex flex-col items-center justify-center py-12 space-y-2">
               <p className="text-sm text-muted-foreground">No standard services added yet</p>
-            </Card>
+            </div>
           ) : (
             <div className="space-y-3">
               {standardInclusions.map((inclusion) => (
@@ -930,9 +922,9 @@ const ServiceInclusions = ({ serviceInclusions, loadData, logAudit }: {
         <div className="space-y-4">
           <h3 className="text-xl font-display font-semibold text-gradient-silver">Premium Add-ons</h3>
           {premiumInclusions.length === 0 ? (
-            <Card className="p-8 text-center">
+            <div className="flex flex-col items-center justify-center py-12 space-y-2">
               <p className="text-sm text-muted-foreground">No premium add-ons added yet</p>
-            </Card>
+            </div>
           ) : (
             <div className="space-y-3">
               {premiumInclusions.map((inclusion) => (

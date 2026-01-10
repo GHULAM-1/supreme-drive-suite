@@ -20,6 +20,7 @@ import {
   UserCog,
   Shield,
   Key,
+  Speech,
 } from "lucide-react";
 import {
   Sidebar,
@@ -70,12 +71,12 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Jobs", icon: Briefcase, href: "/admin/jobs" },
   { label: "Vehicles", icon: Car, href: "/admin/vehicles" },
   { label: "Drivers", icon: Users, href: "/admin/drivers" },
-  { label: "Portfolio", icon: Image, href: "/admin/portfolio" },
   { label: "Security Team", icon: Shield, href: "/admin/security-team" },
-  { label: "Analytics & Reports", icon: BarChart2, href: "/admin/analytics" },
+  { label: "Portfolio", icon: Image, href: "/admin/portfolio" },
   { label: "Pricing", icon: Tag, href: "/admin/pricing" },
   { label: "Testimonials", icon: MessageSquare, href: "/admin/testimonials" },
-  { label: "Feedback", icon: MessageSquare, href: "/admin/feedback" },
+  { label: "Feedback", icon: Speech, href: "/admin/feedback" },
+  { label: "Analytics & Reports", icon: BarChart2, href: "/admin/analytics" },
   { label: "Settings", icon: Settings, href: "/admin/settings", dividerBefore: true },
 ];
 
